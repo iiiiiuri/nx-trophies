@@ -22,7 +22,7 @@ GAMES = REPO_DIR / "games"
 
 
 def replay(game: str, trace: dict, state: UserState | None = None):
-    definition = load_definition(GAMES / game / "definition.json")
+    definition = load_definition(GAMES / f"{game}.json")
     index = build_index(definition, definition.binding_for_build(trace["build_id"]))
     process = FakeProcess({k: (int(v["base"], 0), int(v["size"], 0)) for k, v in trace["regions"].items()})
     state = state or UserState()
@@ -38,7 +38,7 @@ def replay(game: str, trace: dict, state: UserState | None = None):
 
 class MemorySourceTest(unittest.TestCase):
     def test_chain_resolution_and_null_pointer(self):
-        definition = load_definition(GAMES / "mario_kart_8_deluxe" / "definition.json")
+        definition = load_definition(GAMES / "mario_kart_8_deluxe.json")
         index = build_index(definition, definition.binding_for_build("FE941ED5BA14BE5D"))
         process = FakeProcess({"main": (0x8000000, 0x2000000), "heap": (0x40000000, 0x10000000)})
         source = MemorySource(index, process)
@@ -50,7 +50,7 @@ class MemorySourceTest(unittest.TestCase):
         self.assertEqual(source.read()[0].values["p1.star_timer"], 447)
 
     def test_pointer_outside_regions_is_rejected(self):
-        definition = load_definition(GAMES / "mario_kart_8_deluxe" / "definition.json")
+        definition = load_definition(GAMES / "mario_kart_8_deluxe.json")
         index = build_index(definition, definition.binding_for_build("FE941ED5BA14BE5D"))
         process = FakeProcess({"main": (0x8000000, 0x2000000), "heap": (0x40000000, 0x10000000)})
         sa.apply_writes(process, [{"addr": "main+0x1354AF0", "type": "u64", "value": 0xDEAD0000}])
@@ -109,7 +109,7 @@ class LinksAwakeningTest(unittest.TestCase):
 
 class SohTest(unittest.TestCase):
     def setUp(self):
-        definition = load_definition(GAMES / "ship_of_harkinian" / "definition.json")
+        definition = load_definition(GAMES / "ship_of_harkinian.json")
         self.index = build_index(definition, definition.bindings["soh_save_json"])
 
     def unlocked(self, *docs):
@@ -154,7 +154,7 @@ class CliTest(unittest.TestCase):
         return code, out.getvalue()
 
     def test_index(self):
-        code, out = self.run_cli("index", GAMES / "mario_kart_8_deluxe" / "definition.json")
+        code, out = self.run_cli("index", GAMES / "mario_kart_8_deluxe.json")
         self.assertEqual(code, 0)
         self.assertIn("[[main+0x1354AF0]+0x6E0]", out)
         self.assertIn("gold_150.spiny", out)
@@ -164,7 +164,7 @@ class CliTest(unittest.TestCase):
             tmp = Path(tmp)
             trace = tmp / "race.json"
             trace.write_text(json.dumps(traces.mk8_race()), encoding="utf-8")
-            code, out = self.run_cli("replay", GAMES / "mario_kart_8_deluxe" / "definition.json", trace,
+            code, out = self.run_cli("replay", GAMES / "mario_kart_8_deluxe.json", trace,
                                      "--state", tmp / "state.json", "--notify-dir", tmp / "notify")
             self.assertEqual(code, 0)
             self.assertIn("CONQUISTA DESBLOQUEADA: Brilho de Estrela", out)
@@ -179,7 +179,7 @@ class CliTest(unittest.TestCase):
             data = traces.mk8_race()
             data["build_id"] = "0123456789ABCDEF"
             trace.write_text(json.dumps(data), encoding="utf-8")
-            code, _ = self.run_cli("replay", GAMES / "mario_kart_8_deluxe" / "definition.json", trace)
+            code, _ = self.run_cli("replay", GAMES / "mario_kart_8_deluxe.json", trace)
             self.assertEqual(code, 2)
 
     def test_save_command(self):
@@ -187,7 +187,7 @@ class CliTest(unittest.TestCase):
             save_dir = Path(tmp) / "Save"
             save_dir.mkdir()
             (save_dir / "file1.sav").write_text(json.dumps(early_game()), encoding="utf-8")
-            code, out = self.run_cli("save", GAMES / "ship_of_harkinian" / "definition.json", "--save-dir", save_dir)
+            code, out = self.run_cli("save", GAMES / "ship_of_harkinian.json", "--save-dir", save_dir)
             self.assertEqual(code, 0)
             self.assertIn("CONQUISTA DESBLOQUEADA: Espada Kokiri", out)
             self.assertNotIn("Imortal", out)

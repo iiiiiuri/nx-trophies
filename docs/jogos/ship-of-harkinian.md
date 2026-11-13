@@ -1,6 +1,6 @@
 # Ship of Harkinian (Ocarina of Time): modelo de conquistas
 
-> Um dos três jogos da v1, ao lado de Mario Kart 8 Deluxe e Link's Awakening. Definição: [`games/ship_of_harkinian/definition.json`](../../games/ship_of_harkinian/definition.json). O formato é o mesmo dos jogos retail ([modelo de definição](../modelo-de-definicao.md)); só muda o **binding**, que aqui lê o save em vez da memória.
+> Um dos três jogos da v1, ao lado de Mario Kart 8 Deluxe e Link's Awakening. Definição: [`games/ship_of_harkinian.json`](../../games/ship_of_harkinian.json). O formato é o mesmo dos jogos retail ([modelo de definição](../modelo-de-definicao.md)); só muda o **binding**, que aqui lê o save em vez da memória.
 
 ## 1. Por que o SoH é um bom piloto
 
@@ -76,7 +76,7 @@ Decisões de robustez:
 2. Rode:
 
    ```bash
-   python3 tools/sa.py save games/ship_of_harkinian/definition.json --save-dir /caminho/para/Save --state estado.json --notify-dir notificacoes/
+   python3 tools/sa.py save ship_of_harkinian --save-dir /caminho/para/Save --state estado.json --notify-dir notificacoes/
    ```
 
    A saída mostra o modo de cada slot, cada conquista (`[X]` ou `[ ]`), o progresso, o XP e o nível. Use `--reveal-secrets` para mostrar as secretas.

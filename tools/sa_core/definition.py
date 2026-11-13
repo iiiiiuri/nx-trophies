@@ -35,8 +35,29 @@ MEMORY_REGIONS = ("main", "heap", "alias", "aslr")
 MAX_ACHIEVEMENTS = 512
 MAX_CHAIN_DEPTH = 8
 MAX_BLOCK = 0x1000
+GAME_KINDS = ("retail", "homebrew")
+SOURCES = ("memory", "save_json")
 _PLACEHOLDER = re.compile(r"\{item\.([a-zA-Z0-9_]+)\}")
 _EACH_PLACEHOLDER = re.compile(r"\{each\.([a-zA-Z0-9_]+)\}")
+GAME_ID = re.compile(r"[a-z0-9][a-z0-9_]*")
+HEX16 = re.compile(r"[0-9A-Fa-f]{16}")
+IDENTIFIER = re.compile(r"[a-z0-9][a-z0-9_.]*")
+
+# Estrutura padrão: qualquer chave fora destas listas é erro de digitação.
+# Entradas de `content` são livres (cada jogo tem suas chaves), exceto `id`.
+ALLOWED_KEYS = {
+    "definição": {"$schema", "schema_version", "game", "content", "variables", "bindings", "events", "achievements"},
+    "game": {"id", "name", "kind", "title_ids", "notes"},
+    "variável": {"type", "indexed_by", "description"},
+    "binding": {"id", "label", "source", "match", "pointers", "active_when", "aliases", "instance_modes",
+                "poll_ms", "variables", "notes"},
+    "match": {"build_ids", "files"},
+    "ponteiro": {"base", "chain", "note"},
+    "variável do binding": {"base", "from", "offset", "stride", "index_key", "path", "type", "confidence", "note"},
+    "evento": {"id", "when", "description"},
+    "conquista": {"id", "name", "description", "xp", "rarity", "secret", "condition", "progress", "modes",
+                  "confirm_ticks", "for_each", "where_has"},
+}
 
 
 class DefinitionError(ValueError):
@@ -192,6 +213,21 @@ def _require(obj: dict[str, Any], key: str, where: str) -> Any:
     return obj[key]
 
 
+def _check_keys(obj: Any, kind: str, where: str) -> None:
+    if not isinstance(obj, dict):
+        raise DefinitionError(f"{where}: esperado um objeto")
+    unknown = set(obj) - ALLOWED_KEYS[kind]
+    if unknown:
+        raise DefinitionError(f"{where}: chave(s) desconhecida(s) {sorted(unknown)}; "
+                              f"permitidas: {sorted(ALLOWED_KEYS[kind])}")
+
+
+def _check_pattern(value: Any, pattern: re.Pattern[str], where: str, what: str) -> str:
+    if not isinstance(value, str) or not pattern.fullmatch(value):
+        raise DefinitionError(f"{where}: {what} inválido {value!r}")
+    return value
+
+
 def _localized(raw: Any, where: str) -> dict[str, str]:
     if isinstance(raw, str):
         return {"en": raw}
@@ -269,10 +305,14 @@ def _resolve_content(node: Any, content: dict[str, list[dict[str, Any]]], used: 
 def _normalize_content(raw: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
     content: dict[str, list[dict[str, Any]]] = {}
     for set_name, entries in raw.items():
+        _check_pattern(set_name, GAME_ID, "content", "nome de conjunto")
+        if not isinstance(entries, list):
+            raise DefinitionError(f"content.{set_name}: esperado uma lista de entradas")
         seen: set[str] = set()
         normalized = []
         for entry in entries:
-            entry_id = _require(entry, "id", f"content.{set_name}")
+            entry_id = _check_pattern(_require(entry, "id", f"content.{set_name}"), GAME_ID,
+                                      f"content.{set_name}", "id")
             if entry_id in seen:
                 raise DefinitionError(f"content.{set_name}: id duplicado {entry_id!r}")
             seen.add(entry_id)
@@ -310,11 +350,23 @@ def _expand_achievements(raw_list: list[dict[str, Any]], content: dict[str, list
 def _parse_binding(raw: dict[str, Any]) -> Binding:
     binding_id = _require(raw, "id", "binding")
     where = f"binding {binding_id!r}"
+    _check_keys(raw, "binding", where)
     source = _require(raw, "source", where)
-    if source not in ("memory", "save_json"):
-        raise DefinitionError(f"{where}: fonte {source!r} não suportada")
+    if source not in SOURCES:
+        raise DefinitionError(f"{where}: fonte {source!r} não suportada (use {' ou '.join(SOURCES)})")
+    match = raw.get("match", {})
+    _check_keys(match, "match", f"{where} match")
+    for build_id in match.get("build_ids", []):
+        _check_pattern(build_id, HEX16, f"{where} match", "build ID (16 dígitos hex)")
+    if source == "memory" and not match.get("build_ids"):
+        raise DefinitionError(f"{where}: binding de memória exige match.build_ids")
+    if source == "save_json" and not match.get("files"):
+        raise DefinitionError(f"{where}: binding save_json exige match.files")
+    if source == "save_json" and raw.get("pointers"):
+        raise DefinitionError(f"{where}: ponteiros só existem em binding de memória")
     pointers = {}
     for pointer_id, spec in raw.get("pointers", {}).items():
+        _check_keys(spec, "ponteiro", f"{where} ponteiro {pointer_id!r}")
         region = _require(spec, "base", f"{where} ponteiro {pointer_id!r}")
         if region not in MEMORY_REGIONS:
             raise DefinitionError(f"{where} ponteiro {pointer_id!r}: região inválida {region!r}")
@@ -324,8 +376,10 @@ def _parse_binding(raw: dict[str, Any]) -> Binding:
         pointers[pointer_id] = Pointer(pointer_id, region, chain)
     raw_variables = dict(_require(raw, "variables", where))
     for name, spec in raw_variables.items():
+        _check_keys(spec, "variável do binding", f"{where} variável {name!r}")
         Confidence.parse(spec.get("confidence", "to_discover"))
-    match = raw.get("match", {})
+        if "type" in spec and spec["type"] not in TYPE_SIZES:
+            raise DefinitionError(f"{where} variável {name!r}: tipo inválido {spec['type']!r}")
     return Binding(
         id=binding_id,
         label=raw.get("label", binding_id),
@@ -356,14 +410,26 @@ def _implicit_progress(condition: Any) -> dict[str, Any] | None:
 
 
 def parse_definition(raw: dict[str, Any]) -> Definition:
+    _check_keys(raw, "definição", "definição")
     schema = _require(raw, "schema_version", "definição")
     if schema != SCHEMA_VERSION:
         raise DefinitionError(f"schema_version {schema} não suportado (esperado {SCHEMA_VERSION})")
     game = _require(raw, "game", "definição")
+    _check_keys(game, "game", "game")
+    game_id = _check_pattern(_require(game, "id", "game"), GAME_ID, "game", "id (minúsculas, dígitos e _)")
+    kind = game.get("kind", "retail")
+    if kind not in GAME_KINDS:
+        raise DefinitionError(f"game: kind inválido {kind!r} (use {' ou '.join(GAME_KINDS)})")
+    title_ids = tuple(_check_pattern(t, HEX16, "game", "title ID (16 dígitos hex)").upper()
+                      for t in game.get("title_ids", []))
+    if kind == "retail" and not title_ids:
+        raise DefinitionError("game: jogo retail exige title_ids")
     content = _normalize_content(raw.get("content", {}))
 
     variables = {}
     for name, spec in _require(raw, "variables", "definição").items():
+        _check_pattern(name, IDENTIFIER, "variables", "nome de variável")
+        _check_keys(spec, "variável", f"variável {name!r}")
         var_type = spec.get("type", "u32")
         if var_type not in TYPE_SIZES:
             raise DefinitionError(f"variável {name!r}: tipo inválido {var_type!r}")
@@ -381,16 +447,31 @@ def parse_definition(raw: dict[str, Any]) -> Definition:
                 raise DefinitionError(f"binding {binding.id!r}: variável não declarada {var_name!r}")
         bindings[binding.id] = binding
 
+    modes = {"default"} | {m for b in bindings.values() for m in b.instance_modes}
+
     events = {}
     for raw_event in raw.get("events", []):
-        event_id = _require(raw_event, "id", "evento")
+        event_id = _check_pattern(_require(raw_event, "id", "evento"), IDENTIFIER, "evento", "id")
+        _check_keys(raw_event, "evento", f"evento {event_id!r}")
+        if event_id in events:
+            raise DefinitionError(f"evento {event_id!r}: id duplicado")
         used: list[Confidence] = []
         when = _resolve_content(_require(raw_event, "when", f"evento {event_id!r}"), content, used)
         events[event_id] = Event(event_id, when, min(used, default=Confidence.VERIFIED))
 
     achievements = []
     seen: set[str] = set()
-    expanded = _expand_achievements(_require(raw, "achievements", "definição"), content)
+    raw_achievements = _require(raw, "achievements", "definição")
+    for entry in raw_achievements:
+        where = f"conquista {entry.get('id')!r}" if isinstance(entry, dict) else "conquista"
+        _check_keys(entry, "conquista", where)
+        _check_pattern(_require(entry, "id", "conquista"), IDENTIFIER, where, "id")
+        if "where_has" in entry and "for_each" not in entry:
+            raise DefinitionError(f"{where}: where_has só vale em template (for_each)")
+        unknown_modes = set(entry.get("modes", [])) - modes
+        if unknown_modes:
+            raise DefinitionError(f"{where}: modos desconhecidos {sorted(unknown_modes)} (declarados: {sorted(modes)})")
+    expanded = _expand_achievements(raw_achievements, content)
     if len(expanded) > MAX_ACHIEVEMENTS:
         raise DefinitionError(f"definição excede {MAX_ACHIEVEMENTS} conquistas")
     for entry in expanded:
@@ -427,10 +508,10 @@ def parse_definition(raw: dict[str, Any]) -> Definition:
         achievements.append(ach)
 
     return Definition(
-        game_id=_require(game, "id", "game"),
+        game_id=game_id,
         name=_localized(_require(game, "name", "game"), "game"),
-        kind=game.get("kind", "retail"),
-        title_ids=tuple(game.get("title_ids", [])),
+        kind=kind,
+        title_ids=title_ids,
         content=content,
         variables=variables,
         bindings=bindings,
@@ -455,8 +536,14 @@ def _check_achievement(ach: Achievement, events: dict[str, Event]) -> None:
 
 
 def load_definition(path: Path) -> Definition:
-    with path.open(encoding="utf-8") as handle:
-        return parse_definition(json.load(handle))
+    try:
+        with path.open(encoding="utf-8") as handle:
+            raw = json.load(handle)
+    except json.JSONDecodeError as exc:
+        raise DefinitionError(f"JSON inválido na linha {exc.lineno}, coluna {exc.colno}: {exc.msg}") from exc
+    except OSError as exc:
+        raise DefinitionError(f"não foi possível ler {path}: {exc.strerror}") from exc
+    return parse_definition(raw)
 
 
 # --------------------------------------------------------------------------

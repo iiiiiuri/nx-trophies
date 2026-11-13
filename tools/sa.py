@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
 """Switch Achievements: ferramenta de referência para definições de jogo.
 
-  index   mostra o índice: variáveis por binding, plano de leitura e prontidão
-  save    avalia saves JSON (bindings save_json, ex.: Ship of Harkinian)
-  replay  executa um trace de memória simulada (bindings memory, ex.: MK8, Link's Awakening)
+Cada jogo é um arquivo games/<id>.json na estrutura padrão; não há registro manual.
+
+  list      lista os jogos e a prontidão das conquistas
+  validate  valida games/*.json (estrutura, índices, title IDs)
+  new       cria games/<id>.json a partir do esqueleto padrão
+  detect    mostra qual jogo/binding o console usaria para title ID + build ID
+  index     mostra o índice: variáveis por binding, plano de leitura e prontidão
+  save      avalia saves JSON (bindings save_json, ex.: Ship of Harkinian)
+  replay    executa um trace de memória simulada (bindings memory, ex.: MK8, Link's Awakening)
 
 Exemplos:
-  python3 tools/sa.py index games/mario_kart_8_deluxe/definition.json
-  python3 tools/sa.py save games/ship_of_harkinian/definition.json --save-dir examples/soh/Save
-  python3 tools/sa.py replay games/zelda_links_awakening/definition.json examples/traces/la_progress.json
+  python3 tools/sa.py validate
+  python3 tools/sa.py new super_mario_odyssey --name "Super Mario Odyssey" --title-id 0100000000010000
+  python3 tools/sa.py index mario_kart_8_deluxe
+  python3 tools/sa.py save ship_of_harkinian --save-dir examples/soh/Save
+  python3 tools/sa.py replay zelda_links_awakening examples/traces/la_progresso.json
 """
 
 from __future__ import annotations
@@ -21,8 +29,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from sa_core.catalog import (  # noqa: E402
+    GAMES_DIR, Catalog, check_definition, game_files, load_catalog, new_definition, resolve_game_path,
+)
 from sa_core.definition import (  # noqa: E402
     Binding, Confidence, Definition, DefinitionError, Index, Readiness, build_index, load_definition,
+    parse_definition,
 )
 from sa_core.engine import Engine  # noqa: E402
 from sa_core.expr import parse_int  # noqa: E402
@@ -197,12 +209,67 @@ def cmd_replay(definition: Definition, args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_list(catalog: Catalog, lang: str) -> int:
+    for game_id, definition in sorted(catalog.games.items()):
+        counts = {label: 0 for label in READINESS_LABEL.values()}
+        latest = list(definition.bindings.values())[-1]
+        for level in build_index(definition, latest).readiness.values():
+            counts[READINESS_LABEL[level]] += 1
+        titles = ",".join(definition.title_ids) or "-"
+        builds = sum(len(b.build_ids) for b in definition.bindings.values())
+        summary = ", ".join(f"{k}={v}" for k, v in counts.items() if v)
+        print(f"{game_id:<26} {definition.kind:<9} {titles:<17} bindings={len(definition.bindings)} "
+              f"builds={builds} conquistas={len(definition.achievements)} ({summary})")
+    for problem in catalog.problems:
+        print(f"inválido: {problem}", file=sys.stderr)
+    return 1 if catalog.problems else 0
+
+
+def cmd_validate(paths: list[Path]) -> int:
+    if paths:
+        problems = [p for path in paths for p in check_definition(path)[1]]
+        checked = len(paths)
+    else:
+        catalog = load_catalog()
+        problems = catalog.problems
+        checked = len(game_files())
+    for problem in problems:
+        print(f"erro: {problem}", file=sys.stderr)
+    print(f"{checked} arquivo(s) verificados, {len(problems)} problema(s)")
+    return 1 if problems else 0
+
+
+def cmd_detect(title_id: str, build_id: str) -> int:
+    definition, binding = load_catalog().detect(title_id, build_id)
+    if definition is None:
+        print(f"title ID {title_id}: nenhum jogo em games/*.json")
+        return 1
+    if binding is None:
+        print(f"{definition.game_id}: build {build_id} sem binding (jogo conhecido, versão sem suporte)")
+        return 1
+    print(f"{definition.game_id} -> binding {binding.id}")
+    return 0
+
+
+def cmd_new(args: argparse.Namespace) -> int:
+    path = GAMES_DIR / f"{args.game_id}.json"
+    if path.exists():
+        print(f"erro: {path} já existe", file=sys.stderr)
+        return 2
+    raw = new_definition(args.game_id, args.name, title_id=args.title_id, build_id=args.build_id,
+                         save_file=args.save_file)
+    parse_definition(raw)
+    path.write_text(json.dumps(raw, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"criado {path.relative_to(GAMES_DIR.parent)}; edite e rode: python3 tools/sa.py validate")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
 
     def common(p: argparse.ArgumentParser) -> None:
-        p.add_argument("definition", type=Path)
+        p.add_argument("game", help="id do jogo (ex.: mario_kart_8_deluxe) ou caminho do .json")
         p.add_argument("--binding")
         p.add_argument("--lang", default="pt-BR")
 
@@ -211,7 +278,24 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("--notify-dir", type=Path, help="gera .notify do Ultrahand para cada desbloqueio")
         p.add_argument("--reveal-secrets", action="store_true")
 
-    p_index = sub.add_parser("index", help="mostra o índice da definição")
+    p_list = sub.add_parser("list", help="lista os jogos de games/*.json")
+    p_list.add_argument("--lang", default="pt-BR")
+
+    p_validate = sub.add_parser("validate", help="valida games/*.json (ou os arquivos indicados)")
+    p_validate.add_argument("paths", nargs="*", type=Path)
+
+    p_detect = sub.add_parser("detect", help="qual jogo e binding o console usaria")
+    p_detect.add_argument("title_id")
+    p_detect.add_argument("build_id")
+
+    p_new = sub.add_parser("new", help="cria games/<id>.json com a estrutura padrão")
+    p_new.add_argument("game_id")
+    p_new.add_argument("--name", required=True)
+    p_new.add_argument("--title-id")
+    p_new.add_argument("--build-id")
+    p_new.add_argument("--save-file", help="jogo homebrew lido por save JSON (ex.: Save/file1.sav)")
+
+    p_index = sub.add_parser("index", help="mostra o índice de um jogo")
     common(p_index)
     p_index.add_argument("--build", help="seleciona o binding pelo build ID")
 
@@ -230,7 +314,15 @@ def main(argv: list[str] | None = None) -> int:
 
     args = parser.parse_args(argv)
     try:
-        definition = load_definition(args.definition)
+        if args.command == "list":
+            return cmd_list(load_catalog(), args.lang)
+        if args.command == "validate":
+            return cmd_validate(args.paths)
+        if args.command == "detect":
+            return cmd_detect(args.title_id, args.build_id)
+        if args.command == "new":
+            return cmd_new(args)
+        definition = load_definition(resolve_game_path(args.game))
         if args.command == "replay":
             return cmd_replay(definition, args)
         index = build_index(definition, pick_binding(definition, args.binding, getattr(args, "build", None)))

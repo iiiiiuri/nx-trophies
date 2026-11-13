@@ -1,4 +1,5 @@
 {
+  "$schema": "../schema/game-definition.schema.json",
   "schema_version": 2,
   "game": {
     "id": "zelda_links_awakening",

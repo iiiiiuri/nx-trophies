@@ -11,11 +11,11 @@ from sa_core.definition import (  # noqa: E402
 )
 
 GAMES = REPO_DIR / "games"
-DEFINITIONS = sorted(GAMES.glob("*/definition.json"))
+DEFINITIONS = sorted(GAMES.glob("*.json"))
 
 MINIMAL = {
     "schema_version": 2,
-    "game": {"id": "toy", "name": "Toy"},
+    "game": {"id": "toy", "name": "Toy", "title_ids": ["0100000000001000"]},
     "content": {
         "gems": [
             {"id": "red", "name": {"en": "Red", "pt-BR": "Vermelha"}, "bit": 0, "slot": 0},
@@ -29,7 +29,7 @@ MINIMAL = {
         "unknown": {"type": "u8"},
     },
     "bindings": [{
-        "id": "b1", "source": "memory", "match": {"build_ids": ["AA"]},
+        "id": "b1", "source": "memory", "match": {"build_ids": ["AAAAAAAAAAAAAAAA"]},
         "pointers": {"obj": {"base": "heap", "chain": ["0x10", "0x8"]}},
         "variables": {
             "gems": {"base": "main", "offset": "0x100", "confidence": "verified"},
@@ -61,10 +61,10 @@ def toy(mutate=None):
 
 class ShippedDefinitionsTest(unittest.TestCase):
     def test_all_definitions_load_and_index(self):
-        self.assertEqual({p.parent.name for p in DEFINITIONS},
-                         {"mario_kart_8_deluxe", "zelda_links_awakening", "ship_of_harkinian"})
+        self.assertLessEqual({"mario_kart_8_deluxe", "zelda_links_awakening", "ship_of_harkinian"},
+                             {p.stem for p in DEFINITIONS})
         for path in DEFINITIONS:
-            with self.subTest(game=path.parent.name):
+            with self.subTest(game=path.stem):
                 definition = load_definition(path)
                 for binding in definition.bindings.values():
                     index = build_index(definition, binding)
@@ -72,7 +72,7 @@ class ShippedDefinitionsTest(unittest.TestCase):
                     self.assertEqual(set(index.readiness), {a.id for a in index.achievements})
 
     def test_build_lookup_is_case_insensitive(self):
-        definition = load_definition(GAMES / "zelda_links_awakening" / "definition.json")
+        definition = load_definition(GAMES / "zelda_links_awakening.json")
         self.assertIsNotNone(definition.binding_for_build("ae16f71e002af8cb"))
         self.assertIsNone(definition.binding_for_build("0000000000000000"))
 
@@ -126,7 +126,7 @@ class IndexTest(unittest.TestCase):
         self.assertEqual(plan, {("ptr:obj", 0x20, 6), ("region:main", 0x100, 1)})
 
     def test_la_plan_is_two_blocks(self):
-        d = load_definition(GAMES / "zelda_links_awakening" / "definition.json")
+        d = load_definition(GAMES / "zelda_links_awakening.json")
         index = build_index(d, d.binding_for_build("909E904AF78AC1B8"))
         self.assertEqual(len(index.read_plan), 2)
         self.assertEqual(index.instances["dungeon.treasures[angler_tunnel]"].offset, 0x1CBB331)

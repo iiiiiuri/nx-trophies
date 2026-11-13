@@ -1,14 +1,16 @@
 # Modelo de definição de jogo (schema v2)
 
-Cada jogo é **um arquivo JSON**, `games/<jogo>/definition.json`. Não existe código por jogo: o motor lê a definição, **indexa** o conteúdo em endereços de memória (ou caminhos de save) e passa a observar só o que as conquistas usam.
+Cada jogo é **um arquivo JSON**, `games/<id>.json`. Não existe código por jogo: o motor lê a definição, **indexa** o conteúdo em endereços de memória (ou caminhos de save) e passa a observar só o que as conquistas usam.
+
+O catálogo carrega todo `games/*.json` e escolhe o jogo pelo Title ID do processo e o binding pelo Build ID. A estrutura é estrita: chaves fora do padrão são rejeitadas por `python3 tools/sa.py validate`. O schema [`schema/game-definition.schema.json`](../schema/game-definition.schema.json) descreve a mesma estrutura para o editor. Para criar um jogo novo, veja [adicionar-um-jogo.md](adicionar-um-jogo.md).
 
 Jogos da v1:
 
 | Jogo | Fonte | Definição |
 |---|---|---|
-| Mario Kart 8 Deluxe | memória (`dmnt:cht`) | [`games/mario_kart_8_deluxe/definition.json`](../games/mario_kart_8_deluxe/definition.json) |
-| The Legend of Zelda: Link's Awakening | memória (`dmnt:cht`) | [`games/zelda_links_awakening/definition.json`](../games/zelda_links_awakening/definition.json) |
-| Ship of Harkinian (OoT) | save JSON | [`games/ship_of_harkinian/definition.json`](../games/ship_of_harkinian/definition.json) |
+| Mario Kart 8 Deluxe | memória (`dmnt:cht`) | [`games/mario_kart_8_deluxe.json`](../games/mario_kart_8_deluxe.json) |
+| The Legend of Zelda: Link's Awakening | memória (`dmnt:cht`) | [`games/zelda_links_awakening.json`](../games/zelda_links_awakening.json) |
+| Ship of Harkinian (OoT) | save JSON | [`games/ship_of_harkinian.json`](../games/ship_of_harkinian.json) |
 
 ## 1. As cinco camadas
 
@@ -152,19 +154,19 @@ O evento conta quando a condição passa de falsa para verdadeira (borda de subi
 
 ```bash
 # relatório do índice: variáveis, ponteiros, plano de leitura, prontidão
-python3 tools/sa.py index games/zelda_links_awakening/definition.json
+python3 tools/sa.py index zelda_links_awakening
 
 # reproduz um trace de memória simulada tick a tick
-python3 tools/sa.py replay games/mario_kart_8_deluxe/definition.json examples/traces/mk8_corrida.json --verbose
+python3 tools/sa.py replay mario_kart_8_deluxe examples/traces/mk8_corrida.json --verbose
 
 # saves do SoH
-python3 tools/sa.py save games/ship_of_harkinian/definition.json --save-dir examples/soh/Save
+python3 tools/sa.py save ship_of_harkinian --save-dir examples/soh/Save
 ```
 
 Formato do trace: `{"build_id", "regions": {"main": {"base", "size"}}, "initial": [escritas], "ticks": [{"label", "writes": [{"addr": "main+0x1CC0760", "type": "u16", "value": 999}]}]}`.
 
 ## 9. Como completar uma definição no console
 
-1. Abra o jogo e confira o build ID no EdiZon ou no Breeze. Se ele não estiver em `match.build_ids`, copie o binding mais próximo e marque tudo como `assumed` até confirmar.
+1. Abra o jogo e confira o build ID no EdiZon ou no Breeze. `python3 tools/sa.py detect <title_id> <build_id>` diz se ele já tem binding. Se não tiver, copie o binding mais próximo e marque tudo como `assumed` até confirmar.
 2. Para cada variável `to_discover`, siga a dica em `note`: busca de valor exato, mude o valor no jogo, refine. Para estruturas no heap, ache a cadeia de ponteiros a partir de `main`.
 3. Registre o offset e mude a confiança. Rode `sa.py index` para ver as conquistas passarem de "a descobrir" para "ativa".
