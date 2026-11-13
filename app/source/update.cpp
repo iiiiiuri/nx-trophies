@@ -95,7 +95,69 @@ bool exists(const std::string& path) {
     return stat(path.c_str(), &st) == 0;
 }
 
+std::string coverFile(const std::string& gameId) { return kLayout.root() + "/covers/" + gameId + ".png"; }
+
+const cJSON* findGame(const cJSON* games, const std::string& id) {
+    const cJSON* game = nullptr;
+    cJSON_ArrayForEach(game, games) {
+        if (sa::jsonStr(game, "id") == id) return game;
+    }
+    return nullptr;
+}
+
+std::string achievementCount(int64_t count) {
+    return std::to_string(count) + (count == 1 ? " conquista" : " conquistas");
+}
+
+// Sem `contents` local (instalação anterior à 0.2), tudo o que vier conta como novo ou atualizado.
+std::vector<Change> diffContents(const cJSON* local, const cJSON* remote) {
+    std::vector<Change> out;
+    const cJSON* localGames = local ? cJSON_GetObjectItemCaseSensitive(local, "games") : nullptr;
+    const cJSON* remoteGames = cJSON_GetObjectItemCaseSensitive(remote, "games");
+    const cJSON* game = nullptr;
+    cJSON_ArrayForEach(game, remoteGames) {
+        const std::string id = sa::jsonStr(game, "id");
+        const std::string name = sa::jsonStr(game, "name", id);
+        const int64_t count = sa::jsonInt(game, "achievements");
+        const cJSON* before = findGame(localGames, id);
+        if (!before && !exists(kLayout.packs() + "/" + id + ".json")) {
+            out.push_back({Change::Kind::NewGame, id, name, "Jogo novo · " + achievementCount(count)});
+            continue;
+        }
+        if (before && sa::jsonStr(before, "rev") == sa::jsonStr(game, "rev")) continue;
+        const int64_t previous = before ? sa::jsonInt(before, "achievements") : count;
+        const std::string detail = previous != count
+                                       ? std::to_string(previous) + " → " + achievementCount(count)
+                                       : "Conquistas atualizadas";
+        out.push_back({Change::Kind::GameUpdated, id, name, detail});
+    }
+
+    struct Component {
+        const char* key;
+        Change::Kind kind;
+        const char* title;
+        const char* detail;
+    };
+    static const Component components[] = {
+        {"app", Change::Kind::App, "App Conquistas", "Nova versão do app"},
+        {"sysmodule", Change::Kind::Service, "Serviço de conquistas", "Detecção dos jogos e notificações"},
+        {"overlay", Change::Kind::Overlay, "Overlay do Ultrahand", "Lista de conquistas dentro do jogo"},
+        {"art", Change::Kind::Art, "Ícones e capas", "Imagens das conquistas e dos jogos"},
+        {"sound", Change::Kind::Sound, "Som da conquista", "Som tocado ao desbloquear"},
+    };
+    const cJSON* localParts = local ? cJSON_GetObjectItemCaseSensitive(local, "components") : nullptr;
+    const cJSON* remoteParts = cJSON_GetObjectItemCaseSensitive(remote, "components");
+    for (const Component& c : components) {
+        const std::string next = sa::jsonStr(remoteParts, c.key);
+        if (next.empty() || next == sa::jsonStr(localParts, c.key)) continue;
+        out.push_back({c.kind, "", c.title, c.detail});
+    }
+    return out;
+}
+
 }  // namespace
+
+std::string avatarPath() { return kLayout.root() + "/ui/avatar.png"; }
 
 void prepareCertificates() {
     std::string bundled, current;
@@ -157,6 +219,16 @@ std::string Updater::remoteVersion() const {
     return m_version;
 }
 
+std::string Updater::notes() const {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    return m_notes;
+}
+
+std::vector<Change> Updater::changes() const {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    return m_changes;
+}
+
 void Updater::setMessage(const std::string& text) {
     std::lock_guard<std::mutex> lock(m_mutex);
     m_message = text;
@@ -178,6 +250,13 @@ void Updater::run(bool install) {
 }
 
 bool Updater::doCheck(std::string& error) {
+    std::vector<uint8_t> avatar;
+    std::string ignored;
+    if (download(std::string("https://github.com/") + kAuthor + ".png?size=96", avatar, nullptr, ignored) &&
+        sa::writeFileAtomic(avatarPath(), std::string(avatar.begin(), avatar.end()))) {
+        ++m_avatarVersion;
+    }
+
     std::vector<uint8_t> body;
     const std::string url = std::string("https://github.com/") + kRepo + "/releases/latest/download/manifest.json";
     if (!download(url, body, nullptr, error)) return false;
@@ -200,12 +279,30 @@ bool Updater::doCheck(std::string& error) {
         return false;
     }
     if (m_version == installedVersion()) {
-        setMessage("Você já tem a versão " + m_version + ".");
+        setMessage("Você já tem a versão mais recente.");
         m_phase = Phase::UpToDate;
-    } else {
-        setMessage("Versão " + m_version + " disponível. " + m_notes);
-        m_phase = Phase::Available;
+        return true;
     }
+
+    sa::JsonDoc local(sa::parseFile(kLayout.root() + "/version.json"));
+    const cJSON* localContents = local.root ? cJSON_GetObjectItemCaseSensitive(local.root, "contents") : nullptr;
+    const cJSON* remoteContents = cJSON_GetObjectItemCaseSensitive(doc.root, "contents");
+    std::vector<Change> changes = remoteContents ? diffContents(localContents, remoteContents) : std::vector<Change>{};
+    const std::string tag = "v" + m_version;
+    for (const Change& c : changes) {
+        if (c.kind != Change::Kind::NewGame || exists(coverFile(c.gameId))) continue;
+        std::vector<uint8_t> cover;
+        if (download(std::string("https://raw.githubusercontent.com/") + kRepo + "/" + tag + "/assets/covers/" + c.gameId + ".png",
+                     cover, nullptr, ignored)) {
+            sa::writeFileAtomic(coverFile(c.gameId), std::string(cover.begin(), cover.end()));
+        }
+    }
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        m_changes = std::move(changes);
+    }
+    setMessage("Versão " + m_version + " disponível.");
+    m_phase = Phase::Available;
     return true;
 }
 

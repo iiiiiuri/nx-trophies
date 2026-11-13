@@ -30,6 +30,9 @@ constexpr Rgba track{30, 30, 30};
 
 enum class Align { Left, Center, Right };
 
+// Ícones desenhados com primitivas, para não depender de arquivos no SD.
+enum class Glyph { App, Service, Overlay, Art, Sound, Plus, Refresh };
+
 class Ui {
 public:
     bool init();
@@ -49,10 +52,14 @@ public:
 
     // Imagens: arquivo no SD ou JPEG em memória (ícone de jogo do sistema).
     SDL_Texture* image(const std::string& path, bool gray = false);
+    SDL_Texture* imageRound(const std::string& path);
     SDL_Texture* imageFromMemory(const std::string& key, const void* data, size_t size);
+    void forget(const std::string& path);
     void draw(SDL_Texture* tex, int x, int y, int w, int h, uint8_t alpha = 255);
+    void glyph(Glyph g, int x, int y, int size, Rgba background);
 
 private:
+    SDL_Texture* loadImage(const std::string& path, const std::string& key, void (*filter)(SDL_Surface*));
     TTF_Font* font(int size);
     SDL_Texture* textTexture(const std::string& s, int size, Rgba c, int& w, int& h);
 

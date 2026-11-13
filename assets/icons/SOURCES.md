@@ -78,6 +78,25 @@ Arte oficial dos jogos (Nintendo), coletada dos wikis abaixo para uso pessoal.
 - `ship_of_harkinian/sword.master.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Master_Sword_Icon.png
 - `ship_of_harkinian/ten_hours.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Door_of_Time_Model.png
 - `ship_of_harkinian/twenty_hearts.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Heart_Container_Icon.png
+- `zelda_echoes_of_wisdom/accessories_all.png` — https://zeldawiki.wiki/wiki/File:EoW_Frog_Ring_Model.png
+- `zelda_echoes_of_wisdom/automatons_all.png` — https://zeldawiki.wiki/wiki/File:EoW_Tocktorok_Model.png
+- `zelda_echoes_of_wisdom/dungeon.png` — https://zeldawiki.wiki/wiki/File:EoW_Big_Key_Model.png
+- `zelda_echoes_of_wisdom/dungeon.eldin_temple.png` — https://zeldawiki.wiki/wiki/File:EoW_Volvagia_Model.png
+- `zelda_echoes_of_wisdom/dungeon.faron_temple.png` — https://zeldawiki.wiki/wiki/File:EoW_Gohma_Model.png
+- `zelda_echoes_of_wisdom/dungeon.gerudo_sanctum.png` — https://zeldawiki.wiki/wiki/File:EoW_Mogryph_Model.png
+- `zelda_echoes_of_wisdom/dungeon.hyrule_castle.png` — https://zeldawiki.wiki/wiki/File:EoW_Ganon_Model.png
+- `zelda_echoes_of_wisdom/dungeon.jabul_ruins.png` — https://zeldawiki.wiki/wiki/File:EoW_Vocavor_Model.png
+- `zelda_echoes_of_wisdom/dungeon.lanayru_temple.png` — https://zeldawiki.wiki/wiki/File:EoW_Skorchill_Model.png
+- `zelda_echoes_of_wisdom/dungeon.suthorn_ruins.png` — https://zeldawiki.wiki/wiki/File:EoW_Seismic_Talus_Model.png
+- `zelda_echoes_of_wisdom/echo_first.png` — https://zeldawiki.wiki/wiki/File:EoW_Tri_Rod_Model.png
+- `zelda_echoes_of_wisdom/echoes_50.png` — https://zeldawiki.wiki/wiki/File:EoW_Echo_Summoning_Render.png
+- `zelda_echoes_of_wisdom/echoes_all.png` — https://zeldawiki.wiki/wiki/File:EoW_Echo_Render.png
+- `zelda_echoes_of_wisdom/heart_pieces_all.png` — https://zeldawiki.wiki/wiki/File:EoW_Heart_Container_Model.png
+- `zelda_echoes_of_wisdom/might_crystals_all.png` — https://zeldawiki.wiki/wiki/File:EoW_Might_Crystal_Model.png
+- `zelda_echoes_of_wisdom/null_defeated.png` — https://zeldawiki.wiki/wiki/File:EoW_Null_Model.png
+- `zelda_echoes_of_wisdom/rupees_max.png` — https://zeldawiki.wiki/wiki/File:EoW_Gold_Rupee_Model.png
+- `zelda_echoes_of_wisdom/stamps_all.png` — https://zeldawiki.wiki/wiki/File:EoW_Final_Stamp_Card_Model.png
+- `zelda_echoes_of_wisdom/tri_max.png` — https://zeldawiki.wiki/wiki/File:EoW_Tri_Model.png
 - `zelda_links_awakening/all_instruments.png` — https://zeldawiki.wiki/wiki/File:LANS_Wind_Fish_Model.png
 - `zelda_links_awakening/dungeon_treasures.png` — https://zeldawiki.wiki/wiki/File:LANS_Treasure_Chest_Model.png
 - `zelda_links_awakening/dungeon_treasures.angler_tunnel.png` — https://zeldawiki.wiki/wiki/File:LANS_Angler_Fish_Model.png
@@ -96,9 +115,13 @@ Arte oficial dos jogos (Nintendo), coletada dos wikis abaixo para uso pessoal.
 - `zelda_links_awakening/figure.cheep_cheep.png` — https://zeldawiki.wiki/wiki/File:LANS_Cheep_Cheep_Figure_Icon.png
 - `zelda_links_awakening/figure.ciaociao.png` — https://zeldawiki.wiki/wiki/File:LANS_CiaoCiao_Figure_Icon.png
 - `zelda_links_awakening/figure.goomba.png` — https://zeldawiki.wiki/wiki/File:LANS_Goomba_Figure_Icon.png
+- `zelda_links_awakening/figure.piranha_plant.png` — https://zeldawiki.wiki/wiki/File:LANS_Piranha_Plant_Figure_Icon.png
+- `zelda_links_awakening/figure.pokey.png` — https://zeldawiki.wiki/wiki/File:LANS_Pokey_Figure_Icon.png
 - `zelda_links_awakening/figure.shy_guy.png` — https://zeldawiki.wiki/wiki/File:LANS_Shy_Guy_Figure_Icon.png
+- `zelda_links_awakening/figure.spiny.png` — https://zeldawiki.wiki/wiki/File:LANS_Spiny_Figure_Icon.png
 - `zelda_links_awakening/figures_5.png` — https://zeldawiki.wiki/wiki/File:LANS_Trendy_Gamester_Model.png
 - `zelda_links_awakening/follower.png` — https://zeldawiki.wiki/wiki/File:LANS_Marin_Model.png
+- `zelda_links_awakening/follower.flying_rooster.png` — https://zeldawiki.wiki/wiki/File:LANS_Flying_Rooster_Model.png
 - `zelda_links_awakening/follower.ghost.png` — https://zeldawiki.wiki/wiki/File:LANS_Ghost_Model.png
 - `zelda_links_awakening/follower.marin.png` — https://zeldawiki.wiki/wiki/File:LANS_Marin_Render.png
 - `zelda_links_awakening/golden_leaves.png` — https://zeldawiki.wiki/wiki/File:LANS_Golden_Leaf_Model.png
@@ -133,6 +156,7 @@ Arte oficial dos jogos (Nintendo), coletada dos wikis abaixo para uso pessoal.
 
 - `mario_kart_8_deluxe.png` — https://www.mariowiki.com/File:MK8_Deluxe_-_Box_NA.png
 - `ship_of_harkinian.png` — https://github.com/HarbourMasters/Shipwright/blob/develop/soh/macosx/sohIcon.png
+- `zelda_echoes_of_wisdom.png` — https://zeldawiki.wiki/wiki/File:EoW_NA_Box_Art.png
 - `zelda_links_awakening.png` — https://zeldawiki.wiki/wiki/File:LANS_NA_Box_Art.png
 
 `common/trophy.png` e `common/secret.png` são ícones gerados pelo projeto, sem fonte externa.

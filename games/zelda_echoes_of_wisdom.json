@@ -1,0 +1,155 @@
+{
+  "$schema": "../schema/game-definition.schema.json",
+  "schema_version": 2,
+  "game": {
+    "id": "zelda_echoes_of_wisdom",
+    "name": { "pt-BR": "The Legend of Zelda: Echoes of Wisdom", "en": "The Legend of Zelda: Echoes of Wisdom" },
+    "kind": "retail",
+    "title_ids": ["01008CF01BAAC000"],
+    "notes": "Não há endereços de dados públicos: os cheats conhecidos são patches de código. Os endereços devem ser descobertos no console (EdiZon/Breeze) e preenchidos no binding."
+  },
+
+  "content": {
+    "dungeons": [
+      { "id": "suthorn_ruins",  "name": { "pt-BR": "Ruína Meridionau",     "en": "Suthorn Ruins" } },
+      { "id": "jabul_ruins",    "name": { "pt-BR": "Ruína Jabul",          "en": "Jabul Ruins" } },
+      { "id": "faron_temple",   "name": { "pt-BR": "Templo Faron",         "en": "Faron Temple" } },
+      { "id": "gerudo_sanctum", "name": { "pt-BR": "Santuário Gerudo",     "en": "Gerudo Sanctum" } },
+      { "id": "eldin_temple",   "name": { "pt-BR": "Templo Eldin",         "en": "Eldin Temple" } },
+      { "id": "lanayru_temple", "name": { "pt-BR": "Templo Lanayru",       "en": "Lanayru Temple" } },
+      { "id": "hyrule_castle",  "name": { "pt-BR": "Castelo de Hyrule",    "en": "Hyrule Castle" } }
+    ]
+  },
+
+  "variables": {
+    "rupees":           { "type": "u32", "description": "Rúpias na carteira." },
+    "echoes_learned":   { "type": "u16", "description": "Quantidade de ecos aprendidos (127 no total)." },
+    "tri_level":        { "type": "u8",  "description": "Nível do Tri (máximo 11)." },
+    "heart_pieces":     { "type": "u8",  "description": "Pedaços de coração coletados (40 no total)." },
+    "might_crystals":   { "type": "u16", "description": "Cristais de Poder coletados (150 no total)." },
+    "automatons":       { "type": "u8",  "description": "Autômatos do Dampé obtidos (6 no total)." },
+    "stamps":           { "type": "u8",  "description": "Carimbos coletados (25 no total)." },
+    "accessories":      { "type": "u8",  "description": "Acessórios obtidos (26 no total)." },
+    "dungeon.cleared":  { "type": "u8",  "indexed_by": "dungeons", "description": "1 quando a masmorra foi concluída." },
+    "null_defeated":    { "type": "u8",  "description": "1 depois de derrotar Null." }
+  },
+
+  "bindings": [
+    {
+      "id": "v1_0_0",
+      "label": "Versão 1.0.0 (build A581406BC9858651)",
+      "source": "memory",
+      "match": { "build_ids": ["A581406BC9858651"] },
+      "poll_ms": 1000,
+      "variables": {
+        "rupees":          { "confidence": "to_discover", "note": "o cheat 'Max rupees' só troca a instrução em main+0x173D278; buscar u32 pelo valor exibido" },
+        "echoes_learned":  { "confidence": "to_discover", "note": "o cheat 'Unlock All Echoes' patcheia main+0x24861AC; buscar pela contagem do menu de ecos" },
+        "tri_level":       { "confidence": "to_discover", "note": "o cheat 'Max level Tri' patcheia main+0x1A6B4D0" },
+        "heart_pieces":    { "confidence": "to_discover", "note": "buscar u8 pela contagem no mapa (Y)" },
+        "might_crystals":  { "confidence": "to_discover", "note": "buscar pela contagem no mapa (Y)" },
+        "automatons":      { "confidence": "to_discover", "note": "a descobrir" },
+        "stamps":          { "confidence": "to_discover", "note": "buscar pela contagem no mapa (Y)" },
+        "accessories":     { "confidence": "to_discover", "note": "a descobrir" },
+        "dungeon.cleared": { "confidence": "to_discover", "note": "flags de progresso da história" },
+        "null_defeated":   { "confidence": "to_discover", "note": "flag de fim de jogo" }
+      }
+    }
+  ],
+
+  "achievements": [
+    {
+      "id": "echo_first",
+      "name": { "pt-BR": "Primeiro Eco", "en": "First Echo" },
+      "description": { "pt-BR": "Aprenda um eco com o Bastão do Tri.", "en": "Learn an echo with the Tri Rod." },
+      "rarity": "common", "xp": 10,
+      "condition": { "value": "echoes_learned", "op": ">=", "rhs": 1 }
+    },
+    {
+      "id": "echoes_50",
+      "name": { "pt-BR": "Coleção de Ecos", "en": "Echo Collector" },
+      "description": { "pt-BR": "Aprenda 50 ecos.", "en": "Learn 50 echoes." },
+      "rarity": "uncommon", "xp": 50,
+      "progress": { "value": "echoes_learned", "target": 50 },
+      "condition": { "value": "echoes_learned", "op": ">=", "rhs": 50 }
+    },
+    {
+      "id": "echoes_all",
+      "name": { "pt-BR": "Eco de Todas as Coisas", "en": "Echo of Everything" },
+      "description": { "pt-BR": "Aprenda os 127 ecos.", "en": "Learn all 127 echoes." },
+      "rarity": "legendary", "xp": 250,
+      "progress": { "value": "echoes_learned", "target": 127 },
+      "condition": { "value": "echoes_learned", "op": ">=", "rhs": 127 }
+    },
+    {
+      "id": "tri_max",
+      "name": { "pt-BR": "Tri no Máximo", "en": "Tri at Full Power" },
+      "description": { "pt-BR": "Leve o Tri ao nível 11.", "en": "Raise Tri to level 11." },
+      "rarity": "rare", "xp": 75,
+      "progress": { "value": "tri_level", "target": 11 },
+      "condition": { "value": "tri_level", "op": ">=", "rhs": 11 }
+    },
+    {
+      "id": "heart_pieces_all",
+      "name": { "pt-BR": "Coração Inteiro", "en": "Whole Heart" },
+      "description": { "pt-BR": "Encontre os 40 pedaços de coração.", "en": "Find all 40 Pieces of Heart." },
+      "rarity": "epic", "xp": 150,
+      "progress": { "value": "heart_pieces", "target": 40 },
+      "condition": { "value": "heart_pieces", "op": ">=", "rhs": 40 }
+    },
+    {
+      "id": "might_crystals_all",
+      "name": { "pt-BR": "Poder Cristalino", "en": "Crystal Might" },
+      "description": { "pt-BR": "Colete os 150 Cristais de Poder.", "en": "Collect all 150 Might Crystals." },
+      "rarity": "epic", "xp": 150,
+      "progress": { "value": "might_crystals", "target": 150 },
+      "condition": { "value": "might_crystals", "op": ">=", "rhs": 150 }
+    },
+    {
+      "id": "automatons_all",
+      "name": { "pt-BR": "Oficina do Dampé", "en": "Dampé's Workshop" },
+      "description": { "pt-BR": "Obtenha os 6 autômatos do Dampé.", "en": "Obtain all 6 of Dampé's automatons." },
+      "rarity": "rare", "xp": 75,
+      "progress": { "value": "automatons", "target": 6 },
+      "condition": { "value": "automatons", "op": ">=", "rhs": 6 }
+    },
+    {
+      "id": "stamps_all",
+      "name": { "pt-BR": "Carimbador Oficial", "en": "Stamp Master" },
+      "description": { "pt-BR": "Colete os 25 carimbos.", "en": "Collect all 25 stamps." },
+      "rarity": "rare", "xp": 75,
+      "progress": { "value": "stamps", "target": 25 },
+      "condition": { "value": "stamps", "op": ">=", "rhs": 25 }
+    },
+    {
+      "id": "accessories_all",
+      "name": { "pt-BR": "Bem Equipada", "en": "Well Accessorized" },
+      "description": { "pt-BR": "Obtenha os 26 acessórios.", "en": "Obtain all 26 accessories." },
+      "rarity": "epic", "xp": 100,
+      "progress": { "value": "accessories", "target": 26 },
+      "condition": { "value": "accessories", "op": ">=", "rhs": 26 }
+    },
+    {
+      "id": "rupees_max",
+      "name": { "pt-BR": "Tesouro Real", "en": "Royal Treasury" },
+      "description": { "pt-BR": "Junte 9999 rúpias.", "en": "Collect 9999 rupees." },
+      "rarity": "rare", "xp": 75,
+      "progress": { "value": "rupees", "target": 9999 },
+      "condition": { "value": "rupees", "op": ">=", "rhs": 9999 }
+    },
+    {
+      "id": "dungeon",
+      "for_each": "dungeons",
+      "name": { "pt-BR": "{item.name}", "en": "{item.name}" },
+      "description": { "pt-BR": "Conclua {item.name}.", "en": "Clear {item.name}." },
+      "rarity": "uncommon", "xp": 50,
+      "condition": { "value": "dungeon.cleared[{item.id}]", "op": "==", "rhs": 1 }
+    },
+    {
+      "id": "null_defeated",
+      "name": { "pt-BR": "Fim do Silêncio", "en": "End of the Stillness" },
+      "description": { "pt-BR": "Derrote Null e salve Hyrule.", "en": "Defeat Null and save Hyrule." },
+      "rarity": "epic", "xp": 250,
+      "condition": { "value": "null_defeated", "op": "==", "rhs": 1 }
+    }
+  ]
+}

@@ -379,21 +379,114 @@ private:
         if (selected) m_ui.frame(58, y - 2, 1164, kRowH - 4, 10, 3, theme::accent);
     }
 
+    static Glyph glyphFor(Change::Kind kind) {
+        switch (kind) {
+            case Change::Kind::NewGame: return Glyph::Plus;
+            case Change::Kind::GameUpdated: return Glyph::Refresh;
+            case Change::Kind::App: return Glyph::App;
+            case Change::Kind::Service: return Glyph::Service;
+            case Change::Kind::Overlay: return Glyph::Overlay;
+            case Change::Kind::Art: return Glyph::Art;
+            case Change::Kind::Sound: return Glyph::Sound;
+        }
+        return Glyph::Refresh;
+    }
+
+    static Rgba colorFor(Change::Kind kind) {
+        switch (kind) {
+            case Change::Kind::NewGame: return theme::green;
+            case Change::Kind::GameUpdated: return theme::accent;
+            case Change::Kind::App: return Rgba{120, 110, 230};
+            case Change::Kind::Service: return Rgba{230, 120, 60};
+            case Change::Kind::Overlay: return Rgba{70, 150, 230};
+            case Change::Kind::Art: return Rgba{220, 80, 150};
+            case Change::Kind::Sound: return Rgba{200, 160, 40};
+        }
+        return theme::accent;
+    }
+
+    static std::string firstLine(const std::string& notes) {
+        const std::string line = notes.substr(0, notes.find('\n'));
+        return line.rfind("Co-authored-by", 0) == 0 ? "" : line;
+    }
+
+    void drawChange(const Change& c, int y) {
+        constexpr int x = 210, s = 52;
+        SDL_Texture* art = nullptr;
+        if (!c.gameId.empty()) {
+            for (const GameData& g : m_lib.games) {
+                if (g.id == c.gameId) art = cover(g);
+            }
+            if (!art) art = m_ui.image(coverPath(c.gameId));
+        }
+        if (art) {
+            m_ui.draw(art, x, y, s, s);
+            m_ui.glyph(glyphFor(c.kind), x + s - 18, y + s - 18, 22, colorFor(c.kind));
+        } else {
+            m_ui.glyph(glyphFor(c.kind), x, y, s, colorFor(c.kind));
+        }
+        m_ui.text(c.title, x + s + 18, y + 2, 22, theme::text, Align::Left, 780);
+        m_ui.text(c.detail, x + s + 18, y + 30, 18, theme::muted, Align::Left, 780);
+    }
+
     void drawUpdate() {
+        constexpr int left = 170, top = 50, width = 940, height = 620, right = left + width;
         m_ui.rect(0, 0, 1280, 720, Rgba{0, 0, 0, 170});
-        m_ui.rounded(290, 200, 700, 320, 12, theme::panel);
-        m_ui.text("Atualização", 330, 230, 30, theme::text);
-        m_ui.text("Instalada: " + installedVersion(), 950, 238, 20, theme::muted, Align::Right);
-        m_ui.text(m_updater.message(), 330, 300, 22, theme::text, Align::Left, 620);
+        m_ui.rounded(left, top, width, height, 14, theme::panel);
+        m_ui.text("Atualização", left + 40, top + 30, 32, theme::text);
+
         const Updater::Phase phase = m_updater.phase();
-        if (phase == Updater::Phase::Downloading || phase == Updater::Phase::Installing) {
-            m_ui.bar(330, 360, 620, 12, m_updater.progress(), theme::accent);
+        const bool offering = phase == Updater::Phase::Available || phase == Updater::Phase::Downloading ||
+                              phase == Updater::Phase::Installing || phase == Updater::Phase::Done;
+        const std::string installed = installedVersion();
+        const std::string remote = m_updater.remoteVersion();
+        m_ui.text(offering && !remote.empty() && remote != installed ? installed + "  →  " + remote : "Instalada: " + installed, right - 40, top + 40, 22,
+                  theme::muted, Align::Right);
+        m_ui.rect(left + 30, top + 84, width - 60, 1, theme::line);
+
+        int y = top + 104;
+        if (offering) {
+            const std::string headline = firstLine(m_updater.notes());
+            if (!headline.empty()) {
+                m_ui.text(headline, left + 40, y, 20, theme::muted, Align::Left, width - 80);
+                y += 40;
+            }
+            const auto changes = m_updater.changes();
+            constexpr int kMaxRows = 6;
+            for (int i = 0; i < static_cast<int>(changes.size()) && i < kMaxRows; ++i) {
+                drawChange(changes[i], y);
+                y += 66;
+            }
+            if (changes.size() > kMaxRows) {
+                m_ui.text("+ " + std::to_string(changes.size() - kMaxRows) + " outras mudanças", 280, y, 18, theme::muted);
+            } else if (changes.empty()) {
+                m_ui.text("Mesmo conteúdo da versão instalada.", left + 40, y, 20, theme::muted);
+            }
         }
-        int x = 950;
-        if (phase != Updater::Phase::Checking && phase != Updater::Phase::Downloading && phase != Updater::Phase::Installing) {
-            m_ui.button("B", "Fechar", x, 460);
+
+        const int statusY = top + height - 118;
+        const bool busy = phase == Updater::Phase::Downloading || phase == Updater::Phase::Installing;
+        if (!offering || busy || phase == Updater::Phase::Done) {
+            m_ui.text(m_updater.message(), left + 40, offering ? statusY : top + 120, 22,
+                      phase == Updater::Phase::Failed ? Rgba{240, 110, 110} : theme::text, Align::Left, width - 80);
         }
-        if (phase == Updater::Phase::Available) m_ui.button("A", "Instalar", x, 460);
+        if (busy) m_ui.bar(left + 40, statusY + 36, width - 80, 12, m_updater.progress(), theme::accent);
+
+        const int footY = top + height - 62;
+        m_ui.rect(left + 30, footY - 14, width - 60, 1, theme::line);
+        if (m_avatarSeen != m_updater.avatarVersion()) {
+            m_avatarSeen = m_updater.avatarVersion();
+            m_ui.forget(avatarPath());
+        }
+        constexpr int avatar = 40;
+        const int ax = right - 36 - avatar;
+        if (SDL_Texture* tex = m_ui.imageRound(avatarPath())) m_ui.draw(tex, ax, footY, avatar, avatar);
+        else m_ui.circle(ax + avatar / 2, footY + avatar / 2, avatar / 2, theme::line);
+        const int nameW = m_ui.text(kAuthor, ax - 12, footY + 8, 20, theme::muted, Align::Right);
+
+        int x = ax - 12 - nameW - 48;
+        if (phase != Updater::Phase::Checking && !busy) m_ui.button("B", "Fechar", x, footY + 6);
+        if (phase == Updater::Phase::Available) m_ui.button("A", "Instalar", x, footY + 6);
     }
 
     Ui m_ui;
@@ -403,7 +496,7 @@ private:
     Screen m_screen = Screen::Library;
     Tab m_tab = Tab::All;
     std::map<std::string, bool> m_nsTried;
-    int m_sel = 0, m_row = 0, m_gridScroll = 0, m_listScroll = 0;
+    int m_sel = 0, m_row = 0, m_gridScroll = 0, m_listScroll = 0, m_avatarSeen = 0;
     bool m_running = false, m_updateOpen = false, m_touching = false;
     int m_touchStartX = 0, m_touchStartY = 0, m_touchX = 0, m_touchY = 0;
     u64 m_lastReload = 0, m_repeatAt = 0;

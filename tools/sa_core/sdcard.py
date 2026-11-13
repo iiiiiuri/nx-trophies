@@ -13,6 +13,7 @@ import shutil
 import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 from .assets import check_wav, icon_keys
 from .catalog import load_catalog
@@ -36,6 +37,7 @@ class BuildResult:
     root: Path
     files: list[str] = field(default_factory=list)
     binaries: list[str] = field(default_factory=list)
+    contents: dict[str, Any] = field(default_factory=dict)
 
     def add(self, relative: str, data: bytes) -> None:
         target = self.root / relative
@@ -51,6 +53,8 @@ def build_sd(root: Path = DIST_SD, *, version: str = "dev", icons_dir: Path = IC
         shutil.rmtree(root)
     root.mkdir(parents=True)
     result = BuildResult(root)
+    components: dict[str, str] = {}
+    art = hashlib.sha256()
 
     for key in icon_keys(icons_dir):
         source = icons_dir / f"{key}.png"
@@ -58,36 +62,52 @@ def build_sd(root: Path = DIST_SD, *, version: str = "dev", icons_dir: Path = IC
         result.add(icon_file(key), rgba)
         result.add(ultrahand_icon_file(key), rgba)
         result.add(icon_png_file(key), source.read_bytes())
+        art.update(key.encode() + rgba)
 
     if covers_dir.is_dir():
         for cover in sorted(covers_dir.glob("*.png")):
-            result.add(f"{SD_COVERS}/{cover.name}", cover.read_bytes())
+            data = cover.read_bytes()
+            result.add(f"{SD_COVERS}/{cover.name}", data)
+            art.update(cover.name.encode() + data)
+    components["art"] = art.hexdigest()[:12]
 
     catalog = load_catalog()
     if catalog.problems:
         raise BuildError("definições inválidas: " + "; ".join(catalog.problems))
+    games = []
     for game_id, definition in sorted(catalog.games.items()):
-        result.add(pack_file(game_id), pack_bytes(compile_pack(definition, icons_dir)))
+        pack = compile_pack(definition, icons_dir)
+        result.add(pack_file(game_id), pack_bytes(pack))
+        games.append({"id": game_id, "name": definition.name.get("pt-BR") or next(iter(definition.name.values())),
+                      "achievements": len(pack["achievements"]), "rev": pack["rev"]})
 
     if with_sound:
         check_wav(sound)
         data = sound.read_bytes()
         result.add(SD_SOUND, data)
         result.add(UH_SOUND, data)
+        components["sound"] = _digest(data)
 
     for label, source, target in (("overlay", overlay, SD_OVERLAY), ("sysmodule", sysmodule, SD_SYSMODULE),
                                   ("app", app, SD_APP)):
         if source.is_file():
-            result.add(target, source.read_bytes())
+            data = source.read_bytes()
+            result.add(target, data)
             result.binaries.append(label)
+            components[label] = _digest(data)
         elif require_binaries:
             raise BuildError(f"{label} não compilado: {source}")
     if "sysmodule" in result.binaries:
         result.add(SD_SYSMODULE_BOOT, b"")
         result.add(SD_SYSMODULE_TOOLBOX, json.dumps(TOOLBOX, indent=2).encode())
 
-    result.add(SD_VERSION, json.dumps({"version": version}).encode())
+    result.contents = {"games": games, "components": components}
+    result.add(SD_VERSION, json.dumps({"version": version, "contents": result.contents}, ensure_ascii=False).encode())
     return result
+
+
+def _digest(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()[:12]
 
 
 def build_release(version: str, notes: str = "", out: Path = RELEASE_DIR) -> tuple[Path, Path]:
@@ -106,6 +126,7 @@ def build_release(version: str, notes: str = "", out: Path = RELEASE_DIR) -> tup
         "sha256": hashlib.sha256(data).hexdigest(),
         "size": len(data),
         "notes": notes,
+        "contents": sd.contents,
     }
     manifest_path = out / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")

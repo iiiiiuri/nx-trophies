@@ -5,6 +5,8 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_image.h>
 
+#include <algorithm>
+#include <cmath>
 #include <cstring>
 
 namespace app {
@@ -152,8 +154,36 @@ void Ui::button(const char* letter, const std::string& label, int& x, int y) {
     x -= 40;
 }
 
-SDL_Texture* Ui::image(const std::string& path, bool gray) {
-    const std::string key = path + (gray ? "#gray" : "");
+namespace {
+
+void grayscale(SDL_Surface* rgba) {
+    for (int y = 0; y < rgba->h; ++y) {
+        auto* row = static_cast<uint8_t*>(rgba->pixels) + y * rgba->pitch;
+        for (int x = 0; x < rgba->w; ++x) {
+            uint8_t* p = row + 4 * x;
+            const uint8_t l = static_cast<uint8_t>((p[0] * 30 + p[1] * 59 + p[2] * 11) / 140);
+            p[0] = p[1] = p[2] = l;
+        }
+    }
+}
+
+// Recorta em círculo, com 1 px de borda suave.
+void roundMask(SDL_Surface* rgba) {
+    const float r = std::min(rgba->w, rgba->h) / 2.0f;
+    const float cx = rgba->w / 2.0f, cy = rgba->h / 2.0f;
+    for (int y = 0; y < rgba->h; ++y) {
+        auto* row = static_cast<uint8_t*>(rgba->pixels) + y * rgba->pitch;
+        for (int x = 0; x < rgba->w; ++x) {
+            const float d = std::hypot(x + 0.5f - cx, y + 0.5f - cy);
+            const float keep = std::clamp(r - d, 0.0f, 1.0f);
+            row[4 * x + 3] = static_cast<uint8_t>(row[4 * x + 3] * keep);
+        }
+    }
+}
+
+}  // namespace
+
+SDL_Texture* Ui::loadImage(const std::string& path, const std::string& key, void (*filter)(SDL_Surface*)) {
     const auto it = m_images.find(key);
     if (it != m_images.end()) return it->second;
     SDL_Texture* tex = nullptr;
@@ -161,16 +191,9 @@ SDL_Texture* Ui::image(const std::string& path, bool gray) {
         SDL_Surface* rgba = SDL_ConvertSurfaceFormat(loaded, SDL_PIXELFORMAT_ABGR8888, 0);
         SDL_FreeSurface(loaded);
         if (rgba) {
-            if (gray) {
+            if (filter) {
                 SDL_LockSurface(rgba);
-                for (int y = 0; y < rgba->h; ++y) {
-                    auto* row = static_cast<uint8_t*>(rgba->pixels) + y * rgba->pitch;
-                    for (int x = 0; x < rgba->w; ++x) {
-                        uint8_t* p = row + 4 * x;
-                        const uint8_t l = static_cast<uint8_t>((p[0] * 30 + p[1] * 59 + p[2] * 11) / 140);
-                        p[0] = p[1] = p[2] = l;
-                    }
-                }
+                filter(rgba);
                 SDL_UnlockSurface(rgba);
             }
             tex = SDL_CreateTextureFromSurface(m_renderer, rgba);
@@ -179,6 +202,87 @@ SDL_Texture* Ui::image(const std::string& path, bool gray) {
     }
     m_images[key] = tex;
     return tex;
+}
+
+SDL_Texture* Ui::image(const std::string& path, bool gray) {
+    return gray ? loadImage(path, path + "#gray", grayscale) : loadImage(path, path, nullptr);
+}
+
+SDL_Texture* Ui::imageRound(const std::string& path) { return loadImage(path, path + "#round", roundMask); }
+
+void Ui::forget(const std::string& path) {
+    for (auto it = m_images.begin(); it != m_images.end();) {
+        if (it->first.compare(0, path.size(), path) == 0) {
+            if (it->second) SDL_DestroyTexture(it->second);
+            it = m_images.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+void Ui::glyph(Glyph g, int x, int y, int s, Rgba bg) {
+    rounded(x, y, s, s, s / 5, bg);
+    const Rgba w = theme::text;
+    const int cx = x + s / 2, cy = y + s / 2;
+    const int u = s / 10;
+    switch (g) {
+        case Glyph::App: {
+            const int cell = 3 * u, gap = u, left = cx - cell - gap / 2, top = cy - cell - gap / 2;
+            for (int i = 0; i < 4; ++i) {
+                rounded(left + (i % 2) * (cell + gap), top + (i / 2) * (cell + gap), cell, cell, u / 2 + 1, w);
+            }
+            break;
+        }
+        case Glyph::Service: {
+            for (int i = 0; i < 8; ++i) {
+                const double a = i * M_PI / 4;
+                thickLineRGBA(m_renderer, cx, cy, static_cast<Sint16>(cx + std::cos(a) * 3.6 * u),
+                              static_cast<Sint16>(cy + std::sin(a) * 3.6 * u), static_cast<Uint8>(std::max(2, u + u / 2)), w.r, w.g,
+                              w.b, w.a);
+            }
+            filledCircleRGBA(m_renderer, cx, cy, static_cast<Sint16>(2.8 * u), w.r, w.g, w.b, w.a);
+            filledCircleRGBA(m_renderer, cx, cy, static_cast<Sint16>(1.2 * u), bg.r, bg.g, bg.b, bg.a);
+            break;
+        }
+        case Glyph::Overlay: {
+            frame(x + 2 * u, y + 3 * u, 6 * u, 4 * u, u / 2 + 1, 2, w);
+            rounded(x + 2 * u, y + 3 * u, 2 * u + 1, 4 * u, u / 2 + 1, w);
+            break;
+        }
+        case Glyph::Art: {
+            frame(x + 2 * u, y + 2 * u + u / 2, 6 * u, 5 * u, u / 2 + 1, 2, w);
+            filledTrigonRGBA(m_renderer, x + 2 * u + 2, y + 7 * u, x + 4 * u + u / 2, y + 4 * u, x + 7 * u, y + 7 * u, w.r, w.g, w.b,
+                             w.a);
+            filledCircleRGBA(m_renderer, x + 6 * u, y + 4 * u, static_cast<Sint16>(std::max(2, u * 2 / 3)), w.r, w.g, w.b, w.a);
+            break;
+        }
+        case Glyph::Sound: {
+            rounded(x + 2 * u, cy - u, 2 * u, 2 * u, 1, w);
+            filledTrigonRGBA(m_renderer, x + 3 * u, cy, x + 5 * u, cy - 3 * u, x + 5 * u, cy + 3 * u, w.r, w.g, w.b, w.a);
+            for (int r : {2 * u, 3 * u + u / 2}) {
+                for (int t = 0; t < 2; ++t) {
+                    arcRGBA(m_renderer, x + 5 * u, cy, static_cast<Sint16>(r + t), -45, 45, w.r, w.g, w.b, w.a);
+                }
+            }
+            break;
+        }
+        case Glyph::Plus: {
+            const Uint8 thick = static_cast<Uint8>(std::max(2, u + u / 2));
+            thickLineRGBA(m_renderer, cx - 3 * u, cy, cx + 3 * u, cy, thick, w.r, w.g, w.b, w.a);
+            thickLineRGBA(m_renderer, cx, cy - 3 * u, cx, cy + 3 * u, thick, w.r, w.g, w.b, w.a);
+            break;
+        }
+        case Glyph::Refresh: {
+            for (int t = 0; t < std::max(2, u); ++t) {
+                arcRGBA(m_renderer, cx, cy, static_cast<Sint16>(3 * u - t), 20, 320, w.r, w.g, w.b, w.a);
+            }
+            const double a = 20 * M_PI / 180;
+            const int ax = static_cast<int>(cx + std::cos(a) * 2.5 * u), ay = static_cast<int>(cy + std::sin(a) * 2.5 * u);
+            filledTrigonRGBA(m_renderer, ax - 2 * u, ay, ax + 2 * u, ay, ax, ay - 2 * u, w.r, w.g, w.b, w.a);
+            break;
+        }
+    }
 }
 
 SDL_Texture* Ui::imageFromMemory(const std::string& key, const void* data, size_t size) {
