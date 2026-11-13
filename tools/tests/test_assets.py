@@ -17,7 +17,7 @@ from sa_core.catalog import load_catalog  # noqa: E402
 from sa_core.definition import build_index  # noqa: E402
 from sa_core.images import png_to_rgba, read_png  # noqa: E402
 from sa_core.layout import (  # noqa: E402
-    ICONS_DIR, SD_GAMES, SD_OVERLAY, SD_SOUND, SOUND_FILE, UH_SOUND, icon_file, ultrahand_app_name,
+    ICONS_DIR, SD_OVERLAY, SD_VERSION, SD_SOUND, SOUND_FILE, UH_SOUND, icon_file, icon_png_file, pack_file, ultrahand_app_name,
     ultrahand_icon_file,
 )
 from sa_core.notify import notification_name  # noqa: E402
@@ -65,11 +65,19 @@ class ImageTest(unittest.TestCase):
 
 
 class IconTest(unittest.TestCase):
-    def test_icon_by_template_then_default(self):
+    def test_icon_by_item_then_template_then_default(self):
         index = soh()
         boss = index.by_id("boss.gohma")
-        self.assertEqual(icon_key("ship_of_harkinian", boss), "ship_of_harkinian/boss")
+        self.assertEqual(icon_key("ship_of_harkinian", boss), "ship_of_harkinian/boss.gohma")
         self.assertEqual(icon_key("jogo_sem_icones", boss), "common/trophy")
+        with tempfile.TemporaryDirectory() as raw:
+            icons = Path(raw)
+            (icons / "ship_of_harkinian").mkdir()
+            self.assertEqual(icon_key("ship_of_harkinian", boss, icons), "common/trophy")
+            (icons / "ship_of_harkinian" / "boss.png").write_bytes(b"")
+            self.assertEqual(icon_key("ship_of_harkinian", boss, icons), "ship_of_harkinian/boss")
+            (icons / "ship_of_harkinian" / "boss.gohma.png").write_bytes(b"")
+            self.assertEqual(icon_key("ship_of_harkinian", boss, icons), "ship_of_harkinian/boss.gohma")
 
     def test_locked_secret_hides_icon(self):
         secret = next(a for a in soh().achievements if a.secret)
@@ -114,7 +122,7 @@ class ViewTest(unittest.TestCase):
         self.assertEqual((view["unlocked"], view["total"], view["xp"]), (1, len(index.achievements), 50))
         items = {item["id"]: item for item in view["achievements"]}
         self.assertTrue(items["boss.gohma"]["unlocked"])
-        self.assertEqual(items["boss.gohma"]["icon"], "ship_of_harkinian/boss")
+        self.assertEqual(items["boss.gohma"]["icon"], "ship_of_harkinian/boss.gohma")
         self.assertEqual(items["skulltulas_100"]["progress"], [4, 100])
         secret = next(item for item in view["achievements"] if item["secret"])
         self.assertEqual((secret["name"], secret["icon"]), ("Conquista secreta", "common/secret"))
@@ -127,15 +135,18 @@ class SdBuildTest(unittest.TestCase):
     def test_build_lays_out_the_card(self):
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw) / "sd"
-            result = build_sd(root, overlay=Path(raw) / "ausente.ovl")
+            missing = Path(raw) / "ausente"
+            result = build_sd(root, overlay=missing, sysmodule=missing, app=missing)
             files = set(result.files)
             self.assertIn(icon_file("common/trophy"), files)
             self.assertIn(ultrahand_icon_file("ship_of_harkinian/boss"), files)
-            self.assertIn(f"{SD_GAMES}/ship_of_harkinian.json", files)
+            self.assertIn(pack_file("ship_of_harkinian"), files)
+            self.assertIn(icon_png_file("common/trophy"), files)
+            self.assertIn(SD_VERSION, files)
             self.assertIn(SD_SOUND, files)
             self.assertIn(UH_SOUND, files)
             self.assertNotIn(SD_OVERLAY, files)
             self.assertFalse(any("state.json" in f or "progress/" in f for f in files))
             self.assertEqual((root / icon_file("common/trophy")).stat().st_size, 50 * 50 * 4)
-            quiet = build_sd(root, overlay=Path(raw) / "ausente.ovl", with_sound=False)
+            quiet = build_sd(root, overlay=missing, sysmodule=missing, app=missing, with_sound=False)
             self.assertNotIn(UH_SOUND, quiet.files)

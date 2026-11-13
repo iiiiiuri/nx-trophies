@@ -1,22 +1,27 @@
 # Switch Achievements
 
-Plataforma de conquistas independente para Nintendo Switch com Atmosphère. Cada jogo é descrito por **um JSON** (conteúdo, variáveis, endereços por build e conquistas). O motor indexa esse JSON em um plano de leitura de memória via `dmnt:cht` (ou de leitura do save, para ports homebrew), registra desbloqueios no SD e exibe notificações por meio do overlay Ultrahand/libtesla. Não há código específico por jogo.
+Conquistas nativas para Nintendo Switch com Atmosphère. Tudo roda no console:
 
-## Adicionar um jogo
+- **Sysmodule** (`sysmodule/`): liga com o console, detecta o jogo aberto e a versão dele, lê a memória do jogo pelo `dmnt:cht` do Atmosphère (ou o save, nos ports homebrew), avalia as conquistas e dispara a notificação com ícone e som.
+- **App Conquistas** (`app/`): biblioteca no estilo da tela inicial, com os jogos e, dentro de cada um, as conquistas concluídas e bloqueadas. O botão **Y** baixa a última versão do GitHub (app, sysmodule, overlay, jogos e ícones).
+- **Overlay** (`overlay/`): a mesma lista dentro do menu do Ultrahand, para ver sem sair do jogo.
 
-O que o repositório mantém são os arquivos `games/*.json`. Para suportar um jogo novo, adicione `games/<id>.json` na estrutura padrão; o catálogo o descobre sozinho e a suíte de testes o valida automaticamente.
+Cada jogo é descrito por **um JSON** (`games/<id>.json`): conteúdo, variáveis, endereços por versão e conquistas. Não há código por jogo.
 
-```bash
-python3 tools/sa.py new super_mario_odyssey --name "Super Mario Odyssey" --title-id 0100000000010000 --build-id <BUILD_ID>
-python3 tools/sa.py validate
-```
+## Instalar no console
 
-Guia completo: [`docs/adicionar-um-jogo.md`](docs/adicionar-um-jogo.md). Estrutura: [`docs/modelo-de-definicao.md`](docs/modelo-de-definicao.md). Schema para o editor: [`schema/game-definition.schema.json`](schema/game-definition.schema.json).
+1. Baixe `switch-achievements-sd.zip` da [última release](https://github.com/iiiiiuri/nx-trophies/releases/latest).
+2. Extraia na raiz do cartão SD (junta com as pastas `atmosphere/`, `switch/` e `config/` que já existem).
+3. Reinicie o console. O sysmodule começa a rodar sozinho.
+4. Abra **Conquistas** pelo Homebrew Menu.
 
-## Status
+Requisitos: Atmosphère e Ultrahand Overlay ≥ 2.3 (é ele que mostra as notificações por cima do jogo).
 
-- Estudo de viabilidade: [`docs/estudo-viabilidade.md`](docs/estudo-viabilidade.md)
-- Jogos da v1:
+Depois disso, atualize pelo próprio app (botão **Y**). O progresso fica em `sdmc:/config/switch-achievements/state.json` e nunca é apagado por atualização.
+
+O som da conquista substitui o som **global** de notificação do Ultrahand. O original fica em `sdmc:/config/switch-achievements/backup/ultrahand-notification.wav`.
+
+## Jogos
 
 | Jogo | Fonte | Conquistas | Ativas / ensaio / a descobrir |
 |---|---|---|---|
@@ -24,89 +29,76 @@ Guia completo: [`docs/adicionar-um-jogo.md`](docs/adicionar-um-jogo.md). Estrutu
 | [Link's Awakening](games/zelda_links_awakening.json) | memória | 45 | 24 / 12 / 9 |
 | [Ship of Harkinian (OoT)](games/ship_of_harkinian.json) | save JSON ([detalhes](docs/jogos/ship-of-harkinian.md)) | 34 | 34 / 0 / 0 |
 
-"Ensaio" são conquistas com endereço ou valor presumido: elas são avaliadas, mas não desbloqueiam até a confirmação no console. "A descobrir" são as que aguardam um endereço ainda não encontrado.
+"Ensaio" são conquistas com endereço presumido: são avaliadas, mas só desbloqueiam depois de confirmadas no console. "A descobrir" ainda não têm endereço. Uma versão de jogo sem endereços mapeados aparece no app como "ainda sem suporte", com o build ID detectado.
 
-O avaliador de referência em `tools/` (Python 3.10+, sem dependências) define a semântica que o sysmodule C++ vai seguir.
+## Adicionar um jogo
 
-## Uso no PC
-
-Os comandos aceitam o id do jogo (`mario_kart_8_deluxe`) ou o caminho do `.json`.
+Adicione `games/<id>.json` na estrutura padrão; o catálogo o descobre sozinho e a suíte de testes o valida. Ícones vão em `assets/icons/<id>/`. Publicar uma tag `v*` gera a release, e o app de todo mundo recebe o jogo novo no próximo **Y**.
 
 ```bash
-# catálogo: jogos, title IDs, bindings e prontidão
-python3 tools/sa.py list
-
-# qual jogo e binding o console usaria para um title ID + build ID
-python3 tools/sa.py detect 0100152000022000 FE941ED5BA14BE5D
-
-# índice: variáveis por build, ponteiros, plano de leitura e prontidão das conquistas
-python3 tools/sa.py index mario_kart_8_deluxe
-
-# reproduz um trace de memória simulada (MK8 e LA)
-python3 tools/sa.py replay mario_kart_8_deluxe examples/traces/mk8_corrida.json --verbose
-python3 tools/sa.py replay zelda_links_awakening examples/traces/la_progresso.json
-
-# saves do Ship of Harkinian (copie sdmc:/switch/soh/Save/ com o jogo fechado)
-python3 tools/sa.py save ship_of_harkinian --save-dir examples/soh/Save \
-  --state estado.json --notify-dir notificacoes/
+python3 tools/sa.py new super_mario_odyssey --name "Super Mario Odyssey" --title-id 0100000000010000 --build-id <BUILD_ID>
+python3 tools/sa.py validate
 ```
 
-Opções comuns: `--state` (persiste desbloqueios, contadores e XP), `--notify-dir`, `--reveal-secrets`, `--lang en`, `--binding`/`--build` (no `index`) e `--watch` (no `save`).
+Guia completo: [`docs/adicionar-um-jogo.md`](docs/adicionar-um-jogo.md). Estrutura: [`docs/modelo-de-definicao.md`](docs/modelo-de-definicao.md).
 
-## Teste no Switch pela rede local
+## Como funciona
 
-O sysmodule em C++ ainda não existe. Com o sys-ftpd aberto, ou com o FTP do DBI mostrando o SD inteiro (não a pasta de instalação), o PC fala com o console na rede local. Copie `device.local.json.example` para `device.local.json` e preencha o IP, a porta e o login. Esse arquivo fica só na máquina.
+```mermaid
+flowchart LR
+  G[games/*.json] -->|sa.py release| P[packs/*.json<br/>compilados]
+  P --> S[sysmodule]
+  J[jogo: memória via dmnt:cht<br/>ou save JSON] --> S
+  S -->|state.json, progress/, profile.json| A[app e overlay]
+  S -->|.notify + ícone| U[Ultrahand: toast]
+  R[GitHub releases] -->|botão Y| A
+```
+
+O Python em `tools/` é a referência da semântica. `sa.py release` compila cada definição num pacote enxuto (templates expandidos, variáveis indexadas, blocos de leitura por versão), e o motor C++ em `native/common/` só executa. Os testes rodam o motor C++ no PC e comparam com o Python tick a tick.
+
+## Desenvolvimento
 
 ```bash
-python3 tools/sa.py device probe     # confere o SD e as pastas do Ultrahand e do SoH
-python3 tools/sa.py device install   # envia overlay, ícones, definições e som (dist/sd/)
-python3 tools/sa.py device notify    # toast de teste, com o ícone de troféu
-python3 tools/sa.py device sync      # avalia os saves, publica o progresso e notifica o que for novo
+python3 -m unittest discover -s tools/tests -t tools/tests     # inclui paridade C++ x Python (precisa de g++)
+
+# compilar (Docker com devkitPro)
+for dir in overlay sysmodule app; do
+  docker run --rm -u $(id -u):$(id -g) -v "$PWD":/src -w /src/$dir devkitpro/devkita64:latest make -j8
+done
+
+python3 tools/sa.py build                    # dist/sd/, a árvore do cartão
+python3 tools/sa.py release --version 1.2.3  # dist/release/: zip + manifest.json
 ```
 
-`sync` guarda o estado no próprio SD (`state.json`), então só notifica desbloqueios novos; o primeiro `sync` notifica tudo o que o save já cumpriu. Rode com o SoH fechado. `--no-notify` só atualiza a tela.
+O CI (`.github/workflows/release.yml`) faz o mesmo a cada push; numa tag `v*` ele publica a release que o app baixa.
 
-`install` nunca mexe no estado nem no progresso. O som de conquista substitui o som **global** de notificação do Ultrahand: o original fica em `sdmc:/config/switch-achievements/backup/` e volta com `device restore-sound`. Use `install --no-sound` para manter o original. O Ultrahand carrega sons ao abrir; feche e abra o menu (ou reinicie) depois de instalar.
+Pela rede local, com FTP no console e `device.local.json` preenchido (veja `device.local.json.example`):
 
-Sem rede, `python3 tools/sa.py build` monta a mesma árvore em `dist/sd/` para copiar ao cartão.
+```bash
+python3 tools/sa.py device install   # envia dist/sd/ para o SD
+python3 tools/sa.py device probe     # confere o SD
+```
 
-## No console
-
-O overlay **Switch Achievements** aparece no menu do Ultrahand. A tela inicial mostra nível, XP e os jogos com `concluídas/total`; ao abrir um jogo, as conquistas aparecem separadas em **Concluídas** e **Bloqueadas**, com ícone (cinza enquanto bloqueada), XP, raridade e barra de progresso quando a conquista tem contador. Secretas bloqueadas ficam escondidas.
-
-O toast de cada conquista leva o ícone dela. O Ultrahand acha o ícone pelo nome do arquivo `.notify` (`SwitchAchievements-<jogo>.<ícone>-<n>.notify` → `config/ultrahand/assets/notifications/SwitchAchievements-<jogo>.<ícone>.rgba`).
+Ferramentas de análise no PC: `list`, `detect`, `index`, `replay` (traces de memória simulada) e `save` (saves do SoH).
 
 ## Estrutura
 
 | No repositório | Para quê |
 | --- | --- |
 | `games/<id>.json` | definição de cada jogo |
-| `assets/icons/<id>/<conquista ou template>.png` | ícones 50×50; sem ícone, usa `assets/icons/common/trophy.png` |
+| `assets/icons/<id>/<conquista ou template>.png` | ícones; sem ícone, usa `assets/icons/common/trophy.png` |
+| `assets/covers/<id>.png` | capa no app quando o jogo não tem ícone do sistema (homebrew) |
 | `assets/sounds/achievement.wav` | som da conquista (PCM 16 bits, 48 kHz) |
-| `overlay/` | tela do console (C++, libultrahand como submódulo) |
-| `tools/` | CLI e avaliador de referência; caminhos do SD em `tools/sa_core/layout.py` |
+| `native/common/` | motor C++ compartilhado (pacote, expressões, motor, visões) |
+| `sysmodule/`, `app/`, `overlay/` | os três binários do console |
+| `tools/` | CLI, avaliador de referência e compilador de pacotes; caminhos do SD em `tools/sa_core/layout.py` |
 
 | No SD | Quem escreve |
 | --- | --- |
-| `switch/.overlays/switch-achievements.ovl` | `install` |
-| `config/switch-achievements/games/`, `icons/`, `sounds/` | `install` |
-| `config/switch-achievements/state.json`, `profile.json`, `progress/<jogo>.json` | `sync` (depois, o sysmodule) |
-| `config/ultrahand/assets/notifications/SwitchAchievements-*.rgba` | `install` |
-| `config/ultrahand/sounds/notification.wav` | `install` (original em `backup/`) |
-
-Compilar o overlay: [`overlay/README.md`](overlay/README.md).
-
-## Testes
-
-```bash
-python3 -m unittest discover -s tools/tests -t tools/tests
-```
-
-A verificação contra o JSON Schema roda quando o pacote `jsonschema` está instalado (`pip install jsonschema`); sem ele, esse teste é pulado e o resto da suíte continua sem dependências.
-
-## Requisitos previstos no console
-
-- Atmosphère (recomendado: emuMMC, modo offline)
-- Ultrahand Overlay ≥ 2.3 com nx-ovlloader
-- EdiZon ou Breeze para confirmar build IDs e descobrir endereços
-- devkitPro (`switch-dev`) para compilar o sysmodule e o overlay
+| `atmosphere/contents/4200000000534143/` | release (sysmodule, inicia no boot) |
+| `switch/switch-achievements/switch-achievements.nro` | release (app) |
+| `switch/.overlays/switch-achievements.ovl` | release (overlay) |
+| `config/switch-achievements/packs/`, `icons/`, `covers/`, `sounds/`, `version.json` | release |
+| `config/switch-achievements/state.json`, `profile.json`, `progress/<jogo>.json`, `detected.json`, `sysmodule.log` | sysmodule |
+| `config/ultrahand/assets/notifications/SwitchAchievements-*.rgba` | release |
+| `config/ultrahand/sounds/notification.wav` | release (original em `backup/`) |

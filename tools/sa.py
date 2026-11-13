@@ -10,7 +10,8 @@ Cada jogo é um arquivo games/<id>.json na estrutura padrão; não há registro 
   index     mostra o índice: variáveis por binding, plano de leitura e prontidão
   save      avalia saves JSON (bindings save_json, ex.: Ship of Harkinian)
   replay    executa um trace de memória simulada (bindings memory, ex.: MK8, Link's Awakening)
-  build     monta dist/sd/ (overlay, ícones, definições, som) para copiar ao cartão
+  build     monta dist/sd/ (app, sysmodule, overlay, pacotes, ícones, som) para copiar ao cartão
+  release   gera o zip e o manifest.json publicados nas releases do GitHub
   device    fala com o Switch pela rede local (FTP), enquanto o sysmodule não existe
 
 Exemplos:
@@ -44,7 +45,7 @@ from sa_core.layout import (  # noqa: E402
     UH_NOTIFICATIONS, UH_SOUND, UH_SOUND_BACKUP, progress_file, ultrahand_icon_file,
 )
 from sa_core.progress import game_view, profile_view  # noqa: E402
-from sa_core.sdcard import build_sd  # noqa: E402
+from sa_core.sdcard import BuildError, build_release, build_sd  # noqa: E402
 from sa_core.definition import (  # noqa: E402
     Achievement, Binding, Confidence, Definition, DefinitionError, Index, Readiness, build_index, load_definition,
     parse_definition,
@@ -270,14 +271,25 @@ def cmd_detect(title_id: str, build_id: str) -> int:
     return 0
 
 
+MISSING_BINARIES = "não compilado(s): {} (veja overlay/, sysmodule/ e app/ README)"
+
+
 def cmd_build(out: Path) -> int:
     result = build_sd(out)
     print(f"{len(result.files)} arquivo(s) em {out}")
     for relative in sorted({f.rsplit('/', 1)[0] for f in result.files}):
         count = sum(1 for f in result.files if f.rsplit('/', 1)[0] == relative)
         print(f"  sdmc:/{relative}/ ({count})")
-    if not result.overlay:
-        print("overlay não compilado; veja overlay/README.md")
+    missing = sorted({"overlay", "sysmodule", "app"} - set(result.binaries))
+    if missing:
+        print(MISSING_BINARIES.format(", ".join(missing)))
+    return 0
+
+
+def cmd_release(version: str, notes: str) -> int:
+    zip_path, manifest = build_release(version, notes)
+    print(f"{zip_path} ({zip_path.stat().st_size // 1024} KB)")
+    print(manifest)
     return 0
 
 
@@ -345,8 +357,11 @@ def _device_install(device: FtpDevice, with_sound: bool) -> int:
     for relative in result.files:
         device.write(relative, (DIST_SD / relative).read_bytes())
     print(f"{len(result.files)} arquivo(s) enviados")
-    if not result.overlay:
-        print("overlay não compilado: nada foi para sdmc:/switch/.overlays/ (veja overlay/README.md)")
+    missing = sorted({"overlay", "sysmodule", "app"} - set(result.binaries))
+    if missing:
+        print(MISSING_BINARIES.format(", ".join(missing)))
+    if "sysmodule" in result.binaries:
+        print("Reinicie o console para o sysmodule começar a rodar.")
     if with_sound:
         print("O Ultrahand carrega os sons ao abrir; feche e abra o menu dele (ou reinicie) para ouvir o novo.")
     return 0
@@ -540,6 +555,9 @@ def main(argv: list[str] | None = None) -> int:
 
     p_build = sub.add_parser("build", help="monta dist/sd/, o espelho do cartão SD")
     p_build.add_argument("--out", type=Path, default=DIST_SD)
+    p_release = sub.add_parser("release", help="gera o zip do SD e o manifest.json da release do GitHub")
+    p_release.add_argument("--version", required=True)
+    p_release.add_argument("--notes", default="")
 
     args = parser.parse_args(argv)
     try:
@@ -547,6 +565,8 @@ def main(argv: list[str] | None = None) -> int:
             return cmd_device(args)
         if args.command == "build":
             return cmd_build(args.out)
+        if args.command == "release":
+            return cmd_release(args.version, args.notes)
         if args.command == "list":
             return cmd_list(load_catalog(), args.lang)
         if args.command == "validate":
@@ -563,7 +583,7 @@ def main(argv: list[str] | None = None) -> int:
             cmd_index(index, args.lang)
             return 0
         return cmd_save(index, args)
-    except (DefinitionError, AssetError, ImageError, json.JSONDecodeError, OSError) as exc:
+    except (DefinitionError, AssetError, ImageError, BuildError, json.JSONDecodeError, OSError) as exc:
         print(f"erro: {exc}", file=sys.stderr)
         return 2
 

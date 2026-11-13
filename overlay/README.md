@@ -1,6 +1,6 @@
 # Overlay Switch Achievements
 
-Tela do console, feita com [libultrahand](https://github.com/ppkantorski/libultrahand) (submódulo em `lib/`). Ela só lê o que o PC (e, depois, o sysmodule) publica em `sdmc:/config/switch-achievements/`: `profile.json`, `progress/<jogo>.json` e `icons/<chave>.rgba`. O formato está em `tools/sa_core/progress.py`.
+Tela do console, feita com [libultrahand](https://github.com/ppkantorski/libultrahand) (submódulo em `lib/`). Ela só lê o que o sysmodule publica em `sdmc:/config/switch-achievements/`: `profile.json`, `progress/<jogo>.json` e `icons/<chave>.rgba`. O formato está em `tools/sa_core/progress.py`.
 
 ## Compilar
 

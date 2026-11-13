@@ -6,6 +6,8 @@ dist/
 *.nsp
 *.ovl
 *.nacp
+*.nso
+*.npdm
 overlay/out/
 __pycache__/
 *.pyc

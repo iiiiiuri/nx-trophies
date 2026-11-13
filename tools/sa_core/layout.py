@@ -16,8 +16,14 @@ REPO_DIR = Path(__file__).resolve().parents[2]
 ASSETS_DIR = REPO_DIR / "assets"
 ICONS_DIR = ASSETS_DIR / "icons"
 SOUND_FILE = ASSETS_DIR / "sounds" / "achievement.wav"
+COVERS_DIR = ASSETS_DIR / "covers"
 OVERLAY_BUILD = REPO_DIR / "overlay" / "switch-achievements.ovl"
+SYSMODULE_BUILD = REPO_DIR / "sysmodule" / "switch-achievements.nsp"
+APP_BUILD = REPO_DIR / "app" / "switch-achievements.nro"
 DIST_SD = REPO_DIR / "dist" / "sd"
+RELEASE_DIR = REPO_DIR / "dist" / "release"
+GITHUB_REPO = "iiiiiuri/nx-trophies"
+RELEASE_ASSET = "switch-achievements-sd.zip"
 DEVICE_CACHE = REPO_DIR / "device-cache"
 
 SD_ROOT = "config/switch-achievements"
@@ -25,10 +31,19 @@ SD_STATE = f"{SD_ROOT}/state.json"
 SD_PROFILE = f"{SD_ROOT}/profile.json"
 SD_PROGRESS = f"{SD_ROOT}/progress"
 SD_ICONS = f"{SD_ROOT}/icons"
-SD_GAMES = f"{SD_ROOT}/games"
+SD_PACKS = f"{SD_ROOT}/packs"
+SD_COVERS = f"{SD_ROOT}/covers"
+SD_VERSION = f"{SD_ROOT}/version.json"
 SD_SOUND = f"{SD_ROOT}/sounds/achievement.wav"
 SD_BACKUP = f"{SD_ROOT}/backup"
 SD_OVERLAY = "switch/.overlays/switch-achievements.ovl"
+SD_APP = "switch/switch-achievements/switch-achievements.nro"
+
+SYSMODULE_ID = "4200000000534143"
+SD_SYSMODULE_DIR = f"atmosphere/contents/{SYSMODULE_ID}"
+SD_SYSMODULE = f"{SD_SYSMODULE_DIR}/exefs.nsp"
+SD_SYSMODULE_BOOT = f"{SD_SYSMODULE_DIR}/flags/boot2.flag"
+SD_SYSMODULE_TOOLBOX = f"{SD_SYSMODULE_DIR}/toolbox.json"
 
 UH_NOTIFICATIONS = "config/ultrahand/notifications"
 UH_ICONS = "config/ultrahand/assets/notifications"
@@ -49,6 +64,15 @@ def progress_file(game_id: str) -> str:
 def icon_file(icon_key: str) -> str:
     """`ship_of_harkinian/boss` -> config/switch-achievements/icons/ship_of_harkinian/boss.rgba"""
     return f"{SD_ICONS}/{icon_key}.rgba"
+
+
+def icon_png_file(icon_key: str) -> str:
+    """Versão em PNG, no tamanho original, para o app."""
+    return f"{SD_ICONS}/{icon_key}.png"
+
+
+def pack_file(game_id: str) -> str:
+    return f"{SD_PACKS}/{game_id}.json"
 
 
 def ultrahand_app_name(icon_key: str) -> str:
