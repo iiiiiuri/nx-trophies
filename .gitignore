@@ -1,0 +1,7 @@
+agent-tools/
+build/
+dist/
+*.elf
+*.nro
+*.nsp
+*.ovl
