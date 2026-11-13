@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "game": {
+    "id": "ship_of_harkinian",
+    "name": "Ship of Harkinian (Ocarina of Time)",
+    "pack_version": "0.1.0",
+    "authors": ["switch-achievements"],
+    "notes": "Índices conferidos em HarbourMasters/Shipwright (branch develop): soh/soh/Enhancements/gameplaystats.h e soh/include/z64item.h. Conquistas baseadas em 'counts' dependem da ordem do enum GameplayStatCount (107 entradas) e ficam protegidas por guard."
+  },
+  "sources": {
+    "save": {
+      "type": "save_json",
+      "files": [
+        "sdmc:/switch/soh/Save/file1.sav",
+        "sdmc:/switch/soh/Save/file2.sav",
+        "sdmc:/switch/soh/Save/file3.sav"
+      ],
+      "aliases": {
+        "base": "sections.base.data",
+        "stats": "sections.sohStats.data"
+      },
+      "slot_modes": {
+        "randomizer": { "value": "base.n64ddFlag", "op": "==", "rhs": 1 },
+        "master_quest": { "value": "base.isMasterQuest", "op": "==", "rhs": 1 }
+      },
+      "poll_ms": 2000
+    }
+  },
+  "achievements": [
+    {
+      "id": "kokiri_sword",
+      "name": { "pt-BR": "Pequeno Espadachim", "en": "Little Swordsman" },
+      "description": { "pt-BR": "Obtenha a Espada Kokiri.", "en": "Obtain the Kokiri Sword." },
+      "rarity": "common",
+      "xp": 10,
+      "condition": { "value": "base.inventory.equipment", "op": "has_all", "rhs": "0x0001" }
+    },
+    {
+      "id": "fairy_ocarina",
+      "name": { "pt-BR": "Presente de Saria", "en": "Saria's Gift" },
+      "description": { "pt-BR": "Receba a Ocarina das Fadas.", "en": "Receive the Fairy Ocarina." },
+      "rarity": "common",
+      "xp": 10,
+      "modes": ["vanilla", "master_quest"],
+      "condition": { "value": "stats.itemTimestamps[0x07]", "op": ">", "rhs": 0 }
+    },
+    {
+      "id": "defeat_gohma",
+      "name": { "pt-BR": "Parasita Aracnídeo", "en": "Parasitic Arachnid" },
+      "description": { "pt-BR": "Derrote a Rainha Gohma na Árvore Deku.", "en": "Defeat Queen Gohma inside the Deku Tree." },
+      "rarity": "common",
+      "xp": 25,
+      "modes": ["vanilla", "master_quest"],
+      "condition": {
+        "any": [
+          { "value": "stats.itemTimestamps[0xA0]", "op": ">", "rhs": 0 },
+          { "value": "base.inventory.questItems", "op": "has_all", "rhs": "0x40000" }
+        ]
+      }
+    },
+    {
+      "id": "defeat_king_dodongo",
+      "name": { "pt-BR": "Dinossauro Infernal", "en": "Infernal Dinosaur" },
+      "description": { "pt-BR": "Derrote o King Dodongo.", "en": "Defeat King Dodongo." },
+      "rarity": "common",
+      "xp": 25,
+      "modes": ["vanilla", "master_quest"],
+      "condition": {
+        "any": [
+          { "value": "stats.itemTimestamps[0xA1]", "op": ">", "rhs": 0 },
+          { "value": "base.inventory.questItems", "op": "has_all", "rhs": "0x80000" }
+        ]
+      }
+    },
+    {
+      "id": "defeat_barinade",
+      "name": { "pt-BR": "Dentro de Jabu-Jabu", "en": "Inside Jabu-Jabu" },
+      "description": { "pt-BR": "Derrote Barinade.", "en": "Defeat Barinade." },
+      "rarity": "common",
+      "xp": 25,
+      "modes": ["vanilla", "master_quest"],
+      "condition": {
+        "any": [
+          { "value": "stats.itemTimestamps[0xA2]", "op": ">", "rhs": 0 },
+          { "value": "base.inventory.questItems", "op": "has_all", "rhs": "0x100000" }
+        ]
+      }
+    },
+    {
+      "id": "spiritual_stones",
+      "name": { "pt-BR": "As Três Pedras", "en": "The Three Stones" },
+      "description": { "pt-BR": "Reúna as três Pedras Espirituais.", "en": "Collect all three Spiritual Stones." },
+      "rarity": "uncommon",
+      "xp": 50,
+      "modes": ["vanilla", "master_quest"],
+      "progress": { "value": { "popcount": { "value": "base.inventory.questItems", "mask": "0x1C0000" } }, "target": 3 },
+      "condition": { "value": "base.inventory.questItems", "op": "has_all", "rhs": "0x1C0000" }
+    },
+    {
+      "id": "master_sword",
+      "name": { "pt-BR": "A Lâmina do Mal", "en": "The Blade of Evil's Bane" },
+      "description": { "pt-BR": "Retire a Espada Mestra do Pedestal do Tempo.", "en": "Draw the Master Sword from the Pedestal of Time." },
+      "rarity": "uncommon",
+      "xp": 50,
+      "condition": { "value": "base.inventory.equipment", "op": "has_all", "rhs": "0x0002" }
+    },
+    {
+      "id": "defeat_phantom_ganon",
+      "name": { "pt-BR": "Cavaleiro Fantasma", "en": "Phantom Rider" },
+      "description": { "pt-BR": "Derrote Phantom Ganon no Templo da Floresta.", "en": "Defeat Phantom Ganon in the Forest Temple." },
+      "rarity": "uncommon",
+      "xp": 50,
+      "modes": ["vanilla", "master_quest"],
+      "condition": {
+        "any": [
+          { "value": "stats.itemTimestamps[0xA3]", "op": ">", "rhs": 0 },
+          { "value": "base.inventory.questItems", "op": "has_all", "rhs": "0x01" }
+        ]
+      }
+    },
+    {
+      "id": "defeat_volvagia",
+      "name": { "pt-BR": "Dragão da Cratera", "en": "Crater Dragon" },
+      "description": { "pt-BR": "Derrote Volvagia no Templo do Fogo.", "en": "Defeat Volvagia in the Fire Temple." },
+      "rarity": "uncommon",
+      "xp": 50,
+      "modes": ["vanilla", "master_quest"],
+      "condition": {
+        "any": [
+          { "value": "stats.itemTimestamps[0xA4]", "op": ">", "rhs": 0 },
+          { "value": "base.inventory.questItems", "op": "has_all", "rhs": "0x02" }
+        ]
+      }
+    },
+    {
+      "id": "defeat_morpha",
+      "name": { "pt-BR": "Sobrevivi ao Templo da Água", "en": "I Survived the Water Temple" },
+      "description": { "pt-BR": "Derrote Morpha.", "en": "Defeat Morpha." },
+      "rarity": "rare",
+      "xp": 75,
+      "modes": ["vanilla", "master_quest"],
+      "condition": {
+        "any": [
+          { "value": "stats.itemTimestamps[0xA5]", "op": ">", "rhs": 0 },
+          { "value": "base.inventory.questItems", "op": "has_all", "rhs": "0x04" }
+        ]
+      }
+    },
+    {
+      "id": "defeat_bongo_bongo",
+      "name": { "pt-BR": "Ritmo das Sombras", "en": "Rhythm of Shadows" },
+      "description": { "pt-BR": "Derrote Bongo Bongo no Templo das Sombras.", "en": "Defeat Bongo Bongo in the Shadow Temple." },
+      "rarity": "rare",
+      "xp": 75,
+      "modes": ["vanilla", "master_quest"],
+      "condition": {
+        "any": [
+          { "value": "stats.itemTimestamps[0xA6]", "op": ">", "rhs": 0 },
+          { "value": "base.inventory.questItems", "op": "has_all", "rhs": "0x10" }
+        ]
+      }
+    },
+    {
+      "id": "defeat_twinrova",
+      "name": { "pt-BR": "Bruxas Gêmeas", "en": "Twin Witches" },
+      "description": { "pt-BR": "Derrote Twinrova no Templo do Espírito.", "en": "Defeat Twinrova in the Spirit Temple." },
+      "rarity": "rare",
+      "xp": 75,
+      "modes": ["vanilla", "master_quest"],
+      "condition": {
+        "any": [
+          { "value": "stats.itemTimestamps[0xA7]", "op": ">", "rhs": 0 },
+          { "value": "base.inventory.questItems", "op": "has_all", "rhs": "0x08" }
+        ]
+      }
+    },
+    {
+      "id": "six_medallions",
+      "name": { "pt-BR": "Os Seis Sábios", "en": "The Six Sages" },
+      "description": { "pt-BR": "Reúna os seis Medalhões.", "en": "Collect all six Medallions." },
+      "rarity": "epic",
+      "xp": 150,
+      "modes": ["vanilla", "master_quest"],
+      "progress": { "value": { "popcount": { "value": "base.inventory.questItems", "mask": "0x3F" } }, "target": 6 },
+      "condition": { "value": "base.inventory.questItems", "op": "has_all", "rhs": "0x3F" }
+    },
+    {
+      "id": "all_songs",
+      "name": { "pt-BR": "Virtuose da Ocarina", "en": "Ocarina Virtuoso" },
+      "description": { "pt-BR": "Aprenda as 12 canções.", "en": "Learn all 12 songs." },
+      "rarity": "rare",
+      "xp": 100,
+      "progress": { "value": { "popcount": { "value": "base.inventory.questItems", "mask": "0x3FFC0" } }, "target": 12 },
+      "condition": { "value": "base.inventory.questItems", "op": "has_all", "rhs": "0x3FFC0" }
+    },
+    {
+      "id": "hero_of_time",
+      "name": { "pt-BR": "Herói do Tempo", "en": "Hero of Time" },
+      "description": { "pt-BR": "Derrote Ganon e salve Hyrule.", "en": "Defeat Ganon and save Hyrule." },
+      "rarity": "epic",
+      "xp": 250,
+      "condition": {
+        "any": [
+          { "value": "stats.itemTimestamps[0xA9]", "op": ">", "rhs": 0 },
+          { "value": "stats.gameComplete", "op": "==", "rhs": 1 }
+        ]
+      }
+    },
+    {
+      "id": "biggoron_sword",
+      "name": { "pt-BR": "Lâmina de Biggoron", "en": "Biggoron's Blade" },
+      "description": { "pt-BR": "Complete a troca de itens e obtenha a Espada de Biggoron.", "en": "Finish the trading sequence and obtain Biggoron's Sword." },
+      "rarity": "rare",
+      "xp": 100,
+      "condition": { "value": "base.inventory.equipment", "op": "has_all", "rhs": "0x0004" }
+    },
+    {
+      "id": "skulltulas_50",
+      "name": { "pt-BR": "Caçador de Skulltulas", "en": "Skulltula Hunter" },
+      "description": { "pt-BR": "Colete 50 Gold Skulltula Tokens.", "en": "Collect 50 Gold Skulltula Tokens." },
+      "rarity": "uncommon",
+      "xp": 50,
+      "progress": { "value": "base.inventory.gsTokens", "target": 50 },
+      "condition": { "value": "base.inventory.gsTokens", "op": ">=", "rhs": 50 }
+    },
+    {
+      "id": "skulltulas_100",
+      "name": { "pt-BR": "Maldição Quebrada", "en": "Curse Lifted" },
+      "description": { "pt-BR": "Colete todos os 100 Gold Skulltula Tokens.", "en": "Collect all 100 Gold Skulltula Tokens." },
+      "rarity": "legendary",
+      "xp": 250,
+      "progress": { "value": "base.inventory.gsTokens", "target": 100 },
+      "condition": { "value": "base.inventory.gsTokens", "op": ">=", "rhs": 100 }
+    },
+    {
+      "id": "twenty_hearts",
+      "name": { "pt-BR": "Coração de Herói", "en": "Heart of a Hero" },
+      "description": { "pt-BR": "Alcance 20 corações.", "en": "Reach 20 heart containers." },
+      "rarity": "rare",
+      "xp": 100,
+      "progress": { "value": { "div": ["base.healthCapacity", 16] }, "target": 20 },
+      "condition": { "value": "base.healthCapacity", "op": ">=", "rhs": 320 }
+    },
+    {
+      "id": "first_death",
+      "name": { "pt-BR": "Fim de Jogo?", "en": "Game Over?" },
+      "description": { "pt-BR": "Morra pela primeira vez.", "en": "Die for the first time." },
+      "rarity": "common",
+      "xp": 5,
+      "secret": true,
+      "condition": { "value": "base.deaths", "op": ">=", "rhs": 1 }
+    },
+    {
+      "id": "speedy_gohma",
+      "name": { "pt-BR": "Ligeirinho de Kokiri", "en": "Kokiri Speedster" },
+      "description": { "pt-BR": "Derrote a Rainha Gohma com menos de 30 minutos de jogo.", "en": "Defeat Queen Gohma with less than 30 minutes of playtime." },
+      "rarity": "epic",
+      "xp": 100,
+      "secret": true,
+      "modes": ["vanilla", "master_quest"],
+      "condition": {
+        "all": [
+          { "value": "stats.itemTimestamps[0xA0]", "op": ">", "rhs": 0 },
+          { "value": "stats.itemTimestamps[0xA0]", "op": "<=", "rhs": 18000 }
+        ]
+      }
+    },
+    {
+      "id": "deathless",
+      "name": { "pt-BR": "Imortal", "en": "Immortal" },
+      "description": { "pt-BR": "Zere o jogo sem morrer nenhuma vez.", "en": "Beat the game without dying once." },
+      "rarity": "legendary",
+      "xp": 500,
+      "secret": true,
+      "condition": {
+        "all": [
+          { "value": "base.deaths", "op": "==", "rhs": 0 },
+          {
+            "any": [
+              { "value": "stats.itemTimestamps[0xA9]", "op": ">", "rhs": 0 },
+              { "value": "stats.gameComplete", "op": "==", "rhs": 1 }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "ten_hours",
+      "name": { "pt-BR": "Dedicação Hyliana", "en": "Hylian Dedication" },
+      "description": { "pt-BR": "Acumule 10 horas de jogo em um arquivo.", "en": "Play a single file for 10 hours." },
+      "rarity": "uncommon",
+      "xp": 50,
+      "progress": { "value": { "div": [{ "sum": [{ "div": ["stats.playTimer", 2] }, { "div": ["stats.pauseTimer", 3] }] }, 36000] }, "target": 10 },
+      "condition": { "value": { "sum": [{ "div": ["stats.playTimer", 2] }, { "div": ["stats.pauseTimer", 3] }] }, "op": ">=", "rhs": 360000 }
+    },
+    {
+      "id": "enemies_500",
+      "name": { "pt-BR": "Terror de Hyrule", "en": "Terror of Hyrule" },
+      "description": { "pt-BR": "Derrote 500 inimigos em um arquivo.", "en": "Defeat 500 enemies in a single file." },
+      "rarity": "rare",
+      "xp": 75,
+      "guard": { "value": "stats.counts.length", "op": "==", "rhs": 107 },
+      "progress": { "value": { "sum_range": { "path": "stats.counts", "from": 0, "to": 69 } }, "target": 500 },
+      "condition": { "value": { "sum_range": { "path": "stats.counts", "from": 0, "to": 69 } }, "op": ">=", "rhs": 500 }
+    },
+    {
+      "id": "rolls_1000",
+      "name": { "pt-BR": "Cambalhota Profissional", "en": "Professional Roller" },
+      "description": { "pt-BR": "Role 1.000 vezes.", "en": "Roll 1,000 times." },
+      "rarity": "uncommon",
+      "xp": 25,
+      "guard": { "value": "stats.counts.length", "op": "==", "rhs": 107 },
+      "progress": { "value": "stats.counts[96]", "target": 1000 },
+      "condition": { "value": "stats.counts[96]", "op": ">=", "rhs": 1000 }
+    },
+    {
+      "id": "pots_300",
+      "name": { "pt-BR": "Inimigo da Cerâmica", "en": "Enemy of Pottery" },
+      "description": { "pt-BR": "Quebre 300 potes.", "en": "Break 300 pots." },
+      "rarity": "uncommon",
+      "xp": 25,
+      "guard": { "value": "stats.counts.length", "op": "==", "rhs": 107 },
+      "progress": { "value": "stats.counts[100]", "target": 300 },
+      "condition": { "value": "stats.counts[100]", "op": ">=", "rhs": 300 }
+    },
+    {
+      "id": "dark_link",
+      "name": { "pt-BR": "Encare a Si Mesmo", "en": "Face Yourself" },
+      "description": { "pt-BR": "Derrote Dark Link.", "en": "Defeat Dark Link." },
+      "rarity": "rare",
+      "xp": 75,
+      "guard": { "value": "stats.counts.length", "op": "==", "rhs": 107 },
+      "condition": { "value": "stats.counts[12]", "op": ">=", "rhs": 1 }
+    }
+  ]
+}

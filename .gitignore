@@ -5,3 +5,7 @@ dist/
 *.nro
 *.nsp
 *.ovl
+__pycache__/
+*.pyc
+estado.json
+notificacoes/

@@ -435,6 +435,7 @@ sequenceDiagram
 | `memory` (padrão) | memrefs via `dmnt:cht` | MVP |
 | `input` | sequências de botões e contadores de input | Fase 3 |
 | `save` | campos do save lidos offline pelo Manager | Fase 4 |
+| `save_json` | save legível (JSON) observado por mtime durante o jogo; para ports e homebrews como o Ship of Harkinian | **Piloto** ([docs/jogos/ship-of-harkinian.md](jogos/ship-of-harkinian.md)) |
 | `meta` | "desbloqueie todas as outras do jogo" (platina) | Fase 2 |
 
 ### 7.4 Operadores e modificadores
