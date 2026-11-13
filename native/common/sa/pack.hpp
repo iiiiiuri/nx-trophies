@@ -96,6 +96,7 @@ struct Binding {
     std::vector<std::pair<std::string, Cond>> modes;
     std::vector<Readiness> ready;
     std::vector<Pointer> pointers;
+    uint32_t pointerWidth = 8;
     std::vector<Block> blocks;
     std::vector<PathVar> paths;
 };

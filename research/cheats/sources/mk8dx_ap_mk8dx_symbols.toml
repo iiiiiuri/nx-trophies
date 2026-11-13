@@ -1,0 +1,223 @@
+# MK8DX 4.0.1 symbols used by the mod (main build id 158C0C7399AABD7B...).
+#
+# Each entry is located in one of two ways:
+#   address           - main-relative address on 4.0.1, published in the
+#                       commented ASM of RoGamer97/ASM-Cheats-and-Patches
+#                       (Switch/Mario Kart 8 Deluxe/4.0.1/*/source.s). Used
+#                       as-is; if a pattern is also present it is only
+#                       cross-checked and logged.
+#   pattern / offset  - for functions with no published 4.0.1 address.
+#                       IDA-style byte pattern scanned over main .text at
+#                       instruction alignment; address = match + offset.
+#                       Pattern data comes from fishguy6564/MK8DX-Base-Plugin
+#                       symbols.toml, which was authored against 3.0.5. If the
+#                       exact bytes miss, a RELAXED form is tried (branch
+#                       distances, ADRP pages and struct-offset immediates
+#                       wildcarded) and accepted only on a unique match. That
+#                       is the porting method Ro demonstrates in "Porting MK8D
+#                       patches to v4.0.0".
+#
+# Offsets are quoted strings because TOML has no negative hex literals.
+# Run `python scripts/gen_symbol_table.py` after editing to regenerate
+# switch-mod/src/sym/SymbolTable.inc (committed; a test checks freshness).
+
+[[symbols]]
+name = "gear::GetRaceInfo"
+mangled = "_ZN4gear11GetRaceInfoEv"
+pattern = "8C 01 0B 9B 8C 45 40 B9 2D 00 40 B9 9F 01 0D 6B 08 15 88 1A 5F 01 09 EB EB FE FF 54 02 00 00 14"
+offset = "0x2C"
+address = "0x86F7BC"
+
+[[symbols]]
+name = "gear::GetNextRaceInfo"
+mangled = "_ZN4gear15GetNextRaceInfoEv"
+pattern = "8C 01 0B 9B 8C 45 40 B9 2D 00 40 B9 9F 01 0D 6B 08 15 88 1A 5F 01 09 EB EB FE FF 54 02 00 00 14"
+offset = "0x44"
+
+[[symbols]]
+name = "gear::FlagAccessor::isOpen"
+mangled = "_ZNK4gear12FlagAccessor6isOpenEN4mush12EGrandPrixIDE"
+pattern = "08 C4 40 F9 A9 C3 9F B8 08 01 09 8B 09 E4 83 52 08 69 69 38"
+offset = "-0x24"
+
+[[symbols]]
+name = "gear::DLCManager::getCupStatus"
+mangled = "_ZN4gear10DLCManager12getCupStatusEN4mush12EGrandPrixIDE"
+pattern = "29 00 40 B9 89 13 F8 37 29 00 40 B9 3F 1D 00 71"
+offset = "-0x04"
+
+[[symbols]]
+name = "ui::SetNextCourse"
+mangled = "_ZN2ui13SetNextCourseERKNS_10CourseInfoE"
+# Contains LDRSW X9,[X8,#0x1744]; that member moved in 4.0.0, so this one is
+# expected to resolve through the relaxed form (on 4.0.0 and 4.0.1 alike).
+pattern = "E0 03 13 AA 00 01 3F D6 1F 00 00 72 68 12 9F 9A 08 19 40 F9 09 45 97 B9 0A 39 54 B9 29 05 00 91 3F 01 0A 6B"
+offset = "0x4C"
+
+[[symbols]]
+name = "ui::Control_CupButton::setCup"
+mangled = "_ZN2ui17Control_CupButton6setCupENS_4ECupENS_8DLCStateE"
+pattern = "F4 03 01 AA 88 02 40 B9 F3 03 00 AA 68 D2 03 B9 48 00 40 B9 1F 15 00 71"
+offset = "-0x0C"
+
+[[symbols]]
+name = "ui::Control_RaceLapCoin::onCalc_"
+mangled = "_ZN2ui19Control_RaceLapCoin7onCalc_Ev"
+pattern = "FF 03 02 D1 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 F3 03 00 AA 68 5E 40 F9 14 41 41 39 68 42 43 39"
+offset = "0x00"
+
+[[symbols]]
+name = "gear::SaveDataFile::load"
+mangled = "_ZN4gear12SaveDataFile4loadEi"
+pattern = "68 2E 40 F9 08 0D 40 F9 E0 03 17 AA 00 01 3F D6"
+offset = "-0x84"
+
+[[symbols]]
+name = "gear::GetCurrentUserSaveData"
+mangled = "_ZN4gear22GetCurrentUserSaveDataEv"
+pattern = "08 08 44 F9 00 AD 40 F9 FD 7B C1 A8 C0 03 5F D6"
+offset = "-0x0C"
+
+[[symbols]]
+name = "gear::FrameworkUtil::getCurrentGameScene"
+mangled = "_ZN4gear13FrameworkUtil19getCurrentGameSceneEv"
+pattern = "08 01 40 F9 08 11 40 F9 08 05 40 F9 09 01 46 39 3F 01 1E 72 E0 03 88 9A"
+offset = "-0x08"
+address = "0x7E7434"
+
+[[symbols]]
+name = "gear::NetworkUtil::getMyKartIndex"
+mangled = "_ZN4gear11NetworkUtil14getMyKartIndexEv"
+pattern = "A9 C3 1F 38 00 01 3F D6 FD 7B 41 A9 00 1C 00 13"
+offset = "-0x2C"
+address = "0x852234"
+
+[[symbols]]
+name = "ui::RaceWindow::onFakeGoal"
+mangled = "_ZN2ui10RaceWindow10onFakeGoalEv"
+# Ro's 4.0.1 FINISH patch hooks onFakeGoal + 0xD8 at 0x5503C8.
+pattern = ""
+offset = "0x0"
+address = "0x5502F0"
+
+[[symbols]]
+name = "gear::ItemOwner::startSlot"
+mangled = "_ZN4gear9ItemOwner9startSlotEiNS_9EItemSlotEbb"
+pattern = ""
+offset = "0x0"
+address = "0x43374"
+
+[[symbols]]
+name = "mush::EDriverID::text_"
+mangled = "_ZN4mush9EDriverID5text_Ei"
+pattern = "A9 52 00 91 08 41 00 91 A8 26 00 A9 68 3C 80 52 E0 03 15 AA"
+offset = "-0x80"
+
+[[symbols]]
+name = "mush::EBodyID::text_"
+mangled = "_ZN4mush7EBodyID5text_Ei"
+pattern = "A9 52 00 91 08 41 00 91 A8 26 00 A9 E8 24 80 52 E0 03 15 AA"
+offset = "-0x80"
+
+[[symbols]]
+name = "mush::ETireID::text_"
+mangled = "_ZN4mush7ETireID5text_Ei"
+pattern = "A9 52 00 91 08 41 00 91 A8 26 00 A9 C8 0E 80 52 E0 03 15 AA"
+offset = "-0x80"
+
+[[symbols]]
+# RoGamer97 "CPU Combo Modifier" (4.0.1) hooks this function at +0x2140 = 0x4FF998;
+# it finalises every kart's body/tire/glider/driver in RaceInfo at race setup.
+name = "ui::SetRandomCPU"
+mangled = "_ZN2ui12SetRandomCPUEbbPN4sead9SafeArrayIN4mush9EDriverIDELi12EEE"
+address = "0x4FD858"
+
+[[symbols]]
+# Race-scene director prepare: runs after the UI has assembled the 12-kart
+# RaceInfo and before the kart objects are built from it. Pattern from
+# fishguy6564/MK8DX-Base-Plugin symbols.toml.
+name = "object::KartDirector::prepareBeforeStructure"
+mangled = "_ZN6object12KartDirector22prepareBeforeStructureEPKN4gear11ArgumentObjE"
+pattern = "E0 03 1C 32 88 82 41 B9 68 C2 00 B9"
+offset = "-0x3C"
+
+[[symbols]]
+# gear::PlayerManager holds one gear::Player per (local/network) player; each
+# Player carries the RaceKartInfo the UI writes the human selection into
+# (Player+0x210, per MK8DX-Headers). Pattern from fishguy6564's symbols.toml.
+name = "gear::GetPlayerManager"
+mangled = "_ZN4gear16GetPlayerManagerEv"
+pattern = "00 00 44 F9 FD 7B C1 A8 C0 03 5F D6 FD 7B BF A9 FD 03 00 91"
+offset = "-0x10"
+
+[[symbols]]
+# static ui::DLCState Page_CourseBase::isDLC(ui::ECup): the cup-select page's
+# per-cup availability query (feeds Control_CupButton::setCup AND the press
+# handler). DLCState has a user-declared destructor, so it is returned through
+# the hidden x8 pointer; ECup is passed by reference. Pattern from fishguy6564.
+name = "ui::Page_CourseBase::isDLC"
+mangled = "_ZN2ui15Page_CourseBase5isDLCENS_4ECupE"
+pattern = "1F 0D 00 71 E8 03 1F 32 E8 03 88 1A"
+offset = "-0x70"
+
+[[symbols]]
+name = "mush::EWingID::text_"
+mangled = "_ZN4mush7EWingID5text_Ei"
+pattern = "A9 52 00 91 08 41 00 91 A8 26 00 A9 68 0A 80 52 E0 03 15 AA"
+offset = "-0x80"
+
+# The driver / part overloads of FlagAccessor::isOpen, right after the cup one
+# (+0x865E7C). Identical code except the save flag table they index
+# (save+0x188 -> +0x1F48 drivers, +0x1F88 bodies, +0x1FC8 tires, +0x2008
+# gliders; open == 3), so the pattern is the cup entry's with that MOVZ
+# immediate swapped in. Located in the 4.0.1 disassembly (2026-11-04); each
+# matches exactly once (+0x865F14 / +0x865F60 / +0x865FAC / +0x865FF8). Which
+# is which was read off their callers (see PartUnlockHook.cpp).
+[[symbols]]
+name = "gear::FlagAccessor::isOpen(EDriverID)"
+mangled = "_ZNK4gear12FlagAccessor6isOpenEN4mush9EDriverIDE"
+pattern = "08 C4 40 F9 A9 C3 9F B8 08 01 09 8B 09 E9 83 52 08 69 69 38"
+offset = "-0x24"
+
+[[symbols]]
+name = "gear::FlagAccessor::isOpen(EBodyID)"
+mangled = "_ZNK4gear12FlagAccessor6isOpenEN4mush7EBodyIDE"
+pattern = "08 C4 40 F9 A9 C3 9F B8 08 01 09 8B 09 F1 83 52 08 69 69 38"
+offset = "-0x24"
+
+[[symbols]]
+name = "gear::FlagAccessor::isOpen(ETireID)"
+mangled = "_ZNK4gear12FlagAccessor6isOpenEN4mush7ETireIDE"
+pattern = "08 C4 40 F9 A9 C3 9F B8 08 01 09 8B 09 F9 83 52 08 69 69 38"
+offset = "-0x24"
+
+[[symbols]]
+name = "gear::FlagAccessor::isOpen(EWingID)"
+mangled = "_ZNK4gear12FlagAccessor6isOpenEN4mush7EWingIDE"
+pattern = "08 C4 40 F9 A9 C3 9F B8 08 01 09 8B 09 01 84 52 08 69 69 38"
+offset = "-0x24"
+
+[[symbols]]
+# StatCapHook.cpp: per-kart stat setup during race build (sums the body /
+# driver / tire / glider stat rows into KartVehicle+0x2DC and derives the
+# physics levels). x0 = KartVehicle*, x1 = param object, w2 = bool, s0 = float.
+# Unnamed in every public source; name is ours. Address and pattern from the
+# 4.0.1 disassembly (single caller +0x16FA58).
+name = "object::KartVehicle::setupStatParam"
+mangled = ""
+pattern = "FF C3 06 D1 E8 B3 00 FD FC B7 00 F9 F8 5F 17 A9"
+offset = "0x0"
+address = "0x170738"
+
+[[symbols]]
+# GpResultHook.cpp: records a finished Grand Prix's trophy / stars in the save
+# from each local player's GP history (final placing + total points).
+# x0 = result arg (s32 gate, cup, engine, ...), x1 = bool* save dirty.
+# Unnamed in every public source; name is ours. 4.0.1 disassembly; callers
+# +0x543E28 (GP results flow) and the +0x552CD8 tail of +0x55211C. The
+# prologue is shared by 98 functions, so the pattern starts 0x18 in.
+name = "ui::GrandPrix::commitResult"
+mangled = ""
+pattern = "FD 43 01 91 F3 03 00 AA 68 02 40 B9 F4 03 01 AA"
+offset = "-0x18"
+address = "0x552FB0"

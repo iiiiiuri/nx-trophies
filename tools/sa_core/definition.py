@@ -49,8 +49,8 @@ ALLOWED_KEYS = {
     "definição": {"$schema", "schema_version", "game", "content", "variables", "bindings", "events", "achievements"},
     "game": {"id", "name", "kind", "title_ids", "notes"},
     "variável": {"type", "indexed_by", "description"},
-    "binding": {"id", "label", "source", "match", "pointers", "active_when", "aliases", "instance_modes",
-                "poll_ms", "variables", "notes"},
+    "binding": {"id", "label", "source", "match", "pointers", "pointer_width", "active_when", "aliases",
+                "instance_modes", "poll_ms", "variables", "notes"},
     "match": {"build_ids", "files"},
     "ponteiro": {"base", "chain", "note"},
     "variável do binding": {"base", "from", "offset", "stride", "index_key", "path", "type", "confidence", "note"},
@@ -123,6 +123,7 @@ class Binding:
     instance_modes: dict[str, dict[str, Any]]
     poll_ms: int
     raw_variables: dict[str, Any]
+    pointer_width: int = 8
 
 
 @dataclass(frozen=True)
@@ -374,6 +375,9 @@ def _parse_binding(raw: dict[str, Any]) -> Binding:
         if not 1 <= len(chain) <= MAX_CHAIN_DEPTH:
             raise DefinitionError(f"{where} ponteiro {pointer_id!r}: cadeia deve ter 1..{MAX_CHAIN_DEPTH} níveis")
         pointers[pointer_id] = Pointer(pointer_id, region, chain)
+    pointer_width = raw.get("pointer_width", 8)
+    if pointer_width not in (4, 8):
+        raise DefinitionError(f"{where}: pointer_width deve ser 4 (jogo AArch32) ou 8")
     raw_variables = dict(_require(raw, "variables", where))
     for name, spec in raw_variables.items():
         _check_keys(spec, "variável do binding", f"{where} variável {name!r}")
@@ -392,6 +396,7 @@ def _parse_binding(raw: dict[str, Any]) -> Binding:
         instance_modes=dict(raw.get("instance_modes", {})),
         poll_ms=int(raw.get("poll_ms", 500 if source == "memory" else 2000)),
         raw_variables=raw_variables,
+        pointer_width=pointer_width,
     )
 
 

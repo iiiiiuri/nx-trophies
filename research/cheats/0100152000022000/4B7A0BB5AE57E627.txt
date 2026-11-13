@@ -1,0 +1,8 @@
+; Fonte: HamletDuFromage/switch-cheats-db, cheats/0100152000022000.json e cheats_gbatemp/0100152000022000.json (chave 4B7A0BB5AE57E627)
+
+[3-4 player 60 FPS]
+04000000 00B8173C EA000097
+
+[3-4 player 30 FPS (Default)]
+04000000 00B8173C 1A000097
+

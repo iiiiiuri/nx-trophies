@@ -129,7 +129,8 @@ class IndexTest(unittest.TestCase):
         d = load_definition(GAMES / "zelda_links_awakening.json")
         index = build_index(d, d.binding_for_build("909E904AF78AC1B8"))
         self.assertEqual(len(index.read_plan), 2)
-        self.assertEqual(index.instances["dungeon.treasures[angler_tunnel]"].offset, 0x1CBB331)
+        self.assertEqual(index.instances["dungeon.treasures[angler_tunnel]"].offset, 0x1CBB361)
+        self.assertEqual(index.instances["dungeon.treasures[color_dungeon]"].offset, 0x1CBB421)
 
 
 class ValidationTest(unittest.TestCase):

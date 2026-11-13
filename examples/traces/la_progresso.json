@@ -72,6 +72,16 @@
       ]
     },
     {
+      "label": "Violoncelo da Lua Cheia (nadadeiras e Tail Key já no inventário)",
+      "writes": [
+        {
+          "addr": "main+0x1cc078c",
+          "type": "u32",
+          "value": 133
+        }
+      ]
+    },
+    {
       "label": "Marin acompanha",
       "writes": [
         {
@@ -138,6 +148,16 @@
           "addr": "main+0x1cc0760",
           "type": "u16",
           "value": 999
+        }
+      ]
+    },
+    {
+      "label": "oito instrumentos",
+      "writes": [
+        {
+          "addr": "main+0x1cc078c",
+          "type": "u32",
+          "value": 131071
         }
       ]
     }

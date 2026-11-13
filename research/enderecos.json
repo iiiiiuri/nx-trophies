@@ -1,0 +1,238 @@
+{
+  "_meta": {
+    "generated": "2026-11-13",
+    "description": "Endereços derivados de cheats/fontes públicas. Cadeia [[main+X]+Y]: lê-se ponteiro em cada nível; 'chain' segue o formato de games/*.json. Builds AArch32 têm pointer_width 4 (ver nota). Detalhes e linhas exatas em research/enderecos.md; arquivos brutos em research/cheats/.",
+    "confidence_rule": "community = lido diretamente de um cheat/fonte publicada; assumed = inferido/composto por nós; to_discover = não encontrado"
+  },
+
+  "mario_kart_8_deluxe": {
+    "937E57FF64D21ECD": {
+      "version": "2.0.0 (v720896, AArch32)",
+      "pointer_width": 4,
+      "pointers": {
+        "p1_kart": { "base": "main", "chain": ["0xDEE338", "0x1350"] }
+      },
+      "variables": {
+        "p1.star_timer":   { "from": "p1_kart", "offset": "0x9EC", "type": "u32", "confidence": "community", "source": "https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json", "note": "cheat 'Press D-UP P1 Star Power' escreve 0x1BF" },
+        "p1.status":       { "from": "p1_kart", "offset": "0x9D4", "type": "u32", "bit_meaning": "0x00801000 normal; 0x00A01000 Bullet Bill controlado (bit 0x00200000 inferido)", "confidence": "community", "source": "https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json", "note": "cheat 'Press D-RIGHT P1 Controlled Bullet Bill'; o significado do bit é inferido" },
+        "p1.lakitu_timer": { "from": "p1_kart", "offset": "0xA60", "type": "u32", "confidence": "community", "source": "https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json", "note": "cheat 'Press D-DOWN P1 Lakitu Pickup'" },
+        "p1.shock_timer":  { "from": "p1_kart", "offset": "0xA2C", "type": "u32", "confidence": "community", "source": "https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json", "note": "cheat 'Press L-STICK P1 Shocked'" },
+        "p1.squish_timer": { "from": "p1_kart", "offset": "0xA24", "type": "u32", "confidence": "community", "source": "https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json", "note": "cheat 'Press R-STICK P1 Squished'" },
+        "p1.ghost_timer":  { "from": "p1_kart", "offset": "0x9F4", "type": "u32", "confidence": "assumed", "source": "https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json", "note": "não há cheat Ghost para este build; star+0x8 como nos outros builds" },
+        "p1.invincible_timer": { "from": "p1_kart", "offset": "0xA90", "type": "u32", "confidence": "community", "source": "https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json", "note": "cheat 'P1 Invincible' escreve 0x1BF (variável extra, não existe na definição)" },
+        "p1.coins":        { "base": "heap", "offset": "0x5860CACC", "type": "u32", "confidence": "assumed", "source": "https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json", "note": "cheat '99 Coins' (04100000 5860CACC 00000063): endereço estático no heap, pouco confiável; não recomendado" },
+        "race.finished":   { "confidence": "to_discover", "note": "não encontrado" },
+        "race.final_rank": { "confidence": "to_discover", "note": "não encontrado" },
+        "cup.best_trophy_150cc": { "confidence": "to_discover", "note": "não encontrado" }
+      }
+    },
+
+    "4B7A0BB5AE57E627": {
+      "version": "2.4.0 (v1048576, AArch32)",
+      "pointer_width": 4,
+      "pointers": {
+        "p1_kart": { "base": "main", "chain": ["0xEFFDD8", "0x1350"] }
+      },
+      "variables": {
+        "p1.star_timer":   { "from": "p1_kart", "offset": "0x9F0", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/4B7A0BB5AE57E627.txt", "note": "cheat 'Press D-UP P1 Star Power'" },
+        "p1.status":       { "from": "p1_kart", "offset": "0x9D8", "type": "u32", "bit_meaning": "0x00801000 normal; 0x00A01000 Bullet Bill (bit 0x00200000 inferido)", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/4B7A0BB5AE57E627.txt", "note": "cheats Bullet Bill / Normal Status" },
+        "p1.lakitu_timer": { "from": "p1_kart", "offset": "0xA64", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/4B7A0BB5AE57E627.txt" },
+        "p1.shock_timer":  { "from": "p1_kart", "offset": "0xA30", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/4B7A0BB5AE57E627.txt" },
+        "p1.squish_timer": { "from": "p1_kart", "offset": "0xA28", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/4B7A0BB5AE57E627.txt" },
+        "p1.ghost_timer":  { "from": "p1_kart", "offset": "0x9F8", "type": "u32", "confidence": "assumed", "note": "sem cheat Ghost neste build; mesmo offset do 3.0.1" },
+        "p1.coins":        { "confidence": "to_discover", "note": "só há patches de código (Eiffel2018), sem endereço de dado" },
+        "race.finished":   { "confidence": "to_discover", "note": "não encontrado" },
+        "race.final_rank": { "confidence": "to_discover", "note": "não encontrado" },
+        "cup.best_trophy_150cc": { "confidence": "to_discover", "note": "não encontrado" }
+      }
+    },
+
+    "94FB3AFECA39D600": {
+      "version": "3.0.0 (v1114112, AArch32)",
+      "pointer_width": 4,
+      "pointers": {
+        "p1_kart": { "base": "main", "chain": ["0xF53448", "0x1350"] }
+      },
+      "variables": {
+        "p1.star_timer":   { "from": "p1_kart", "offset": "0x9F0", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/94FB3AFECA39D600.txt" },
+        "p1.status":       { "from": "p1_kart", "offset": "0x9D8", "type": "u32", "bit_meaning": "0x00801000 normal; 0x00A01000 Bullet Bill (bit 0x00200000 inferido)", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/94FB3AFECA39D600.txt" },
+        "p1.lakitu_timer": { "from": "p1_kart", "offset": "0xA64", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/94FB3AFECA39D600.txt" },
+        "p1.shock_timer":  { "from": "p1_kart", "offset": "0xA30", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/94FB3AFECA39D600.txt" },
+        "p1.squish_timer": { "from": "p1_kart", "offset": "0xA28", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/94FB3AFECA39D600.txt" },
+        "p1.ghost_timer":  { "from": "p1_kart", "offset": "0x9F8", "type": "u32", "confidence": "assumed", "note": "sem cheat Ghost neste build; mesmo offset do 3.0.1" },
+        "p1.coins":        { "confidence": "to_discover", "note": "só patches de código" },
+        "race.finished":   { "confidence": "to_discover", "note": "não encontrado" },
+        "race.final_rank": { "confidence": "to_discover", "note": "não encontrado" },
+        "cup.best_trophy_150cc": { "confidence": "to_discover", "note": "não encontrado" }
+      }
+    },
+
+    "9EF5CAA2D5B933C7": {
+      "version": "3.0.1 (v1179648, AArch32)",
+      "pointer_width": 4,
+      "pointers": {
+        "p1_kart": { "base": "main", "chain": ["0xF53448", "0x1350"] }
+      },
+      "variables": {
+        "p1.star_timer":   { "from": "p1_kart", "offset": "0x9F0", "type": "u32", "confidence": "community", "source": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/0100152000022000.json", "note": "cheat 'Press D-UP P1 Star Power' (Arch9SK7)" },
+        "p1.ghost_timer":  { "from": "p1_kart", "offset": "0x9F8", "type": "u32", "confidence": "community", "source": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/0100152000022000.json", "note": "cheat 'Press R-STICK P1 Ghost Mode'" },
+        "p1.status":       { "from": "p1_kart", "offset": "0x9D8", "type": "u32", "bit_meaning": "0x00801000 normal; 0x00A01000 Bullet Bill (bit 0x00200000 inferido)", "confidence": "community", "source": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/0100152000022000.json" },
+        "p1.lakitu_timer": { "from": "p1_kart", "offset": "0xA64", "type": "u32", "confidence": "community", "source": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/0100152000022000.json" },
+        "p1.shock_timer":  { "from": "p1_kart", "offset": "0xA30", "type": "u32", "confidence": "community", "source": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/0100152000022000.json" },
+        "p1.squish_timer": { "from": "p1_kart", "offset": "0xA28", "type": "u32", "confidence": "community", "source": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/0100152000022000.json" },
+        "p1.coins":        { "confidence": "to_discover", "note": "só patches de código (Eiffel2018)" },
+        "race.finished":   { "confidence": "to_discover", "note": "não encontrado" },
+        "race.final_rank": { "confidence": "to_discover", "note": "não encontrado" },
+        "cup.best_trophy_150cc": { "confidence": "to_discover", "note": "não encontrado" }
+      }
+    },
+
+    "6A85262F21B90364": {
+      "version": "3.0.3 (v1245184, AArch32)",
+      "pointer_width": 4,
+      "pointers": {
+        "p1_kart":    { "base": "main", "chain": ["0xF53448", "0x1350"] },
+        "race_scene": { "base": "main", "chain": ["0xF12C68", "0x0", "0x10", "0x4"] },
+        "p1_checker": { "base": "main", "chain": ["0xF12C68", "0x0", "0x10", "0x4", "0xF0", "0x11C", "0x3C", "0x0"] }
+      },
+      "variables": {
+        "p1.star_timer":   { "from": "p1_kart", "offset": "0x9F0", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/6A85262F21B90364.txt" },
+        "p1.ghost_timer":  { "from": "p1_kart", "offset": "0x9F8", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/6A85262F21B90364.txt" },
+        "p1.status":       { "from": "p1_kart", "offset": "0x9D8", "type": "u32", "bit_meaning": "0x00801000 normal; 0x00A01000 Bullet Bill (bit 0x00200000 inferido)", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/6A85262F21B90364.txt" },
+        "p1.lakitu_timer": { "from": "p1_kart", "offset": "0xA64", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/6A85262F21B90364.txt" },
+        "p1.shock_timer":  { "from": "p1_kart", "offset": "0xA30", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/6A85262F21B90364.txt" },
+        "p1.squish_timer": { "from": "p1_kart", "offset": "0xA28", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/6A85262F21B90364.txt" },
+        "race.scene_kind": { "from": "race_scene", "offset": "0xD8", "type": "u32", "bit_meaning": "4 = Race (enum Invalid, Boot, Root, Menu, Race, ...); cena ativa se u8 scene+0xD4 & 4", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp", "note": "use em active_when antes de ler p1_checker" },
+        "p1.coins":        { "from": "p1_checker", "offset": "0x34", "type": "u8", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp", "note": "RaceKartChecker+0x34 (perfil 3.0.3 do eden-duo); cadeia composta por nós; índice 0 = jogador local offline" },
+        "race.final_rank": { "from": "p1_checker", "offset": "0x24", "type": "u16", "bit_meaning": "0-based (0 = 1º lugar)", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp", "note": "somar 1 para a colocação exibida" },
+        "race.finished":   { "from": "p1_checker", "offset": "0x20", "type": "u32", "bit_meaning": "bit 0 = cruzou a chegada", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "cup.best_trophy_150cc": { "confidence": "to_discover", "note": "layout conhecido só no 4.0.1" }
+      }
+    },
+
+    "2452C49BC26EC159": {
+      "version": "3.0.4 (v1310720, AArch64; ausente do versions.json do switch-cheats-db)",
+      "pointers": {},
+      "variables": {
+        "p1.star_timer":   { "confidence": "to_discover", "note": "só há cheats de FPS/DRS para este build" },
+        "p1.coins":        { "confidence": "to_discover", "note": "não encontrado" },
+        "race.finished":   { "confidence": "to_discover", "note": "não encontrado" },
+        "race.final_rank": { "confidence": "to_discover", "note": "não encontrado" },
+        "cup.best_trophy_150cc": { "confidence": "to_discover", "note": "não encontrado" }
+      }
+    },
+
+    "FE941ED5BA14BE5D": {
+      "version": "3.0.5 (v1376256, AArch64)",
+      "pointers": {
+        "p1_kart": { "base": "main", "chain": ["0x1354AF0", "0x6E0"] }
+      },
+      "variables": {
+        "p1.star_timer":   { "from": "p1_kart", "offset": "0x7BC", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/FE941ED5BA14BE5D.txt", "note": "Mastercode carrega R2 = [[main+0x1354AF0]+0x6E0]; '04420000 000007BC 000001BF'" },
+        "p1.ghost_timer":  { "from": "p1_kart", "offset": "0x7C4", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/FE941ED5BA14BE5D.txt" },
+        "p1.squish_timer": { "from": "p1_kart", "offset": "0x7F4", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/FE941ED5BA14BE5D.txt" },
+        "p1.shock_timer":  { "from": "p1_kart", "offset": "0x7FC", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/FE941ED5BA14BE5D.txt" },
+        "p1.lakitu_timer": { "from": "p1_kart", "offset": "0x830", "type": "u32", "confidence": "community", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/FE941ED5BA14BE5D.txt" },
+        "p1.status":       { "from": "p1_kart", "offset": "0x7A4", "type": "u32", "bit_meaning": "0x00801000 normal; 0x00A01000 Bullet Bill (bit 0x00200000 inferido)", "confidence": "assumed", "source": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/FE941ED5BA14BE5D.txt", "note": "o endereço vem do cheat (community); o bit que indica Bullet Bill é inferido" },
+        "p1.coins":        { "confidence": "to_discover", "note": "cheat 'Always Max Coins' mostra que as moedas ficam em [x19+0x50] (str w20,[x19,#0x50] em main+0x87C994), x19 = RaceKartChecker; mas a raiz estática até o checker não é pública para 3.0.5. Ver checker_chain_hint" },
+        "race.final_rank": { "confidence": "to_discover", "note": "RaceKartChecker+0x40 (RoGamer97 3.0.5 'YOU WIN!/YOU LOSE': getCurrentGameScene()@main+0x7F41FC ->+0x1B0->+0x218->+0x68->[i*8] ->+0x40). Falta a célula GOT da raiz: desmontar main+0x7F41FC (adrp+ldr)" },
+        "race.finished":   { "confidence": "to_discover", "note": "provável bit 0 de u32 RaceKartChecker+0x3C (layout 4.0.0 = 3.0.5 segundo mk8dx_ap); mesma pendência da raiz" },
+        "cup.best_trophy_150cc": { "confidence": "to_discover", "note": "não encontrado para 3.0.5" }
+      },
+      "checker_chain_hint": "checker[i] = [[[[scene+0x1B0]+0x218]+0x68]+8*i], scene = [[root+0x20]+0x8], root = [[GOT]]; GOT desconhecido em 3.0.5"
+    },
+
+    "2C336A9BCF79C304": {
+      "version": "4.0.0 (v1441792, AArch64)",
+      "pointers": {
+        "race_scene":  { "base": "main", "chain": ["0x12FC388", "0x0", "0x20", "0x8"] },
+        "race_dir":    { "base": "main", "chain": ["0x12FC388", "0x0", "0x20", "0x8", "0x1B0", "0x218"] },
+        "p1_checker":  { "base": "main", "chain": ["0x12FC388", "0x0", "0x20", "0x8", "0x1B0", "0x218", "0x68", "0x0"] },
+        "race_phase_obj": { "base": "main", "chain": ["0x12FC388", "0x0", "0x20", "0x8", "0x1B0", "0x218", "0x50"] },
+        "save_progress": { "base": "main", "chain": ["0x12FC388", "0x0", "0x28", "0x190", "0x810", "0x158", "0x188"] }
+      },
+      "variables": {
+        "race.scene_kind": { "from": "race_scene", "offset": "0x184", "type": "u32", "bit_meaning": "4 = Race; cena ativa se u8 scene+0x180 & 4", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp", "note": "célula main+0x12FC388 decodificada do pino RaceInfoHolder (adrp x8,#0x12fc000 / ldr x8,[x8,#0x388]) em mk8d_pins.inc" },
+        "race.phase":      { "from": "race_phase_obj", "offset": "0x38", "type": "u32", "bit_meaning": "0 carregando .. 4 banner, 5 contagem, 6 correndo, 7 jogador local terminou", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "p1.coins":        { "from": "p1_checker", "offset": "0x50", "type": "u8", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp", "note": "RaceKartChecker+0x50; índice 0 = jogador local offline (RoGamer97: 'your ID is always 0 offline')" },
+        "race.final_rank": { "from": "p1_checker", "offset": "0x40", "type": "u16", "bit_meaning": "0-based (0 = 1º)", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp", "note": "também em RoGamer97 4.0.0 'YOU WIN!' (LDR W0,[X8,#0x40])" },
+        "race.finished":   { "from": "p1_checker", "offset": "0x3C", "type": "u32", "bit_meaning": "bit 0 = cruzou a chegada", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "cup.best_trophy_150cc": { "from": "save_progress", "offset": "0x6C8", "stride": "0x1", "type": "u8", "bit_meaning": "0 nenhum, 1 bronze, 2 prata, 3 ouro; índice = ECup (0 = Cogumelo; ordem das demais não confirmada)", "confidence": "assumed", "source": "https://github.com/mdietz94/mk8dx_ap/blob/HEAD/docs/symbols.md", "note": "layout analisado no 4.0.1 (save+0x188 -> +0x688 + engine*0x20 + cup; 150cc = engine 2). Prefixo até 'save' inferido (GetCurrentUserSaveData = [[SystemEngine+0x810]+0x158])" },
+        "p1.star_timer":   { "confidence": "to_discover", "note": "não há cheat de estado do kart para 4.0.x" },
+        "p1.status":       { "confidence": "to_discover", "note": "não encontrado; item na mão: ver item_slot_hint" }
+      },
+      "item_slot_hint": "ItemDirector = [oe+0x240] (oe = [scene+0x1B0]); count u32 +0xE0; owners [+0xE8]; owner[i]+0x40 == i; slots [owner+0x60],[owner+0x68]; slot: u8 +0x41 estado (3 = segurando), u32 +0xC8 item (9 = Bullet Bill), u32 +0xA0 quantidade"
+    },
+
+    "158C0C7399AABD7B": {
+      "version": "4.0.1 (v1507328, AArch64) - versão mais recente encontrada",
+      "pointers": {
+        "race_scene":  { "base": "main", "chain": ["0x12FB388", "0x0", "0x20", "0x8"] },
+        "race_dir":    { "base": "main", "chain": ["0x12FB388", "0x0", "0x20", "0x8", "0x1B0", "0x218"] },
+        "p1_checker":  { "base": "main", "chain": ["0x12FB388", "0x0", "0x20", "0x8", "0x1B0", "0x218", "0x68", "0x0"] },
+        "race_phase_obj": { "base": "main", "chain": ["0x12FB388", "0x0", "0x20", "0x8", "0x1B0", "0x218", "0x50"] },
+        "save_progress": { "base": "main", "chain": ["0x12FB388", "0x0", "0x28", "0x190", "0x810", "0x158", "0x188"] }
+      },
+      "variables": {
+        "race.scene_kind": { "from": "race_scene", "offset": "0x184", "type": "u32", "bit_meaning": "4 = Race; cena ativa se u8 scene+0x180 & 4", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_pins401.inc", "note": "célula main+0x12FB388 (adrp x8,#0x12fb000 / ldr x8,[x8,#0x388])" },
+        "race.phase":      { "from": "race_phase_obj", "offset": "0x38", "type": "u32", "bit_meaning": "6 correndo, 7 jogador local terminou", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "p1.coins":        { "from": "p1_checker", "offset": "0x50", "type": "u8", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp", "note": "índice 0 = jogador local offline" },
+        "race.final_rank": { "from": "p1_checker", "offset": "0x40", "type": "u16", "bit_meaning": "0-based (0 = 1º)", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "race.finished":   { "from": "p1_checker", "offset": "0x3C", "type": "u32", "bit_meaning": "bit 0 = cruzou a chegada", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "cup.best_trophy_150cc": { "from": "save_progress", "offset": "0x6C8", "stride": "0x1", "type": "u8", "bit_meaning": "0 nenhum, 1 bronze, 2 prata, 3 ouro (max(antigo, novo)); índice = ECup, 0 = Cogumelo", "confidence": "assumed", "source": "https://github.com/mdietz94/mk8dx_ap/blob/HEAD/docs/symbols.md", "note": "'save+0x188 -> +0x688 + engine*0x20 + cup'; estrelas em +0x588 + engine*0x20 + cup; flags de copa aberta em +0x1F20 (3 = aberta). Prefixo até 'save' inferido" },
+        "p1.star_timer":   { "confidence": "to_discover", "note": "não encontrado" },
+        "p1.status":       { "confidence": "to_discover", "note": "não encontrado; ver item_slot_hint" }
+      },
+      "item_slot_hint": "igual ao 4.0.0 (eden-duo usa os mesmos offsets de layout)"
+    },
+
+    "FE1B230800D4933C": {
+      "version": "1.7.1 (v589824, AArch32)",
+      "pointer_width": 4,
+      "pointers": {
+        "coin_owner": { "base": "main", "chain": ["0xDA9EA8"] }
+      },
+      "variables": {
+        "p1.coins": { "from": "coin_owner", "offset": "0xC28FC", "type": "u32", "confidence": "community", "source": "https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json", "note": "cheat 'Grand Prix - Always 10 Coins': R0=[main+0xDA9EA8]; lê u32 [R0+0xC28FC]; se < 10 grava 10" },
+        "p1.star_timer": { "confidence": "to_discover", "note": "não encontrado" },
+        "race.finished": { "confidence": "to_discover", "note": "não encontrado" },
+        "race.final_rank": { "confidence": "to_discover", "note": "não encontrado" },
+        "cup.best_trophy_150cc": { "confidence": "to_discover", "note": "não encontrado" }
+      }
+    }
+  },
+
+  "zelda_links_awakening": {
+    "AE16F71E002AF8CB": {
+      "version": "1.0.0 (v0)",
+      "pointers": {},
+      "variables": {
+        "rupees":        { "base": "main", "offset": "0x1CC0760", "type": "u16", "confidence": "community", "source": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/01006BB00C6F0000.json", "note": "'Infinite Rupees' 02000000 01CC0760 0000270F" },
+        "trade_item":    { "base": "main", "offset": "0x1CC077A", "type": "u8", "bit_meaning": "1 Yoshi Doll, 2 Ribbon, 3 Dog Food, 4 Bananas, 5 Stick, 6 Honeycomb, 7 Pineapple, 8 Hibiscus, 9 Goat's Letter, 10 Broom, 11 Fishing Hook, 12 Necklace, 13 Mermaid's Scale, 14 Magnifying Lens", "confidence": "community", "source": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/01006BB00C6F0000.json", "note": "um cheat por item, todos em 0x1CC077A" },
+        "follower":      { "base": "main", "offset": "0x1CC077D", "type": "u8", "bit_meaning": "1 Marin ('Girl'), 3 Fantasma, 4 Galinha azul (Flying Rooster)", "confidence": "community", "source": "https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/01006BB00C6F0000.json", "note": "o valor de Marin conflita: xenocard 1.0.0 lista 'Dog on Chain'=1 e 'Girl'=1; o hook do 1.0.1 usa 1=BowWow, 2=Marin. Marin=1 deve ficar assumed" },
+        "golden_leaves": { "base": "main", "offset": "0x1CC07A2", "type": "u8", "bit_meaning": "bits 0..4, 0x1F = 5 folhas", "confidence": "community", "source": "https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/01006BB00C6F0000.json", "note": "'Have 5/5 Gold Leafs (Press L3+R3)'" },
+        "figures":       { "base": "main", "offset": "0x1CC07C8", "type": "u16", "bit_meaning": "0x1 CiaoCiao, 0x2 Goomba, 0x4 Spiny, 0x8 Boo, 0x10 Cheep Cheep, 0x20 Blooper, 0x40 Shy Guy, 0x80 Piranha Plant, 0x100 Pokey, 0x200 BowWow", "confidence": "community", "source": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/01006BB00C6F0000.json", "note": "games/zelda_links_awakening.json usa shy_guy=0x0004, mas o cheat diz Spiny=0x4 e Shy Guy=0x40" },
+        "instruments":   { "base": "main", "offset": "0x1CC078C", "type": "u32", "bit_meaning": "bits 7..14 (máscara 0x7F80): 7 Full Moon Cello, 8 Conch Horn, 9 Sea Lily's Bell, 10 Surf Harp, 11 Wind Marimba, 12 Coral Triangle, 13 Evening Calm Organ, 14 Thunder Drum", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/packages/LinksAwakening/dualscreen/909E904AF78AC1B8.json", "note": "mapa do 1.0.1 ('.bss layout identical to 1.0.0'); o cheat 'Have All Items' grava 0x000FFFFF aqui. A ordem bit a bit segue os rótulos 'Cello..Drum' da fonte" },
+        "dungeon.small_keys": { "base": "main", "offset": "0x1CBB300", "stride": "0x20", "type": "u8", "bit_meaning": "índice 0..7 = Nv1..Nv8, 8 = Câmaras do Dampé, 9 = Masmorra das Cores", "confidence": "community", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/packages/LinksAwakening/dualscreen/909E904AF78AC1B8.json", "note": "stride CORRIGIDO para 0x20 (não 0x10). O cheat 'Infinite Small Keys' também grava em +0x10 dos registros pares, mas 0x1CBB420 (Cores, índice 9) confirma o stride 0x20" },
+        "dungeon.treasures":  { "base": "main", "offset": "0x1CBB301", "stride": "0x20", "type": "u8", "bit_meaning": "b0 bússola, b1 mapa, b2 bico de pedra, b3 chave do pesadelo (0x0F = todos)", "confidence": "community", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/packages/LinksAwakening/dualscreen/909E904AF78AC1B8.json", "note": "o cheat 'Have Map/Compass/Nightmare Key/Stone Beak' grava 0x0F; os significados dos bits vêm do eden-duo" },
+        "dungeon.current": { "base": "main", "offset": "0x1CC13C8", "type": "u8", "bit_meaning": "0-7 Nv1-8, 8 Câmara, 9 Cores, 255 fora", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/packages/LinksAwakening/dualscreen/909E904AF78AC1B8.json", "note": "variável extra" }
+      }
+    },
+
+    "909E904AF78AC1B8": {
+      "version": "1.0.1 (v65536) e 1.1.0 (v131072): mesmo build ID; o 1.1.0 só mudou main.npdm",
+      "pointers": {},
+      "variables": {
+        "rupees":        { "base": "main", "offset": "0x1CC0760", "type": "u16", "confidence": "community", "source": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/01006BB00C6F0000.json", "note": "'9999 Rupees Press L'" },
+        "trade_item":    { "base": "main", "offset": "0x1CC077A", "type": "u8", "bit_meaning": "1 Yoshi Doll .. 14 Magnifying Lens (igual ao 1.0.0)", "confidence": "community", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/packages/LinksAwakening/dualscreen/909E904AF78AC1B8.json", "note": "eden-duo: '0 none, 1 Yoshi Doll .. 14 Magnifying Lens (observed: 14)'" },
+        "follower":      { "base": "main", "offset": "0x1CC077D", "type": "u8", "bit_meaning": "3 Fantasma, 4 Galinha (Marin incerto: 1 ou 2)", "confidence": "assumed", "note": "não há cheat deste build que grave 0x1CC077D; o layout é o mesmo do 1.0.0" },
+        "golden_leaves": { "base": "main", "offset": "0x1CC07A2", "type": "u8", "bit_meaning": "bits 0..4", "confidence": "community", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/packages/LinksAwakening/dualscreen/909E904AF78AC1B8.json" },
+        "figures":       { "base": "main", "offset": "0x1CC07C8", "type": "u16", "bit_meaning": "mesmas máscaras do 1.0.0", "confidence": "community", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/packages/LinksAwakening/dualscreen/909E904AF78AC1B8.json", "note": "eden-duo 'figures_won'; máscaras dos cheats do 1.0.0" },
+        "instruments":   { "base": "main", "offset": "0x1CC078C", "type": "u32", "bit_meaning": "bits 7..14 (máscara 0x7F80), Cello..Drum", "confidence": "assumed", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/packages/LinksAwakening/dualscreen/909E904AF78AC1B8.json", "note": "inst_0..inst_7 = bits 7..14; instrument_count = popcount dos bits 7..14 (observado 8)" },
+        "dungeon.small_keys": { "base": "main", "offset": "0x1CBB300", "stride": "0x20", "type": "u8", "bit_meaning": "índice 0..7 Nv1-8, 8 Câmara, 9 Cores", "confidence": "community", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/packages/LinksAwakening/dualscreen/909E904AF78AC1B8.json" },
+        "dungeon.treasures":  { "base": "main", "offset": "0x1CBB301", "stride": "0x20", "type": "u8", "bit_meaning": "b0 bússola, b1 mapa, b2 bico de pedra, b3 chave do pesadelo", "confidence": "community", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/packages/LinksAwakening/dualscreen/909E904AF78AC1B8.json" },
+        "dungeon.current": { "base": "main", "offset": "0x1CC13C8", "type": "u8", "bit_meaning": "0-7 Nv1-8, 8 Câmara, 9 Cores, 255 fora", "confidence": "community", "source": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/packages/LinksAwakening/dualscreen/909E904AF78AC1B8.json", "note": "variável extra" }
+      }
+    }
+  }
+}

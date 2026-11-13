@@ -114,6 +114,7 @@ def _compile_binding(definition: Definition, binding: Binding, comp: _Compiler) 
     if binding.source == "memory":
         out["pointers"] = [{"region": p.region, "chain": [_int(o) for o in p.chain]}
                            for p in binding.pointers.values()]
+        out["pointer_width"] = binding.pointer_width
         blocks = []
         for block in index.read_plan:
             kind, name = block.anchor.split(":", 1)

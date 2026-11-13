@@ -10,7 +10,7 @@
 
   "content": {
     "cups": [
-      { "id": "mushroom",    "name": { "pt-BR": "Copa Cogumelo",   "en": "Mushroom Cup" },   "menu_order": 0 },
+      { "id": "mushroom",    "name": { "pt-BR": "Copa Cogumelo",   "en": "Mushroom Cup" },   "menu_order": 0, "trophy_index": 0 },
       { "id": "flower",      "name": { "pt-BR": "Copa Flor",       "en": "Flower Cup" },     "menu_order": 1 },
       { "id": "star",        "name": { "pt-BR": "Copa Estrela",    "en": "Star Cup" },       "menu_order": 2 },
       { "id": "special",     "name": { "pt-BR": "Copa Especial",   "en": "Special Cup" },    "menu_order": 3 },
@@ -45,8 +45,9 @@
     "p1.lakitu_timer": { "type": "u32", "description": "Temporizador do resgate do Lakitu do jogador 1." },
     "p1.status":       { "type": "u32", "description": "Flags de estado do kart do jogador 1." },
     "p1.coins":        { "type": "u8",  "description": "Moedas do jogador 1 na corrida atual." },
-    "race.finished":   { "type": "u8",  "description": "1 quando o jogador 1 cruza a linha de chegada da última volta." },
-    "race.final_rank": { "type": "u8",  "description": "Colocação final do jogador 1 (1 = primeiro)." },
+    "race.scene_kind": { "type": "u32", "description": "Tipo da cena atual do jogo (4 = corrida)." },
+    "race.finished":   { "type": "u32", "description": "Flags do RaceKartChecker do jogador 1; bit 0 = cruzou a chegada." },
+    "race.final_rank": { "type": "u16", "description": "Colocação do jogador 1, a partir de 0 (0 = primeiro)." },
     "cup.best_trophy_150cc": {
       "type": "u8",
       "indexed_by": "cups",
@@ -57,7 +58,7 @@
   "bindings": [
     {
       "id": "build_FE941ED5BA14BE5D",
-      "label": "Build FE941ED5BA14BE5D (versão 3.0.x; confirmar no console)",
+      "label": "Versão 3.0.5 (build FE941ED5BA14BE5D)",
       "source": "memory",
       "match": { "build_ids": ["FE941ED5BA14BE5D"] },
       "pointers": {
@@ -77,6 +78,168 @@
         "race.final_rank": { "confidence": "to_discover", "note": "busca u8 pela posição exibida durante a corrida (1..12)" },
         "cup.best_trophy_150cc": { "confidence": "to_discover", "index_key": "trophy_index", "note": "tabela do save em memória; descobrir offset base, stride e trophy_index de cada copa" }
       }
+    },
+    {
+      "id": "build_937E57FF64D21ECD",
+      "label": "Versão 2.0.0 (build 937E57FF64D21ECD, AArch32)",
+      "source": "memory",
+      "match": { "build_ids": ["937E57FF64D21ECD"] },
+      "pointer_width": 4,
+      "pointers": {
+        "p1_kart": { "base": "main", "chain": ["0xDEE338", "0x1350"] }
+      },
+      "active_when": {"exists": "p1.star_timer"},
+      "poll_ms": 250,
+      "variables": {
+        "p1.star_timer": { "from": "p1_kart", "offset": "0x9EC", "confidence": "community", "note": "cheat 'Press D-UP P1 Star Power' escreve 0x1BF; https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json" },
+        "p1.ghost_timer": { "from": "p1_kart", "offset": "0x9F4", "confidence": "assumed", "note": "não há cheat Ghost para este build; star+0x8 como nos outros builds; https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json" },
+        "p1.squish_timer": { "from": "p1_kart", "offset": "0xA24", "confidence": "community", "note": "cheat 'Press R-STICK P1 Squished'; https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json" },
+        "p1.shock_timer": { "from": "p1_kart", "offset": "0xA2C", "confidence": "community", "note": "cheat 'Press L-STICK P1 Shocked'; https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json" },
+        "p1.lakitu_timer": { "from": "p1_kart", "offset": "0xA60", "confidence": "community", "note": "cheat 'Press D-DOWN P1 Lakitu Pickup'; https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json" },
+        "p1.status": { "from": "p1_kart", "offset": "0x9D4", "confidence": "assumed", "note": "cheat 'Press D-RIGHT P1 Controlled Bullet Bill'; o significado do bit é inferido; https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json" },
+        "p1.coins": { "base": "heap", "offset": "0x5860CACC", "type": "u32", "confidence": "assumed", "note": "cheat '99 Coins' (04100000 5860CACC 00000063): endereço estático no heap, pouco confiável; não recomendado; https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json" }
+      }
+    },
+    {
+      "id": "build_4B7A0BB5AE57E627",
+      "label": "Versão 2.4.0 (build 4B7A0BB5AE57E627, AArch32)",
+      "source": "memory",
+      "match": { "build_ids": ["4B7A0BB5AE57E627"] },
+      "pointer_width": 4,
+      "pointers": {
+        "p1_kart": { "base": "main", "chain": ["0xEFFDD8", "0x1350"] }
+      },
+      "active_when": {"exists": "p1.star_timer"},
+      "poll_ms": 250,
+      "variables": {
+        "p1.star_timer": { "from": "p1_kart", "offset": "0x9F0", "confidence": "community", "note": "cheat 'Press D-UP P1 Star Power'; https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/4B7A0BB5AE57E627.txt" },
+        "p1.ghost_timer": { "from": "p1_kart", "offset": "0x9F8", "confidence": "assumed", "note": "sem cheat Ghost neste build; mesmo offset do 3.0.1" },
+        "p1.squish_timer": { "from": "p1_kart", "offset": "0xA28", "confidence": "community", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/4B7A0BB5AE57E627.txt" },
+        "p1.shock_timer": { "from": "p1_kart", "offset": "0xA30", "confidence": "community", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/4B7A0BB5AE57E627.txt" },
+        "p1.lakitu_timer": { "from": "p1_kart", "offset": "0xA64", "confidence": "community", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/4B7A0BB5AE57E627.txt" },
+        "p1.status": { "from": "p1_kart", "offset": "0x9D8", "confidence": "assumed", "note": "cheats Bullet Bill / Normal Status; https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/4B7A0BB5AE57E627.txt" }
+      }
+    },
+    {
+      "id": "build_94FB3AFECA39D600",
+      "label": "Versão 3.0.0 (build 94FB3AFECA39D600, AArch32)",
+      "source": "memory",
+      "match": { "build_ids": ["94FB3AFECA39D600"] },
+      "pointer_width": 4,
+      "pointers": {
+        "p1_kart": { "base": "main", "chain": ["0xF53448", "0x1350"] }
+      },
+      "active_when": {"exists": "p1.star_timer"},
+      "poll_ms": 250,
+      "variables": {
+        "p1.star_timer": { "from": "p1_kart", "offset": "0x9F0", "confidence": "community", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/94FB3AFECA39D600.txt" },
+        "p1.ghost_timer": { "from": "p1_kart", "offset": "0x9F8", "confidence": "assumed", "note": "sem cheat Ghost neste build; mesmo offset do 3.0.1" },
+        "p1.squish_timer": { "from": "p1_kart", "offset": "0xA28", "confidence": "community", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/94FB3AFECA39D600.txt" },
+        "p1.shock_timer": { "from": "p1_kart", "offset": "0xA30", "confidence": "community", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/94FB3AFECA39D600.txt" },
+        "p1.lakitu_timer": { "from": "p1_kart", "offset": "0xA64", "confidence": "community", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/94FB3AFECA39D600.txt" },
+        "p1.status": { "from": "p1_kart", "offset": "0x9D8", "confidence": "assumed", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/94FB3AFECA39D600.txt" }
+      }
+    },
+    {
+      "id": "build_9EF5CAA2D5B933C7",
+      "label": "Versão 3.0.1 (build 9EF5CAA2D5B933C7, AArch32)",
+      "source": "memory",
+      "match": { "build_ids": ["9EF5CAA2D5B933C7"] },
+      "pointer_width": 4,
+      "pointers": {
+        "p1_kart": { "base": "main", "chain": ["0xF53448", "0x1350"] }
+      },
+      "active_when": {"exists": "p1.star_timer"},
+      "poll_ms": 250,
+      "variables": {
+        "p1.star_timer": { "from": "p1_kart", "offset": "0x9F0", "confidence": "community", "note": "cheat 'Press D-UP P1 Star Power' (Arch9SK7); https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/0100152000022000.json" },
+        "p1.ghost_timer": { "from": "p1_kart", "offset": "0x9F8", "confidence": "community", "note": "cheat 'Press R-STICK P1 Ghost Mode'; https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/0100152000022000.json" },
+        "p1.squish_timer": { "from": "p1_kart", "offset": "0xA28", "confidence": "community", "note": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/0100152000022000.json" },
+        "p1.shock_timer": { "from": "p1_kart", "offset": "0xA30", "confidence": "community", "note": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/0100152000022000.json" },
+        "p1.lakitu_timer": { "from": "p1_kart", "offset": "0xA64", "confidence": "community", "note": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/0100152000022000.json" },
+        "p1.status": { "from": "p1_kart", "offset": "0x9D8", "confidence": "assumed", "note": "https://github.com/HamletDuFromage/switch-cheats-db/blob/master/cheats/0100152000022000.json" }
+      }
+    },
+    {
+      "id": "build_6A85262F21B90364",
+      "label": "Versão 3.0.3 (build 6A85262F21B90364, AArch32)",
+      "source": "memory",
+      "match": { "build_ids": ["6A85262F21B90364"] },
+      "pointer_width": 4,
+      "pointers": {
+        "p1_kart": { "base": "main", "chain": ["0xF53448", "0x1350"] },
+        "race_scene": { "base": "main", "chain": ["0xF12C68", "0x0", "0x10", "0x4"] },
+        "p1_checker": { "base": "main", "chain": ["0xF12C68", "0x0", "0x10", "0x4", "0xF0", "0x11C", "0x3C", "0x0"] }
+      },
+      "active_when": {"exists": "p1.star_timer"},
+      "poll_ms": 250,
+      "variables": {
+        "p1.star_timer": { "from": "p1_kart", "offset": "0x9F0", "confidence": "community", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/6A85262F21B90364.txt" },
+        "p1.ghost_timer": { "from": "p1_kart", "offset": "0x9F8", "confidence": "community", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/6A85262F21B90364.txt" },
+        "p1.squish_timer": { "from": "p1_kart", "offset": "0xA28", "confidence": "community", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/6A85262F21B90364.txt" },
+        "p1.shock_timer": { "from": "p1_kart", "offset": "0xA30", "confidence": "community", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/6A85262F21B90364.txt" },
+        "p1.lakitu_timer": { "from": "p1_kart", "offset": "0xA64", "confidence": "community", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/6A85262F21B90364.txt" },
+        "p1.status": { "from": "p1_kart", "offset": "0x9D8", "confidence": "assumed", "note": "https://github.com/Arch9SK7/MyNXCheats/blob/HEAD/Mario%20Kart%208%20Deluxe/0100152000022000/cheats/6A85262F21B90364.txt" },
+        "p1.coins": { "from": "p1_checker", "offset": "0x34", "confidence": "assumed", "note": "RaceKartChecker+0x34 (perfil 3.0.3 do eden-duo); cadeia composta por nós; índice 0 = jogador local offline; https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "race.scene_kind": { "from": "race_scene", "offset": "0xD8", "confidence": "assumed", "note": "use em active_when antes de ler p1_checker; https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "race.finished": { "from": "p1_checker", "offset": "0x20", "confidence": "assumed", "note": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "race.final_rank": { "from": "p1_checker", "offset": "0x24", "confidence": "assumed", "note": "somar 1 para a colocação exibida; https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" }
+      }
+    },
+    {
+      "id": "build_FE1B230800D4933C",
+      "label": "Versão 1.7.1 (build FE1B230800D4933C, AArch32)",
+      "source": "memory",
+      "match": { "build_ids": ["FE1B230800D4933C"] },
+      "pointer_width": 4,
+      "pointers": {
+        "coin_owner": { "base": "main", "chain": ["0xDA9EA8"] }
+      },
+      "active_when": {"exists": "p1.coins"},
+      "poll_ms": 250,
+      "variables": {
+        "p1.coins": { "from": "coin_owner", "offset": "0xC28FC", "type": "u32", "confidence": "community", "note": "cheat 'Grand Prix - Always 10 Coins': R0=[main+0xDA9EA8]; lê u32 [R0+0xC28FC]; se < 10 grava 10; https://github.com/sthetix/nx-cheats-db/blob/HEAD/cheats/0100152000022000.json" }
+      }
+    },
+    {
+      "id": "build_2C336A9BCF79C304",
+      "label": "Versão 4.0.0 (build 2C336A9BCF79C304)",
+      "source": "memory",
+      "match": { "build_ids": ["2C336A9BCF79C304"] },
+      "pointers": {
+        "race_scene": { "base": "main", "chain": ["0x12FC388", "0x0", "0x20", "0x8"] },
+        "p1_checker": { "base": "main", "chain": ["0x12FC388", "0x0", "0x20", "0x8", "0x1B0", "0x218", "0x68", "0x0"] },
+        "save_progress": { "base": "main", "chain": ["0x12FC388", "0x0", "0x28", "0x190", "0x810", "0x158", "0x188"] }
+      },
+      "active_when": {"value": "race.scene_kind", "op": "==", "rhs": 4},
+      "poll_ms": 250,
+      "variables": {
+        "p1.coins": { "from": "p1_checker", "offset": "0x50", "confidence": "assumed", "note": "RaceKartChecker+0x50; índice 0 = jogador local offline (RoGamer97: 'your ID is always 0 offline'); https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "race.scene_kind": { "from": "race_scene", "offset": "0x184", "confidence": "assumed", "note": "célula main+0x12FC388 decodificada do pino RaceInfoHolder (adrp x8,#0x12fc000 / ldr x8,[x8,#0x388]) em mk8d_pins.inc; https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "race.finished": { "from": "p1_checker", "offset": "0x3C", "confidence": "assumed", "note": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "race.final_rank": { "from": "p1_checker", "offset": "0x40", "confidence": "assumed", "note": "também em RoGamer97 4.0.0 'YOU WIN!' (LDR W0,[X8,#0x40]); https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "cup.best_trophy_150cc": { "from": "save_progress", "offset": "0x6C8", "stride": "0x1", "index_key": "trophy_index", "confidence": "assumed", "note": "layout analisado no 4.0.1 (save+0x188 -> +0x688 + engine*0x20 + cup; 150cc = engine 2). Prefixo até 'save' inferido (GetCurrentUserSaveData = [[SystemEngine+0x810]+0x158]); https://github.com/mdietz94/mk8dx_ap/blob/HEAD/docs/symbols.md" }
+      }
+    },
+    {
+      "id": "build_158C0C7399AABD7B",
+      "label": "Versão 4.0.1 (build 158C0C7399AABD7B)",
+      "source": "memory",
+      "match": { "build_ids": ["158C0C7399AABD7B"] },
+      "pointers": {
+        "race_scene": { "base": "main", "chain": ["0x12FB388", "0x0", "0x20", "0x8"] },
+        "p1_checker": { "base": "main", "chain": ["0x12FB388", "0x0", "0x20", "0x8", "0x1B0", "0x218", "0x68", "0x0"] },
+        "save_progress": { "base": "main", "chain": ["0x12FB388", "0x0", "0x28", "0x190", "0x810", "0x158", "0x188"] }
+      },
+      "active_when": {"value": "race.scene_kind", "op": "==", "rhs": 4},
+      "poll_ms": 250,
+      "variables": {
+        "p1.coins": { "from": "p1_checker", "offset": "0x50", "confidence": "assumed", "note": "índice 0 = jogador local offline; https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "race.scene_kind": { "from": "race_scene", "offset": "0x184", "confidence": "assumed", "note": "célula main+0x12FB388 (adrp x8,#0x12fb000 / ldr x8,[x8,#0x388]); https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_pins401.inc" },
+        "race.finished": { "from": "p1_checker", "offset": "0x3C", "confidence": "assumed", "note": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "race.final_rank": { "from": "p1_checker", "offset": "0x40", "confidence": "assumed", "note": "https://github.com/igawa6/eden-duo-companions/blob/HEAD/native/modules/mk8d_reader.cpp" },
+        "cup.best_trophy_150cc": { "from": "save_progress", "offset": "0x6C8", "stride": "0x1", "index_key": "trophy_index", "confidence": "assumed", "note": "'save+0x188 -> +0x688 + engine*0x20 + cup'; estrelas em +0x588 + engine*0x20 + cup; flags de copa aberta em +0x1F20 (3 = aberta). Prefixo até 'save' inferido; https://github.com/mdietz94/mk8dx_ap/blob/HEAD/docs/symbols.md" }
+      }
     }
   ],
 
@@ -88,8 +251,8 @@
     { "id": "lakitu_rescue", "when": { "value": "p1.lakitu_timer", "op": ">", "rhs": 0 } },
     { "id": "bullet_bill",   "when": { "value": "p1.status", "op": "has_any", "rhs": "0x00200000" } },
     { "id": "race_won",      "when": { "all": [
-        { "value": "race.finished",   "op": "==", "rhs": 1 },
-        { "value": "race.final_rank", "op": "==", "rhs": 1 }
+        { "value": "race.finished",   "op": "has_any", "rhs": "0x1" },
+        { "value": "race.final_rank", "op": "==", "rhs": 0 }
     ] } }
   ],
 

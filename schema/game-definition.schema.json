@@ -129,6 +129,7 @@
           }
         },
         "pointers": { "type": "object", "additionalProperties": { "$ref": "#/definitions/pointer" } },
+        "pointer_width": { "enum": [4, 8], "description": "Bytes por nível da cadeia: 4 em jogos AArch32, 8 (padrão) em AArch64." },
         "active_when": { "$ref": "#/definitions/condition" },
         "aliases": { "type": "object", "additionalProperties": { "type": "string" } },
         "instance_modes": { "type": "object", "additionalProperties": { "$ref": "#/definitions/condition" } },

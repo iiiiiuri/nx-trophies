@@ -1,0 +1,138 @@
+# Origem dos ícones e capas
+
+Arte oficial dos jogos (Nintendo), coletada dos wikis abaixo para uso pessoal.
+Ícones normalizados para 128x128 RGBA; capas para 256x256 RGBA.
+
+## Ícones (`assets/icons/`)
+
+- `mario_kart_8_deluxe/all_gold_150.png` — https://www.mariowiki.com/File:MK8_Crown_Cup_Trophy_3.png
+- `mario_kart_8_deluxe/bullet_bill_first.png` — https://www.mariowiki.com/File:BulletBillMK8.png
+- `mario_kart_8_deluxe/ghost_first.png` — https://www.mariowiki.com/File:NSMBW_Boo_Artwork.png
+- `mario_kart_8_deluxe/gold_150.png` — https://www.mariowiki.com/File:MK8_Mushroom_Cup_Trophy_3.png
+- `mario_kart_8_deluxe/gold_150.acorn.png` — https://www.mariowiki.com/File:MK8D_BCP_Acorn_Emblem.png
+- `mario_kart_8_deluxe/gold_150.banana.png` — https://www.mariowiki.com/File:MK8_Banana_Cup_Emblem.png
+- `mario_kart_8_deluxe/gold_150.bell.png` — https://www.mariowiki.com/File:MK8_Bell_Cup_Emblem.png
+- `mario_kart_8_deluxe/gold_150.boomerang.png` — https://www.mariowiki.com/File:MK8D_BCP_Boomerang_Emblem.png
+- `mario_kart_8_deluxe/gold_150.cherry.png` — https://www.mariowiki.com/File:MK8D_BCP_Cherry_Emblem.png
+- `mario_kart_8_deluxe/gold_150.crossing.png` — https://www.mariowiki.com/File:MK8_Crossing_Cup_Emblem.png
+- `mario_kart_8_deluxe/gold_150.egg.png` — https://www.mariowiki.com/File:MK8_Egg_Cup_Emblem.png
+- `mario_kart_8_deluxe/gold_150.feather.png` — https://www.mariowiki.com/File:MK8D_BCP_Feather_Emblem.png
+- `mario_kart_8_deluxe/gold_150.flower.png` — https://www.mariowiki.com/File:MK8_FlowerCup.png
+- `mario_kart_8_deluxe/gold_150.fruit.png` — https://www.mariowiki.com/File:MK8D_BCP_Fruit_Emblem.png
+- `mario_kart_8_deluxe/gold_150.golden_dash.png` — https://www.mariowiki.com/File:MK8D_BCP_Golden_Dash_Emblem.png
+- `mario_kart_8_deluxe/gold_150.leaf.png` — https://www.mariowiki.com/File:MK8_Leaf_Cup_Emblem.png
+- `mario_kart_8_deluxe/gold_150.lightning.png` — https://www.mariowiki.com/File:MK8_Lightning_Cup_Emblem.png
+- `mario_kart_8_deluxe/gold_150.lucky_cat.png` — https://www.mariowiki.com/File:MK8D_BCP_Lucky_Cat_Emblem.png
+- `mario_kart_8_deluxe/gold_150.moon.png` — https://www.mariowiki.com/File:MK8D_BCP_Moon_Emblem.png
+- `mario_kart_8_deluxe/gold_150.mushroom.png` — https://www.mariowiki.com/File:MK8_MushroomCup.png
+- `mario_kart_8_deluxe/gold_150.propeller.png` — https://www.mariowiki.com/File:MK8D_BCP_Propeller_Emblem.png
+- `mario_kart_8_deluxe/gold_150.rock.png` — https://www.mariowiki.com/File:MK8D_BCP_Rock_Emblem.png
+- `mario_kart_8_deluxe/gold_150.shell.png` — https://www.mariowiki.com/File:MK8_Shell_Cup_Emblem.png
+- `mario_kart_8_deluxe/gold_150.special.png` — https://www.mariowiki.com/File:MK8_Special_Cup_Emblem.png
+- `mario_kart_8_deluxe/gold_150.spiny.png` — https://www.mariowiki.com/File:MK8D_BCP_Spiny_Emblem.png
+- `mario_kart_8_deluxe/gold_150.star.png` — https://www.mariowiki.com/File:MK8_Star_Cup_Emblem.png
+- `mario_kart_8_deluxe/gold_150.triforce.png` — https://www.mariowiki.com/File:MK8_Triforce_Cup_Emblem.png
+- `mario_kart_8_deluxe/gold_150.turnip.png` — https://www.mariowiki.com/File:MK8D_BCP_Turnip_Emblem.png
+- `mario_kart_8_deluxe/lakitu_25.png` — https://www.mariowiki.com/File:MK8_Lakitu_Icon.png
+- `mario_kart_8_deluxe/race_won_100.png` — https://www.mariowiki.com/File:MK8_Mario_Hold_Trophy_Artwork.png
+- `mario_kart_8_deluxe/race_won_first.png` — https://www.mariowiki.com/File:MK8_Flower_Cup_Trophy_3.png
+- `mario_kart_8_deluxe/shocked_10.png` — https://www.mariowiki.com/File:LightningBoltMK8.png
+- `mario_kart_8_deluxe/squished_first.png` — https://www.mariowiki.com/File:Thwomp_MK8.png
+- `mario_kart_8_deluxe/star_50.png` — https://www.mariowiki.com/File:MK8_Star_Cup_Trophy_3.png
+- `mario_kart_8_deluxe/star_first.png` — https://www.mariowiki.com/File:StarMK8.png
+- `mario_kart_8_deluxe/ten_coins.png` — https://www.mariowiki.com/File:CoinMK8.png
+- `ship_of_harkinian/all_songs.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Ocarina_of_Time_Icon.png
+- `ship_of_harkinian/boss.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Boss_Key_Icon.png
+- `ship_of_harkinian/boss.barinade.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Barinade_Thumbnail.png
+- `ship_of_harkinian/boss.bongo_bongo.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Bongo_Bongo_Thumbnail.png
+- `ship_of_harkinian/boss.gohma.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Gohma_Thumbnail.png
+- `ship_of_harkinian/boss.king_dodongo.png` — https://zeldawiki.wiki/wiki/File:OoT3D_King_Dodongo_Thumbnail.png
+- `ship_of_harkinian/boss.morpha.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Morpha_Thumbnail.png
+- `ship_of_harkinian/boss.phantom_ganon.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Phantom_Ganon_Thumbnail.png
+- `ship_of_harkinian/boss.twinrova.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Twinrova_Thumbnail.png
+- `ship_of_harkinian/boss.volvagia.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Volvagia_Thumbnail.png
+- `ship_of_harkinian/deathless.png` — https://zeldawiki.wiki/wiki/File:OoT_Fairy_Icon.png
+- `ship_of_harkinian/hero_of_time.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Triforce_Model.png
+- `ship_of_harkinian/six_medallions.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Light_Medallion_Icon.png + https://zeldawiki.wiki/wiki/File:OoT3D_Forest_Medallion_Icon.png + https://zeldawiki.wiki/wiki/File:OoT3D_Fire_Medallion_Icon.png + https://zeldawiki.wiki/wiki/File:OoT3D_Water_Medallion_Icon.png + https://zeldawiki.wiki/wiki/File:OoT3D_Spirit_Medallion_Icon.png + https://zeldawiki.wiki/wiki/File:OoT3D_Shadow_Medallion_Icon.png
+- `ship_of_harkinian/skulltulas_100.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Golden_Skull_Token_Icon.png
+- `ship_of_harkinian/song.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Fairy_Ocarina_Icon.png
+- `ship_of_harkinian/song.bolero.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Bolero_of_Fire_Icon.png
+- `ship_of_harkinian/song.epona.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Epona%27s_Song_Icon.png
+- `ship_of_harkinian/song.lullaby.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Zelda%27s_Lullaby_Icon.png
+- `ship_of_harkinian/song.minuet.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Minuet_of_Forest_Icon.png
+- `ship_of_harkinian/song.nocturne.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Nocturne_of_Shadow_Icon.png
+- `ship_of_harkinian/song.prelude.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Prelude_of_Light_Icon.png
+- `ship_of_harkinian/song.requiem.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Requiem_of_Spirit_Icon.png
+- `ship_of_harkinian/song.saria.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Saria%27s_Song_Icon.png
+- `ship_of_harkinian/song.serenade.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Serenade_of_Water_Icon.png
+- `ship_of_harkinian/song.storms.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Song_of_Storms_Icon.png
+- `ship_of_harkinian/song.sun.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Sun%27s_Song_Icon.png
+- `ship_of_harkinian/song.time.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Song_of_Time_Icon.png
+- `ship_of_harkinian/speedy_gohma.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Gohma_Model.png
+- `ship_of_harkinian/spiritual_stones.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Spiritual_Stone_of_the_Forest_Icon.png + https://zeldawiki.wiki/wiki/File:OoT3D_Spiritual_Stone_of_Fire_Icon.png + https://zeldawiki.wiki/wiki/File:OoT3D_Spiritual_Stone_of_Water_Icon.png
+- `ship_of_harkinian/stat_dark_link.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Dark_Link_Model.png
+- `ship_of_harkinian/stat_rolls.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Child_Link_Render.png
+- `ship_of_harkinian/sword.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Master_Sword_Icon.png
+- `ship_of_harkinian/sword.biggoron.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Biggoron%27s_Sword_Icon.png
+- `ship_of_harkinian/sword.kokiri.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Kokiri_Sword_Icon.png
+- `ship_of_harkinian/sword.master.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Master_Sword_Icon.png
+- `ship_of_harkinian/ten_hours.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Door_of_Time_Model.png
+- `ship_of_harkinian/twenty_hearts.png` — https://zeldawiki.wiki/wiki/File:OoT3D_Heart_Container_Icon.png
+- `zelda_links_awakening/all_instruments.png` — https://zeldawiki.wiki/wiki/File:LANS_Wind_Fish_Model.png
+- `zelda_links_awakening/dungeon_treasures.png` — https://zeldawiki.wiki/wiki/File:LANS_Treasure_Chest_Model.png
+- `zelda_links_awakening/dungeon_treasures.angler_tunnel.png` — https://zeldawiki.wiki/wiki/File:LANS_Angler_Fish_Model.png
+- `zelda_links_awakening/dungeon_treasures.bottle_grotto.png` — https://zeldawiki.wiki/wiki/File:LANS_Genie_Model.png
+- `zelda_links_awakening/dungeon_treasures.catfish_maw.png` — https://zeldawiki.wiki/wiki/File:LANS_Slime_Eel_Concept_Artwork.png
+- `zelda_links_awakening/dungeon_treasures.color_dungeon.png` — https://zeldawiki.wiki/wiki/File:LANS_Hardhit_Beetle_Model.png
+- `zelda_links_awakening/dungeon_treasures.eagle_tower.png` — https://zeldawiki.wiki/wiki/File:LANS_Evil_Eagle_Model.png
+- `zelda_links_awakening/dungeon_treasures.face_shrine.png` — https://zeldawiki.wiki/wiki/File:LANS_Facade_Model.png
+- `zelda_links_awakening/dungeon_treasures.key_cavern.png` — https://zeldawiki.wiki/wiki/File:LANS_Slime_Eye_Model.png
+- `zelda_links_awakening/dungeon_treasures.tail_cave.png` — https://zeldawiki.wiki/wiki/File:LANS_Moldorm_Model.png
+- `zelda_links_awakening/dungeon_treasures.turtle_rock.png` — https://zeldawiki.wiki/wiki/File:LANS_Hot_Head_Model.png
+- `zelda_links_awakening/figure.png` — https://zeldawiki.wiki/wiki/File:LANS_Goomba_Figure_Model.png
+- `zelda_links_awakening/figure.blooper.png` — https://zeldawiki.wiki/wiki/File:LANS_Blooper_Figure_Icon.png
+- `zelda_links_awakening/figure.boo.png` — https://zeldawiki.wiki/wiki/File:LANS_Boo_Figure_Icon.png
+- `zelda_links_awakening/figure.bow_wow.png` — https://zeldawiki.wiki/wiki/File:LANS_BowWow_Figure_Icon.png
+- `zelda_links_awakening/figure.cheep_cheep.png` — https://zeldawiki.wiki/wiki/File:LANS_Cheep_Cheep_Figure_Icon.png
+- `zelda_links_awakening/figure.ciaociao.png` — https://zeldawiki.wiki/wiki/File:LANS_CiaoCiao_Figure_Icon.png
+- `zelda_links_awakening/figure.goomba.png` — https://zeldawiki.wiki/wiki/File:LANS_Goomba_Figure_Icon.png
+- `zelda_links_awakening/figure.shy_guy.png` — https://zeldawiki.wiki/wiki/File:LANS_Shy_Guy_Figure_Icon.png
+- `zelda_links_awakening/figures_5.png` — https://zeldawiki.wiki/wiki/File:LANS_Trendy_Gamester_Model.png
+- `zelda_links_awakening/follower.png` — https://zeldawiki.wiki/wiki/File:LANS_Marin_Model.png
+- `zelda_links_awakening/follower.ghost.png` — https://zeldawiki.wiki/wiki/File:LANS_Ghost_Model.png
+- `zelda_links_awakening/follower.marin.png` — https://zeldawiki.wiki/wiki/File:LANS_Marin_Render.png
+- `zelda_links_awakening/golden_leaves.png` — https://zeldawiki.wiki/wiki/File:LANS_Golden_Leaf_Model.png
+- `zelda_links_awakening/instrument.png` — https://zeldawiki.wiki/wiki/File:LANS_Full_Moon_Cello_Model.png
+- `zelda_links_awakening/instrument.conch_horn.png` — https://zeldawiki.wiki/wiki/File:LANS_Conch_Horn_Icon.png
+- `zelda_links_awakening/instrument.coral_triangle.png` — https://zeldawiki.wiki/wiki/File:LANS_Coral_Triangle_Icon.png
+- `zelda_links_awakening/instrument.evening_calm_organ.png` — https://zeldawiki.wiki/wiki/File:LANS_Organ_of_Evening_Calm_Icon.png
+- `zelda_links_awakening/instrument.full_moon_cello.png` — https://zeldawiki.wiki/wiki/File:LANS_Full_Moon_Cello_Icon.png
+- `zelda_links_awakening/instrument.sea_lily_bell.png` — https://zeldawiki.wiki/wiki/File:LANS_Sea_Lily%27s_Bell_Icon.png
+- `zelda_links_awakening/instrument.surf_harp.png` — https://zeldawiki.wiki/wiki/File:LANS_Surf_Harp_Icon.png
+- `zelda_links_awakening/instrument.thunder_drum.png` — https://zeldawiki.wiki/wiki/File:LANS_Thunder_Drum_Icon.png
+- `zelda_links_awakening/instrument.wind_marimba.png` — https://zeldawiki.wiki/wiki/File:LANS_Wind_Marimba_Icon.png
+- `zelda_links_awakening/rupees_999.png` — https://zeldawiki.wiki/wiki/File:LANS_Red_Rupee_Model.png
+- `zelda_links_awakening/trade.png` — https://zeldawiki.wiki/wiki/File:LANS_Yoshi_Doll_Model.png
+- `zelda_links_awakening/trade.bananas.png` — https://zeldawiki.wiki/wiki/File:LANS_Bananas_Icon.png
+- `zelda_links_awakening/trade.broom.png` — https://zeldawiki.wiki/wiki/File:LANS_Broom_Icon.png
+- `zelda_links_awakening/trade.dog_food.png` — https://zeldawiki.wiki/wiki/File:LANS_Dog_Food_Icon.png
+- `zelda_links_awakening/trade.fishing_hook.png` — https://zeldawiki.wiki/wiki/File:LANS_Fishing_Hook_Icon.png
+- `zelda_links_awakening/trade.hibiscus.png` — https://zeldawiki.wiki/wiki/File:LANS_Hibiscus_Icon.png
+- `zelda_links_awakening/trade.honeycomb.png` — https://zeldawiki.wiki/wiki/File:LANS_Honeycomb_Icon.png
+- `zelda_links_awakening/trade.letter.png` — https://zeldawiki.wiki/wiki/File:LANS_Goat%27s_Letter_Icon.png
+- `zelda_links_awakening/trade.magnifying_lens.png` — https://zeldawiki.wiki/wiki/File:LANS_Magnifying_Lens_Icon.png
+- `zelda_links_awakening/trade.mermaid_scale.png` — https://zeldawiki.wiki/wiki/File:LANS_Scale_Icon.png
+- `zelda_links_awakening/trade.necklace.png` — https://zeldawiki.wiki/wiki/File:LANS_Necklace_Icon.png
+- `zelda_links_awakening/trade.pineapple.png` — https://zeldawiki.wiki/wiki/File:LANS_Pineapple_Icon.png
+- `zelda_links_awakening/trade.ribbon.png` — https://zeldawiki.wiki/wiki/File:LANS_Ribbon_Icon.png
+- `zelda_links_awakening/trade.stick.png` — https://zeldawiki.wiki/wiki/File:LANS_Stick_Icon.png
+- `zelda_links_awakening/trade.yoshi_doll.png` — https://zeldawiki.wiki/wiki/File:LANS_Yoshi_Doll_Icon.png
+- `zelda_links_awakening/trade_complete.png` — https://zeldawiki.wiki/wiki/File:LANS_Magnifying_Lens_Model.png
+
+## Capas (`assets/covers/`)
+
+- `mario_kart_8_deluxe.png` — https://www.mariowiki.com/File:MK8_Deluxe_-_Box_NA.png
+- `ship_of_harkinian.png` — https://github.com/HarbourMasters/Shipwright/blob/develop/soh/macosx/sohIcon.png
+- `zelda_links_awakening.png` — https://zeldawiki.wiki/wiki/File:LANS_NA_Box_Art.png
+
+`common/trophy.png` e `common/secret.png` são ícones gerados pelo projeto, sem fonte externa.

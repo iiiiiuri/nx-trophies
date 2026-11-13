@@ -91,6 +91,7 @@ class NativeParityTest(unittest.TestCase):
 
     def test_memory_traces_match(self):
         for game_id, trace in (("mario_kart_8_deluxe", "mk8_corrida.json"),
+                               ("mario_kart_8_deluxe", "mk8_301_aarch32.json"),
                                ("zelda_links_awakening", "la_progresso.json")):
             with self.subTest(game=game_id):
                 expected = self.python_trace(game_id, TRACES / trace)

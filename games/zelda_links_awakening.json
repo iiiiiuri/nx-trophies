@@ -10,13 +10,13 @@
 
   "content": {
     "trade_items": [
-      { "id": "yoshi_doll",      "name": { "pt-BR": "Boneco do Yoshi",   "en": "Yoshi Doll" },       "value": 1,  "confidence": "assumed" },
-      { "id": "ribbon",          "name": { "pt-BR": "Laço",              "en": "Ribbon" },           "value": 2,  "confidence": "assumed" },
+      { "id": "yoshi_doll",      "name": { "pt-BR": "Boneco do Yoshi",   "en": "Yoshi Doll" },       "value": 1 },
+      { "id": "ribbon",          "name": { "pt-BR": "Laço",              "en": "Ribbon" },           "value": 2 },
       { "id": "dog_food",        "name": { "pt-BR": "Ração de Cachorro", "en": "Dog Food" },         "value": 3 },
       { "id": "bananas",         "name": { "pt-BR": "Bananas",           "en": "Bananas" },          "value": 4 },
       { "id": "stick",           "name": { "pt-BR": "Graveto",           "en": "Stick" },            "value": 5 },
       { "id": "honeycomb",       "name": { "pt-BR": "Favo de Mel",       "en": "Honeycomb" },        "value": 6 },
-      { "id": "pineapple",       "name": { "pt-BR": "Abacaxi",           "en": "Pineapple" },        "value": 7,  "confidence": "assumed" },
+      { "id": "pineapple",       "name": { "pt-BR": "Abacaxi",           "en": "Pineapple" },        "value": 7 },
       { "id": "hibiscus",        "name": { "pt-BR": "Hibisco",           "en": "Hibiscus" },         "value": 8 },
       { "id": "letter",          "name": { "pt-BR": "Carta da Cabra",    "en": "Goat's Letter" },    "value": 9 },
       { "id": "broom",           "name": { "pt-BR": "Vassoura",          "en": "Broom" },            "value": 10 },
@@ -28,36 +28,40 @@
     "figures": [
       { "id": "ciaociao", "name": { "pt-BR": "CiaoCiao",    "en": "CiaoCiao" },    "mask": "0x0001" },
       { "id": "goomba",               "name": { "pt-BR": "Goomba",      "en": "Goomba" },      "mask": "0x0002" },
-      { "id": "shy_guy",              "name": { "pt-BR": "Shy Guy",     "en": "Shy Guy" },     "mask": "0x0004" },
+      { "id": "spiny",                "name": { "pt-BR": "Spiny",       "en": "Spiny" },       "mask": "0x0004" },
       { "id": "boo",                  "name": { "pt-BR": "Boo",         "en": "Boo" },         "mask": "0x0008" },
       { "id": "cheep_cheep",          "name": { "pt-BR": "Cheep Cheep", "en": "Cheep Cheep" }, "mask": "0x0010" },
       { "id": "blooper",              "name": { "pt-BR": "Blooper",     "en": "Blooper" },     "mask": "0x0020" },
+      { "id": "shy_guy",              "name": { "pt-BR": "Shy Guy",     "en": "Shy Guy" },     "mask": "0x0040" },
+      { "id": "piranha_plant",        "name": { "pt-BR": "Planta Piranha", "en": "Piranha Plant" }, "mask": "0x0080" },
+      { "id": "pokey",                "name": { "pt-BR": "Pokey",       "en": "Pokey" },       "mask": "0x0100" },
       { "id": "bow_wow",              "name": { "pt-BR": "BowWow",      "en": "BowWow" },      "mask": "0x0200" }
     ],
     "dungeons": [
-      { "id": "tail_cave",     "name": { "pt-BR": "Caverna da Cauda",     "en": "Tail Cave" },      "slot": 0, "confidence": "assumed" },
-      { "id": "bottle_grotto", "name": { "pt-BR": "Gruta da Garrafa",     "en": "Bottle Grotto" },  "slot": 1, "confidence": "assumed" },
-      { "id": "key_cavern",    "name": { "pt-BR": "Caverna da Chave",     "en": "Key Cavern" },     "slot": 2, "confidence": "assumed" },
-      { "id": "angler_tunnel", "name": { "pt-BR": "Túnel do Pescador",    "en": "Angler's Tunnel" },"slot": 3, "confidence": "assumed" },
-      { "id": "catfish_maw",   "name": { "pt-BR": "Boca do Bagre",        "en": "Catfish's Maw" },  "slot": 4, "confidence": "assumed" },
-      { "id": "face_shrine",   "name": { "pt-BR": "Santuário da Face",    "en": "Face Shrine" },    "slot": 5, "confidence": "assumed" },
-      { "id": "eagle_tower",   "name": { "pt-BR": "Torre da Águia",       "en": "Eagle's Tower" },  "slot": 6, "confidence": "assumed" },
-      { "id": "turtle_rock",   "name": { "pt-BR": "Rocha da Tartaruga",   "en": "Turtle Rock" },    "slot": 7, "confidence": "assumed" },
-      { "id": "color_dungeon", "name": { "pt-BR": "Masmorra das Cores",   "en": "Color Dungeon" },  "slot": 8, "confidence": "assumed" }
+      { "id": "tail_cave",     "name": { "pt-BR": "Caverna da Cauda",     "en": "Tail Cave" },      "slot": 0 },
+      { "id": "bottle_grotto", "name": { "pt-BR": "Gruta da Garrafa",     "en": "Bottle Grotto" },  "slot": 1 },
+      { "id": "key_cavern",    "name": { "pt-BR": "Caverna da Chave",     "en": "Key Cavern" },     "slot": 2 },
+      { "id": "angler_tunnel", "name": { "pt-BR": "Túnel do Pescador",    "en": "Angler's Tunnel" },"slot": 3 },
+      { "id": "catfish_maw",   "name": { "pt-BR": "Boca do Bagre",        "en": "Catfish's Maw" },  "slot": 4 },
+      { "id": "face_shrine",   "name": { "pt-BR": "Santuário da Face",    "en": "Face Shrine" },    "slot": 5 },
+      { "id": "eagle_tower",   "name": { "pt-BR": "Torre da Águia",       "en": "Eagle's Tower" },  "slot": 6 },
+      { "id": "turtle_rock",   "name": { "pt-BR": "Rocha da Tartaruga",   "en": "Turtle Rock" },    "slot": 7 },
+      { "id": "color_dungeon", "name": { "pt-BR": "Masmorra das Cores",   "en": "Color Dungeon" },  "slot": 9 }
     ],
     "instruments": [
-      { "id": "full_moon_cello",       "name": { "pt-BR": "Violoncelo da Lua Cheia", "en": "Full Moon Cello" },       "bit": 0, "confidence": "assumed" },
-      { "id": "conch_horn",            "name": { "pt-BR": "Trompa de Concha",        "en": "Conch Horn" },            "bit": 1, "confidence": "assumed" },
-      { "id": "sea_lily_bell",         "name": { "pt-BR": "Sino do Lírio do Mar",    "en": "Sea Lily's Bell" },       "bit": 2, "confidence": "assumed" },
-      { "id": "surf_harp",             "name": { "pt-BR": "Harpa das Ondas",         "en": "Surf Harp" },             "bit": 3, "confidence": "assumed" },
-      { "id": "wind_marimba",          "name": { "pt-BR": "Marimba do Vento",        "en": "Wind Marimba" },          "bit": 4, "confidence": "assumed" },
-      { "id": "coral_triangle",        "name": { "pt-BR": "Triângulo de Coral",      "en": "Coral Triangle" },        "bit": 5, "confidence": "assumed" },
-      { "id": "evening_calm_organ",    "name": { "pt-BR": "Órgão da Calmaria",       "en": "Organ of Evening Calm" }, "bit": 6, "confidence": "assumed" },
-      { "id": "thunder_drum",          "name": { "pt-BR": "Tambor do Trovão",        "en": "Thunder Drum" },          "bit": 7, "confidence": "assumed" }
+      { "id": "full_moon_cello",       "name": { "pt-BR": "Violoncelo da Lua Cheia", "en": "Full Moon Cello" },       "bit": 7 },
+      { "id": "conch_horn",            "name": { "pt-BR": "Trompa de Concha",        "en": "Conch Horn" },            "bit": 8 },
+      { "id": "sea_lily_bell",         "name": { "pt-BR": "Sino do Lírio do Mar",    "en": "Sea Lily's Bell" },       "bit": 9 },
+      { "id": "surf_harp",             "name": { "pt-BR": "Harpa das Ondas",         "en": "Surf Harp" },             "bit": 10 },
+      { "id": "wind_marimba",          "name": { "pt-BR": "Marimba do Vento",        "en": "Wind Marimba" },          "bit": 11 },
+      { "id": "coral_triangle",        "name": { "pt-BR": "Triângulo de Coral",      "en": "Coral Triangle" },        "bit": 12 },
+      { "id": "evening_calm_organ",    "name": { "pt-BR": "Órgão da Calmaria",       "en": "Organ of Evening Calm" }, "bit": 13 },
+      { "id": "thunder_drum",          "name": { "pt-BR": "Tambor do Trovão",        "en": "Thunder Drum" },          "bit": 14 }
     ],
     "followers": [
-      { "id": "marin", "name": { "pt-BR": "Marin", "en": "Marin" }, "value": 1 },
-      { "id": "ghost", "name": { "pt-BR": "Fantasma", "en": "Ghost" }, "value": 3 }
+      { "id": "marin", "name": { "pt-BR": "Marin", "en": "Marin" }, "value": 1, "confidence": "assumed" },
+      { "id": "ghost", "name": { "pt-BR": "Fantasma", "en": "Ghost" }, "value": 3 },
+      { "id": "flying_rooster", "name": { "pt-BR": "Galo Voador", "en": "Flying Rooster" }, "value": 4 }
     ]
   },
 
@@ -67,7 +71,7 @@
     "follower":      { "type": "u8",  "description": "Acompanhante atual (valores em content.followers)." },
     "golden_leaves": { "type": "u8",  "description": "Bitfield das 5 Folhas Douradas." },
     "figures":       { "type": "u16", "description": "Bitfield das figurinhas do jogo de garra (máscaras em content.figures)." },
-    "instruments":   { "type": "u8",  "description": "Bitfield dos Instrumentos das Sirenas." },
+    "instruments":   { "type": "u32", "description": "Itens-chave; os Instrumentos das Sirenas são os bits 7 a 14." },
     "dungeon.small_keys": { "type": "u8", "indexed_by": "dungeons", "description": "Chaves pequenas na masmorra." },
     "dungeon.treasures":  { "type": "u8", "indexed_by": "dungeons", "description": "Bitfield: mapa, bússola, bico de pedra, chave do pesadelo." }
   },
@@ -82,12 +86,12 @@
       "variables": {
         "rupees":        { "base": "main", "offset": "0x1CC0760", "confidence": "community", "note": "cheat '9999 Rupees' (u16)" },
         "trade_item":    { "base": "main", "offset": "0x1CC077A", "confidence": "community", "note": "cheats de itens de troca (Bananas=4, Vassoura=0xA...)" },
-        "follower":      { "base": "main", "offset": "0x1CC077D", "confidence": "community", "note": "cheats 'Girl'=1, 'Ghost'=3" },
+        "follower":      { "base": "main", "offset": "0x1CC077D", "confidence": "community", "note": "cheats 'Girl'=1, 'Ghost'=3, 'Blue Chicken'=4; o valor da Marin diverge entre fontes" },
         "golden_leaves": { "base": "main", "offset": "0x1CC07A2", "confidence": "community", "note": "cheat 'Have 5/5 Gold Leafs' escreve 0x1F" },
         "figures":       { "base": "main", "offset": "0x1CC07C8", "confidence": "community", "note": "cheats de figurinhas (máscaras por personagem)" },
-        "instruments":   { "confidence": "to_discover", "note": "provavelmente no mesmo bloco de inventário perto de 0x1CC0788; buscar após pegar o 1º instrumento" },
-        "dungeon.small_keys": { "base": "main", "offset": "0x1CBB300", "stride": "0x10", "index_key": "slot", "confidence": "community", "note": "cheat 'Infinite Small Keys' escreve em 0x1CBB300 + 0x10*n" },
-        "dungeon.treasures":  { "base": "main", "offset": "0x1CBB301", "stride": "0x10", "index_key": "slot", "confidence": "community", "note": "cheat 'Map/Compass/Nightmare Key/Stone Beak' escreve 0x0F em 0x1CBB301 + 0x10*n" }
+        "instruments":   { "base": "main", "offset": "0x1CC078C", "confidence": "community", "note": "eden-duo-companions, mapa do 1.0.1 conferido no jogo: instrumento i = bit 7+i (Cello..Drum); 'Have All Items' grava 0x000FFFFF" },
+        "dungeon.small_keys": { "base": "main", "offset": "0x1CBB300", "stride": "0x20", "index_key": "slot", "confidence": "community", "note": "registros de 0x20 bytes (eden-duo); 0..7 = Nível 1..8, 9 = Masmorra das Cores" },
+        "dungeon.treasures":  { "base": "main", "offset": "0x1CBB301", "stride": "0x20", "index_key": "slot", "confidence": "community", "note": "b0 bússola, b1 mapa, b2 bico de pedra, b3 chave do pesadelo; cheat 'Map/Compass/Nightmare Key/Stone Beak' grava 0x0F" }
       }
     }
   ],

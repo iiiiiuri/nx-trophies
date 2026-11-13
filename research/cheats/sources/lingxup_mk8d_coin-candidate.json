@@ -1,0 +1,15 @@
+{
+  "original_coins": 10,
+  "candidate_coins": 5000,
+  "changed_offsets": [
+    "0x38",
+    "0x39",
+    "0x3a",
+    "0x3b",
+    "0x195c",
+    "0x195d"
+  ],
+  "original_save_unchanged": true,
+  "candidate": "/Volumes/SwitchNative/GameFiles/MK8D/Mush8-4.0.1-cheat-test/work/save/type1-index0/userdata.dat",
+  "status": "checksum passed; game verification pending"
+}

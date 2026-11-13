@@ -88,23 +88,36 @@ class Mk8Test(unittest.TestCase):
         self.assertLessEqual(self.source.read_calls, ticks * 3)
 
 
+class MarioKartAarch32Test(unittest.TestCase):
+    def test_four_byte_pointers(self):
+        _, _, state, _, _ = replay("mario_kart_8_deluxe", traces.mk8_race_aarch32())
+        self.assertTrue(state.is_unlocked("mario_kart_8_deluxe", "ghost_first"))
+        self.assertTrue(state.is_unlocked("mario_kart_8_deluxe", "squished_first"))
+        self.assertEqual(state.counters_for("mario_kart_8_deluxe")["ghost_used"], 1)
+
+
 class LinksAwakeningTest(unittest.TestCase):
     def setUp(self):
         self.index, self.engine, self.state, _, self.log = replay("zelda_links_awakening", traces.la_progress())
 
     def test_unlocks(self):
         unlocked = {a for _, u, _ in self.log for a in u}
-        self.assertTrue({"trade.dog_food", "trade.bananas", "figure.ciaociao", "figure.goomba", "figure.bow_wow",
-                         "figures_5", "golden_leaves", "follower.marin", "rupees_999"} <= unlocked)
-        self.assertNotIn("trade.yoshi_doll", unlocked)
+        self.assertTrue({"trade.yoshi_doll", "trade.ribbon", "trade.dog_food", "trade.bananas", "figure.ciaociao",
+                         "figure.goomba", "figure.spiny", "figure.bow_wow", "figures_5", "golden_leaves",
+                         "dungeon_treasures.tail_cave", "rupees_999"} <= unlocked)
         self.assertNotIn("trade_complete", unlocked)
+        self.assertNotIn("figure.shy_guy", unlocked)
+
+    def test_instruments_are_bits_7_to_14(self):
+        unlocked = [a for _, u, _ in self.log for a in u]
+        self.assertIn("instrument.full_moon_cello", unlocked)
+        self.assertNotIn("instrument.conch_horn", unlocked[:unlocked.index("instrument.full_moon_cello") + 1])
+        self.assertIn("all_instruments", unlocked)
 
     def test_assumed_values_only_rehearse(self):
         rehearsed = {a for _, _, r in self.log for a in r}
-        self.assertEqual(rehearsed, {"trade.yoshi_doll", "trade.ribbon", "dungeon_treasures.tail_cave"})
-
-    def test_pending_never_evaluated(self):
-        self.assertIs(self.index.readiness["all_instruments"], Readiness.PENDING)
+        self.assertEqual(rehearsed, {"follower.marin"})
+        self.assertIs(self.index.readiness["follower.marin"], Readiness.REHEARSAL)
 
 
 class SohTest(unittest.TestCase):

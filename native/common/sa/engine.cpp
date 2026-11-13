@@ -357,7 +357,8 @@ Snapshot readMemory(const Pack& pack, const Binding& binding, MemoryReader& read
         for (uint64_t offset : ptr.chain) {
             const uint64_t slot = address + offset;
             uint64_t next = 0;
-            if (!inRegions(reader.regions, slot, 8) || !reader.read(slot, &next, 8) || next == 0) {
+            if (!inRegions(reader.regions, slot, binding.pointerWidth) ||
+                !reader.read(slot, &next, binding.pointerWidth) || next == 0) {
                 ok = false;
                 break;
             }

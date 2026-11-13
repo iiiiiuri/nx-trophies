@@ -138,7 +138,7 @@ O modo ensaio permite publicar uma definição incompleta sem risco de desbloque
 ```
 
 - O binding é escolhido pelo **build ID** do módulo principal (`dmntchtGetCheatProcessMetadata`), comparado sem diferenciar maiúsculas. Sem binding para o build, o jogo fica sem suporte, e nada é lido.
-- `base` é uma região (`main`, `heap`, `alias`, `aslr`); `from` é um ponteiro. A cadeia `[[main+0x1354AF0]+0x6E0]` lê um u64 em cada nível; ponteiro nulo ou fora das regiões do processo torna a variável ausente.
+- `base` é uma região (`main`, `heap`, `alias`, `aslr`); `from` é um ponteiro. A cadeia `[[main+0x1354AF0]+0x6E0]` lê um u64 em cada nível; ponteiro nulo ou fora das regiões do processo torna a variável ausente. Em jogos AArch32 (ex.: Mario Kart 8 Deluxe até a 3.0.3), declare `"pointer_width": 4` no binding para ler u32 por nível.
 - `active_when`: fora do estado ativo (ex.: menu, sem kart), os eventos não contam e as conquistas não são avaliadas. Isso evita contar lixo de memória.
 - Os offsets vêm do formato de cheats do Atmosphère: `58020000 X` / `58021000 Y` é a cadeia de ponteiros; `0TMR00AA AAAAAAAA` com M=0 é endereço estático em `main`.
 

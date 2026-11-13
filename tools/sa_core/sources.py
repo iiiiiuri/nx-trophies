@@ -88,14 +88,15 @@ class MemorySource:
         return any(base <= address and address + size <= base + length for base, length in regions.values())
 
     def _resolve(self, pointer: Pointer, regions: dict[str, tuple[int, int]]) -> int | None:
+        width = self.index.binding.pointer_width
         address = regions[pointer.region][0]
         for offset in pointer.chain:
             slot = address + offset
-            if not self._in_regions(slot, 8, regions):
+            if not self._in_regions(slot, width, regions):
                 return None
             try:
                 self.read_calls += 1
-                address = decode("u64", self.reader.read(slot, 8))
+                address = decode("u64" if width == 8 else "u32", self.reader.read(slot, width))
             except MemoryReadError:
                 return None
             if address == 0:

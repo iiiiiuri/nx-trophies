@@ -216,6 +216,7 @@ Binding parseBinding(const cJSON* node) {
         cJSON_ArrayForEach(off, cJSON_GetObjectItemCaseSensitive(item, "chain")) p.chain.push_back(static_cast<uint64_t>(toInt(off)));
         b.pointers.push_back(std::move(p));
     }
+    b.pointerWidth = jsonInt(node, "pointer_width", 8) == 4 ? 4 : 8;
     cJSON_ArrayForEach(item, cJSON_GetObjectItemCaseSensitive(node, "blocks")) {
         Block blk;
         const cJSON* anchor = need(item, "anchor");

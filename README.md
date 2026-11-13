@@ -23,13 +23,15 @@ O som da conquista substitui o som **global** de notificação do Ultrahand. O o
 
 ## Jogos
 
-| Jogo | Fonte | Conquistas | Ativas / ensaio / a descobrir |
+| Jogo | Versões | Conquistas | Ativas / ensaio |
 |---|---|---|---|
-| [Mario Kart 8 Deluxe](games/mario_kart_8_deluxe.json) | memória | 35 | 6 / 1 / 28 |
-| [Link's Awakening](games/zelda_links_awakening.json) | memória | 45 | 24 / 12 / 9 |
-| [Ship of Harkinian (OoT)](games/ship_of_harkinian.json) | save JSON ([detalhes](docs/jogos/ship-of-harkinian.md)) | 34 | 34 / 0 / 0 |
+| [Link's Awakening](games/zelda_links_awakening.json) | todas (1.0.0, 1.0.1, 1.1.0) | 49 | 48 / 1 |
+| [Mario Kart 8 Deluxe](games/mario_kart_8_deluxe.json) | 3.0.5 e 2.4.0 a 3.0.3 | 35 | 6 / 1 |
+| | 2.0.0 | 35 | 5 / 2 |
+| | 4.0.0 e 4.0.1 | 35 | 0 / 4 |
+| [Ship of Harkinian (OoT)](games/ship_of_harkinian.json) | save JSON ([detalhes](docs/jogos/ship-of-harkinian.md)) | 34 | 34 / 0 |
 
-"Ensaio" são conquistas com endereço presumido: são avaliadas, mas só desbloqueiam depois de confirmadas no console. "A descobrir" ainda não têm endereço. Uma versão de jogo sem endereços mapeados aparece no app como "ainda sem suporte", com o build ID detectado.
+Os endereços vêm de cheats e mapas de memória públicos; as fontes de cada um estão em [`research/enderecos.md`](research/enderecos.md). "Ensaio" são conquistas com endereço presumido: o sysmodule avalia e anota em `sysmodule.log`, mas só desbloqueia depois de confirmado no console. As demais conquistas do Mario Kart (troféus por copa, vitórias e moedas na 3.0.5) ainda não têm endereço e aparecem como "ainda não rastreada". Uma versão de jogo sem nada mapeado aparece no app como "sem suporte", com o build ID detectado.
 
 ## Adicionar um jogo
 

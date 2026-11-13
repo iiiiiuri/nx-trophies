@@ -1,0 +1,91 @@
+{
+  "build_id": "9EF5CAA2D5B933C7",
+  "regions": {
+    "main": {
+      "base": "0x8000000",
+      "size": "0x2000000"
+    },
+    "heap": {
+      "base": "0x40000000",
+      "size": "0x10000000"
+    }
+  },
+  "initial": [],
+  "ticks": [
+    {
+      "label": "menu",
+      "writes": [
+        {
+          "addr": "main+0xF5344C",
+          "type": "u32",
+          "value": 3735928559
+        }
+      ]
+    },
+    {
+      "label": "corrida começa",
+      "writes": [
+        {
+          "addr": "main+0xF53448",
+          "type": "u32",
+          "value": 1073750016
+        },
+        {
+          "addr": "main+0xF5344C",
+          "type": "u32",
+          "value": 3735928559
+        },
+        {
+          "addr": "0x40003350",
+          "type": "u32",
+          "value": 1075838976
+        },
+        {
+          "addr": "0x402009d8",
+          "type": "u32",
+          "value": 8392704
+        }
+      ]
+    },
+    {
+      "label": "fantasma (Boo)",
+      "writes": [
+        {
+          "addr": "0x402009f8",
+          "type": "u32",
+          "value": 288
+        }
+      ]
+    },
+    {
+      "label": "fantasma acabou",
+      "writes": [
+        {
+          "addr": "0x402009f8",
+          "type": "u32",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "label": "achatado",
+      "writes": [
+        {
+          "addr": "0x40200a28",
+          "type": "u32",
+          "value": 288
+        }
+      ]
+    },
+    {
+      "label": "fim da corrida",
+      "writes": [
+        {
+          "addr": "0x40003350",
+          "type": "u32",
+          "value": 0
+        }
+      ]
+    }
+  ]
+}
