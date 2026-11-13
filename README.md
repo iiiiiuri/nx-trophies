@@ -19,7 +19,7 @@ Requisitos: Atmosphère e Ultrahand Overlay ≥ 2.3 (é ele que mostra as notifi
 
 Depois disso, atualize pelo próprio app (botão **Y**). O progresso fica em `sdmc:/config/switch-achievements/state.json` e nunca é apagado por atualização.
 
-O som da conquista substitui o som **global** de notificação do Ultrahand. O original fica em `sdmc:/config/switch-achievements/backup/ultrahand-notification.wav`.
+O som da conquista substitui o som **global** de notificação do Ultrahand. Nas atualizações pelo app, o original é guardado em `sdmc:/config/switch-achievements/backup/`; extraindo o zip à mão, copie antes `sdmc:/config/ultrahand/sounds/notification.wav` se quiser mantê-lo.
 
 ## Jogos
 
