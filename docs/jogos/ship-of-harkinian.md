@@ -82,13 +82,21 @@ Decisões de robustez:
    A saída mostra o modo de cada slot, cada conquista (`[X]` ou `[ ]`), o progresso, o XP e o nível. Use `--reveal-secrets` para mostrar as secretas.
 3. Rodar de novo com o mesmo `--state` mostra só os desbloqueios **novos**: é o comportamento do motor. `--watch` reavalia sempre que um save muda.
 
-### Testar a notificação no Switch (requer Ultrahand ≥ 2.3)
+### Pela rede local (sysmodule ainda não existe)
 
-Copie [`examples/ultrahand/SwitchAchievements-teste.notify`](../../examples/ultrahand/SwitchAchievements-teste.notify), ou qualquer arquivo gerado em `notificacoes/`, para `sdmc:/config/ultrahand/notifications/`. O Ultrahand exibe o toast sobre o jogo. É exatamente o caminho que o sysmodule vai usar.
+Com o sys-ftpd aberto, ou o FTP do DBI no SD inteiro, e `device.local.json` na raiz do repositório:
+
+```bash
+python3 tools/sa.py device install
+python3 tools/sa.py device sync
+```
+
+`sync` lê `sdmc:/switch/soh/Save/` com o jogo fechado, publica o progresso para o overlay e manda um toast com ícone para cada conquista nova. O estado fica no SD, então rodar de novo não repete toasts. O Ultrahand (≥ 2.3) mostra o `.notify` e apaga o arquivo.
+
+Os ícones deste jogo ficam em [`assets/icons/ship_of_harkinian/`](../../assets/icons/ship_of_harkinian/), nomeados pelo `id` ou pelo `template` da conquista (ex.: `boss.png` cobre todos os chefes).
 
 ## 6. Próximos passos para este jogo
 
 1. Validar a definição contra o save real do usuário (confirmar versão, `counts.length` e campos presentes).
 2. Sysmodule mínimo: a cada 2 s, faz `stat()` em `sdmc:/switch/soh/Save/*.sav`. Quando o mtime muda, lê o arquivo (com nova tentativa se o JSON estiver incompleto), avalia em C++ com a mesma semântica de `tools/sa_core/` e grava o `.notify`.
-3. Ícones 50×50 RGBA por conquista.
-4. Avaliar a integração nativa via fork do SoH, para ter eventos em tempo real.
+3. Avaliar a integração nativa via fork do SoH, para ter eventos em tempo real.

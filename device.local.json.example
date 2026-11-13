@@ -1,0 +1,6 @@
+{
+  "host": "192.168.0.6",
+  "port": 5000,
+  "user": "anonymous",
+  "password": ""
+}

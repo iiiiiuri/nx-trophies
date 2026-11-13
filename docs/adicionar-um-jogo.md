@@ -51,6 +51,10 @@ python3 -m unittest discover -s tools/tests -t tools/tests     # inclui o novo a
 
 Para testar sem console, escreva um trace em `examples/traces/` (formato na seção 8 do modelo) e rode `python3 tools/sa.py replay super_mario_odyssey examples/traces/<trace>.json --verbose`.
 
+### Ícones (opcional)
+
+Coloque PNGs em `assets/icons/<id>/`, com o nome do `id` da conquista ou do seu `template` (um ícone cobre o template inteiro). Qualquer tamanho serve; o `build` reduz para 50×50. Sem ícone, a conquista usa o troféu de `assets/icons/common/`.
+
 ## 4. Nova versão de um jogo já existente
 
 Não crie outro arquivo. Adicione um binding em `bindings` com o novo build ID. Conteúdo, variáveis, eventos e conquistas são reaproveitados. Se os endereços não mudaram entre versões, basta incluir o build ID em `match.build_ids` do binding existente, como em `zelda_links_awakening.json`.

@@ -10,6 +10,8 @@ Cada jogo é um arquivo games/<id>.json na estrutura padrão; não há registro 
   index     mostra o índice: variáveis por binding, plano de leitura e prontidão
   save      avalia saves JSON (bindings save_json, ex.: Ship of Harkinian)
   replay    executa um trace de memória simulada (bindings memory, ex.: MK8, Link's Awakening)
+  build     monta dist/sd/ (overlay, ícones, definições, som) para copiar ao cartão
+  device    fala com o Switch pela rede local (FTP), enquanto o sysmodule não existe
 
 Exemplos:
   python3 tools/sa.py validate
@@ -17,6 +19,8 @@ Exemplos:
   python3 tools/sa.py index mario_kart_8_deluxe
   python3 tools/sa.py save ship_of_harkinian --save-dir examples/soh/Save
   python3 tools/sa.py replay zelda_links_awakening examples/traces/la_progresso.json
+  python3 tools/sa.py device install
+  python3 tools/sa.py device sync
 """
 
 from __future__ import annotations
@@ -29,16 +33,27 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from sa_core.assets import AssetError, icon_key  # noqa: E402
 from sa_core.catalog import (  # noqa: E402
     GAMES_DIR, Catalog, check_definition, game_files, load_catalog, new_definition, resolve_game_path,
 )
+from sa_core.device import DeviceError, FtpDevice, connect, load_endpoint  # noqa: E402
+from sa_core.images import ImageError  # noqa: E402
+from sa_core.layout import (  # noqa: E402
+    DEFAULT_ICON, DEVICE_CACHE, DIST_SD, SD_OVERLAY, SD_PROFILE, SD_ROOT, SD_STATE, SD_SOUND, SOH_SAVE,
+    UH_NOTIFICATIONS, UH_SOUND, UH_SOUND_BACKUP, progress_file, ultrahand_icon_file,
+)
+from sa_core.progress import game_view, profile_view  # noqa: E402
+from sa_core.sdcard import build_sd  # noqa: E402
 from sa_core.definition import (  # noqa: E402
-    Binding, Confidence, Definition, DefinitionError, Index, Readiness, build_index, load_definition,
+    Achievement, Binding, Confidence, Definition, DefinitionError, Index, Readiness, build_index, load_definition,
     parse_definition,
 )
 from sa_core.engine import Engine  # noqa: E402
 from sa_core.expr import parse_int  # noqa: E402
-from sa_core.notify import RARITY_LABEL, write_notification  # noqa: E402
+from sa_core.notify import (  # noqa: E402
+    RARITY_LABEL, build_notification, notification_name, test_notification, write_notification,
+)
 from sa_core.sources import FakeProcess, FileSource, MemorySource, Snapshot  # noqa: E402
 from sa_core.store import UserState, level_for_xp, load_state, save_state, xp_for_level  # noqa: E402
 
@@ -135,9 +150,13 @@ def announce(index: Index, result, lang: str, notify_dir: Path | None) -> None:
     for ach in result.unlocked:
         print(f">>> CONQUISTA DESBLOQUEADA: {ach.text('name', lang)} (+{ach.xp} XP)")
         if notify_dir is not None:
-            write_notification(ach, lang, notify_dir)
+            write_notification(ach, lang, notify_dir, icon_key(index.definition.game_id, ach))
     for ach in result.rehearsal:
         print(f"... ensaio: '{ach.text('name', lang)}' seria desbloqueada (endereço/valor presumido)")
+
+
+def save_paths(index: Index, save_dir: Path) -> list[Path]:
+    return [save_dir / Path(name.split(":", 1)[-1]).name for name in index.binding.files]
 
 
 def cmd_save(index: Index, args: argparse.Namespace) -> int:
@@ -146,7 +165,7 @@ def cmd_save(index: Index, args: argparse.Namespace) -> int:
         return 2
     paths = list(args.save)
     if args.save_dir:
-        paths += [args.save_dir / Path(name.split(":", 1)[-1]).name for name in index.binding.files]
+        paths += save_paths(index, args.save_dir)
     state = load_state(args.state) if args.state else UserState()
     engine = Engine(index, state)
     source = FileSource(index, paths)
@@ -251,6 +270,184 @@ def cmd_detect(title_id: str, build_id: str) -> int:
     return 0
 
 
+def cmd_build(out: Path) -> int:
+    result = build_sd(out)
+    print(f"{len(result.files)} arquivo(s) em {out}")
+    for relative in sorted({f.rsplit('/', 1)[0] for f in result.files}):
+        count = sum(1 for f in result.files if f.rsplit('/', 1)[0] == relative)
+        print(f"  sdmc:/{relative}/ ({count})")
+    if not result.overlay:
+        print("overlay não compilado; veja overlay/README.md")
+    return 0
+
+
+def cmd_device(args: argparse.Namespace) -> int:
+    try:
+        endpoint = load_endpoint(
+            host=args.host, port=args.port, user=args.user, password=args.password, config=args.config,
+        )
+        device = connect(endpoint)
+    except DeviceError as exc:
+        print(f"erro: {exc}", file=sys.stderr)
+        return 2
+    try:
+        command = args.device_command
+        if command == "probe":
+            return _device_probe(device, endpoint.host, endpoint.port)
+        if command == "install":
+            return _device_install(device, with_sound=not args.no_sound)
+        if command == "restore-sound":
+            return _device_restore_sound(device)
+        if command == "notify":
+            return _device_notify(device, args.file)
+        if command == "pull":
+            return _device_pull(device, args.into or DEVICE_CACHE / "ship_of_harkinian")
+        return _device_sync(device, args)
+    except DeviceError as exc:
+        print(f"erro: {exc}", file=sys.stderr)
+        return 2
+    finally:
+        device.close()
+
+
+def _device_probe(device: FtpDevice, host: str, port: int) -> int:
+    print(f"conectado em {host}:{port}")
+    base = device.base()
+    print("sdmc:/ no FTP: /" + "/".join(base))
+    checks = (
+        ("Switch Achievements", SD_ROOT),
+        ("notificações do Ultrahand", UH_NOTIFICATIONS),
+        ("saves do Ship of Harkinian", SOH_SAVE),
+    )
+    ok = True
+    for label, path in checks:
+        try:
+            found = device.locate(path)
+        except DeviceError:
+            ok = ok and path == SD_ROOT
+            print(f"{label}: ausente (sdmc:/{path})")
+        else:
+            listed = ", ".join(found.names) or "vazia"
+            print(f"{label}: sdmc:/{path} ({listed})")
+    print("overlay: " + ("instalado" if device.exists(SD_OVERLAY) else "não instalado"))
+    print("som de conquista: " + ("instalado" if device.exists(SD_SOUND) else "não instalado"))
+    return 0 if ok else 1
+
+
+def _device_install(device: FtpDevice, with_sound: bool) -> int:
+    result = build_sd(DIST_SD, with_sound=with_sound)
+    if with_sound and not device.exists(UH_SOUND_BACKUP):
+        original = device.read(UH_SOUND)
+        ours = (DIST_SD / UH_SOUND).read_bytes()
+        if original is not None and original != ours:
+            device.write(UH_SOUND_BACKUP, original)
+            print(f"som original do Ultrahand salvo em sdmc:/{UH_SOUND_BACKUP}")
+    for relative in result.files:
+        device.write(relative, (DIST_SD / relative).read_bytes())
+    print(f"{len(result.files)} arquivo(s) enviados")
+    if not result.overlay:
+        print("overlay não compilado: nada foi para sdmc:/switch/.overlays/ (veja overlay/README.md)")
+    if with_sound:
+        print("O Ultrahand carrega os sons ao abrir; feche e abra o menu dele (ou reinicie) para ouvir o novo.")
+    return 0
+
+
+def _device_restore_sound(device: FtpDevice) -> int:
+    original = device.read(UH_SOUND_BACKUP)
+    if original is None:
+        print(f"sem backup em sdmc:/{UH_SOUND_BACKUP}", file=sys.stderr)
+        return 1
+    device.write(UH_SOUND, original)
+    print("som de notificação do Ultrahand restaurado")
+    return 0
+
+
+def _device_notify(device: FtpDevice, path: Path | None) -> int:
+    if path is None:
+        if not device.exists(ultrahand_icon_file(DEFAULT_ICON)):
+            print("aviso: ícone ainda não está no SD; rode 'device install'", file=sys.stderr)
+        name = notification_name(DEFAULT_ICON)
+        data = json.dumps(test_notification(), ensure_ascii=False).encode()
+    else:
+        name = path.name
+        data = path.read_bytes()
+    remote = device.write(f"{UH_NOTIFICATIONS}/{name}", data)
+    print(f"enviado {remote}")
+    print("O Ultrahand lê e apaga esse arquivo. O overlay precisa estar ativo.")
+    return 0
+
+
+def _device_pull(device: FtpDevice, into: Path) -> int:
+    saved = device.pull_saves(into)
+    if not saved:
+        print(f"nenhum .sav em sdmc:/{SOH_SAVE}", file=sys.stderr)
+        return 1
+    for path in saved:
+        print(f"{path.name} ({path.stat().st_size} bytes) -> {path}")
+    return 0
+
+
+def _pull_binding_files(device: FtpDevice, game_id: str, binding: Binding) -> list[Path]:
+    local: list[Path] = []
+    for remote in binding.files:
+        relative = remote.split(":/", 1)[-1].lstrip("/")
+        data = device.read(relative)
+        if data is None:
+            continue
+        target = DEVICE_CACHE / game_id / Path(relative).name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(data)
+        local.append(target)
+    return local
+
+
+def _device_sync(device: FtpDevice, args: argparse.Namespace) -> int:
+    """Lê os saves e o estado do SD, avalia todos os jogos e publica estado, progresso e toasts."""
+    raw_state = device.read(SD_STATE)
+    state = UserState.from_json(json.loads(raw_state)) if raw_state else UserState()
+    print(f"estado no SD: {len(state.unlocked)} conquista(s)" if raw_state else "estado no SD: novo")
+    catalog = load_catalog()
+    if catalog.problems:
+        for problem in catalog.problems:
+            print(f"erro: {problem}", file=sys.stderr)
+        return 2
+
+    views = []
+    unlocked: list[tuple[Index, Achievement]] = []
+    for game_id, definition in sorted(catalog.games.items()):
+        index = build_index(definition, next(iter(definition.bindings.values())))
+        snapshots: list[Snapshot] = []
+        if index.binding.source == "save_json":
+            local = _pull_binding_files(device, game_id, index.binding)
+            if local:
+                engine = Engine(index, state)
+                snapshots = FileSource(index, local).read()
+                for snapshot in snapshots:
+                    print(f"{game_id}/{snapshot.label}: modo={engine.mode_of(snapshot)}")
+                result = engine.tick(snapshots)
+                unlocked += [(index, ach) for ach in result.unlocked]
+                announce(index, result, args.lang, None)
+                print_report(index, engine, state, snapshots, args.lang, args.reveal_secrets)
+        views.append(game_view(index, state, snapshots, args.lang))
+
+    device.write(SD_STATE, json.dumps(state.to_json(), ensure_ascii=False, indent=2).encode())
+    for view in views:
+        device.write(progress_file(view["game"]), json.dumps(view, ensure_ascii=False).encode())
+    profile = profile_view(state, views)
+    device.write(SD_PROFILE, json.dumps(profile, ensure_ascii=False).encode())
+    print(f"\npublicado: estado, perfil e progresso de {len(views)} jogo(s) em sdmc:/{SD_ROOT}/")
+
+    if args.no_notify or not unlocked:
+        print("nenhuma notificação enviada" if unlocked else "nenhuma conquista nova")
+        return 0
+    for index, ach in unlocked:
+        key = icon_key(index.definition.game_id, ach)
+        payload = json.dumps(build_notification(ach, args.lang), ensure_ascii=False).encode()
+        device.write(f"{UH_NOTIFICATIONS}/{notification_name(key)}", payload)
+        print(f"toast: {ach.text('name', args.lang)} ({key})")
+    return 0
+
+
 def cmd_new(args: argparse.Namespace) -> int:
     path = GAMES_DIR / f"{args.game_id}.json"
     if path.exists():
@@ -312,8 +509,44 @@ def main(argv: list[str] | None = None) -> int:
     p_replay.add_argument("trace", type=Path)
     p_replay.add_argument("--verbose", action="store_true")
 
+    p_device = sub.add_parser("device", help="testa no Switch por FTP na rede local")
+    device_sub = p_device.add_subparsers(dest="device_command", required=True)
+
+    def device_conn(p: argparse.ArgumentParser) -> None:
+        p.add_argument("--host", help="IP do Switch na rede local")
+        p.add_argument("--port", type=int, help="porta do FTP (padrão 5000, ou a do device.local.json)")
+        p.add_argument("--user")
+        p.add_argument("--password")
+        p.add_argument("--config", type=Path, help="JSON com host, port, user e password")
+
+    p_probe = device_sub.add_parser("probe", help="confere o que já está no SD")
+    device_conn(p_probe)
+    p_install = device_sub.add_parser("install", help="envia overlay, ícones, definições e som")
+    device_conn(p_install)
+    p_install.add_argument("--no-sound", action="store_true", help="mantém o som de notificação do Ultrahand")
+    p_restore = device_sub.add_parser("restore-sound", help="volta o som original do Ultrahand")
+    device_conn(p_restore)
+    p_notify = device_sub.add_parser("notify", help="envia um toast de teste ao Ultrahand")
+    device_conn(p_notify)
+    p_notify.add_argument("--file", type=Path, help="um .notify pronto; sem isso, manda o toast de teste")
+    p_pull = device_sub.add_parser("pull", help="baixa sdmc:/switch/soh/Save/*.sav")
+    device_conn(p_pull)
+    p_pull.add_argument("--into", type=Path, help="pasta local (padrão device-cache/ship_of_harkinian)")
+    p_sync = device_sub.add_parser("sync", help="avalia os saves e publica estado, tela e toasts no console")
+    device_conn(p_sync)
+    p_sync.add_argument("--lang", default="pt-BR")
+    p_sync.add_argument("--reveal-secrets", action="store_true")
+    p_sync.add_argument("--no-notify", action="store_true", help="atualiza a tela sem mandar toasts")
+
+    p_build = sub.add_parser("build", help="monta dist/sd/, o espelho do cartão SD")
+    p_build.add_argument("--out", type=Path, default=DIST_SD)
+
     args = parser.parse_args(argv)
     try:
+        if args.command == "device":
+            return cmd_device(args)
+        if args.command == "build":
+            return cmd_build(args.out)
         if args.command == "list":
             return cmd_list(load_catalog(), args.lang)
         if args.command == "validate":
@@ -330,7 +563,7 @@ def main(argv: list[str] | None = None) -> int:
             cmd_index(index, args.lang)
             return 0
         return cmd_save(index, args)
-    except (DefinitionError, json.JSONDecodeError, OSError) as exc:
+    except (DefinitionError, AssetError, ImageError, json.JSONDecodeError, OSError) as exc:
         print(f"erro: {exc}", file=sys.stderr)
         return 2
 

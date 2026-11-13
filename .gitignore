@@ -5,7 +5,11 @@ dist/
 *.nro
 *.nsp
 *.ovl
+*.nacp
+overlay/out/
 __pycache__/
 *.pyc
 estado.json
 notificacoes/
+device.local.json
+device-cache/

@@ -53,7 +53,48 @@ python3 tools/sa.py save ship_of_harkinian --save-dir examples/soh/Save \
 
 Opções comuns: `--state` (persiste desbloqueios, contadores e XP), `--notify-dir`, `--reveal-secrets`, `--lang en`, `--binding`/`--build` (no `index`) e `--watch` (no `save`).
 
-Os arquivos em `notificacoes/` usam o formato `.notify` do Ultrahand. Copiados para `sdmc:/config/ultrahand/notifications/`, eles aparecem como toast no Switch.
+## Teste no Switch pela rede local
+
+O sysmodule em C++ ainda não existe. Com o sys-ftpd aberto, ou com o FTP do DBI mostrando o SD inteiro (não a pasta de instalação), o PC fala com o console na rede local. Copie `device.local.json.example` para `device.local.json` e preencha o IP, a porta e o login. Esse arquivo fica só na máquina.
+
+```bash
+python3 tools/sa.py device probe     # confere o SD e as pastas do Ultrahand e do SoH
+python3 tools/sa.py device install   # envia overlay, ícones, definições e som (dist/sd/)
+python3 tools/sa.py device notify    # toast de teste, com o ícone de troféu
+python3 tools/sa.py device sync      # avalia os saves, publica o progresso e notifica o que for novo
+```
+
+`sync` guarda o estado no próprio SD (`state.json`), então só notifica desbloqueios novos; o primeiro `sync` notifica tudo o que o save já cumpriu. Rode com o SoH fechado. `--no-notify` só atualiza a tela.
+
+`install` nunca mexe no estado nem no progresso. O som de conquista substitui o som **global** de notificação do Ultrahand: o original fica em `sdmc:/config/switch-achievements/backup/` e volta com `device restore-sound`. Use `install --no-sound` para manter o original. O Ultrahand carrega sons ao abrir; feche e abra o menu (ou reinicie) depois de instalar.
+
+Sem rede, `python3 tools/sa.py build` monta a mesma árvore em `dist/sd/` para copiar ao cartão.
+
+## No console
+
+O overlay **Switch Achievements** aparece no menu do Ultrahand. A tela inicial mostra nível, XP e os jogos com `concluídas/total`; ao abrir um jogo, as conquistas aparecem separadas em **Concluídas** e **Bloqueadas**, com ícone (cinza enquanto bloqueada), XP, raridade e barra de progresso quando a conquista tem contador. Secretas bloqueadas ficam escondidas.
+
+O toast de cada conquista leva o ícone dela. O Ultrahand acha o ícone pelo nome do arquivo `.notify` (`SwitchAchievements-<jogo>.<ícone>-<n>.notify` → `config/ultrahand/assets/notifications/SwitchAchievements-<jogo>.<ícone>.rgba`).
+
+## Estrutura
+
+| No repositório | Para quê |
+| --- | --- |
+| `games/<id>.json` | definição de cada jogo |
+| `assets/icons/<id>/<conquista ou template>.png` | ícones 50×50; sem ícone, usa `assets/icons/common/trophy.png` |
+| `assets/sounds/achievement.wav` | som da conquista (PCM 16 bits, 48 kHz) |
+| `overlay/` | tela do console (C++, libultrahand como submódulo) |
+| `tools/` | CLI e avaliador de referência; caminhos do SD em `tools/sa_core/layout.py` |
+
+| No SD | Quem escreve |
+| --- | --- |
+| `switch/.overlays/switch-achievements.ovl` | `install` |
+| `config/switch-achievements/games/`, `icons/`, `sounds/` | `install` |
+| `config/switch-achievements/state.json`, `profile.json`, `progress/<jogo>.json` | `sync` (depois, o sysmodule) |
+| `config/ultrahand/assets/notifications/SwitchAchievements-*.rgba` | `install` |
+| `config/ultrahand/sounds/notification.wav` | `install` (original em `backup/`) |
+
+Compilar o overlay: [`overlay/README.md`](overlay/README.md).
 
 ## Testes
 
