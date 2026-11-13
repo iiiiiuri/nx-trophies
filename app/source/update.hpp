@@ -12,6 +12,9 @@ namespace app {
 constexpr const char* kRepo = "iiiiiuri/nx-trophies";
 constexpr u64 kSysmoduleId = 0x4200000000534143ull;
 
+// Copia o certificado do romfs para o SD; depois disso o romfs pode ser fechado,
+// e o .nro deixa de ficar aberto (o Switch não substitui arquivo aberto).
+void prepareCertificates();
 std::string installedVersion();
 bool sysmoduleRunning();
 bool restartSysmodule();

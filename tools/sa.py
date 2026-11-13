@@ -274,8 +274,8 @@ def cmd_detect(title_id: str, build_id: str) -> int:
 MISSING_BINARIES = "não compilado(s): {} (veja overlay/, sysmodule/ e app/ README)"
 
 
-def cmd_build(out: Path) -> int:
-    result = build_sd(out)
+def cmd_build(out: Path, version: str) -> int:
+    result = build_sd(out, version=version)
     print(f"{len(result.files)} arquivo(s) em {out}")
     for relative in sorted({f.rsplit('/', 1)[0] for f in result.files}):
         count = sum(1 for f in result.files if f.rsplit('/', 1)[0] == relative)
@@ -307,7 +307,7 @@ def cmd_device(args: argparse.Namespace) -> int:
         if command == "probe":
             return _device_probe(device, endpoint.host, endpoint.port)
         if command == "install":
-            return _device_install(device, with_sound=not args.no_sound)
+            return _device_install(device, with_sound=not args.no_sound, version=args.version)
         if command == "restore-sound":
             return _device_restore_sound(device)
         if command == "notify":
@@ -346,8 +346,8 @@ def _device_probe(device: FtpDevice, host: str, port: int) -> int:
     return 0 if ok else 1
 
 
-def _device_install(device: FtpDevice, with_sound: bool) -> int:
-    result = build_sd(DIST_SD, with_sound=with_sound)
+def _device_install(device: FtpDevice, with_sound: bool, version: str) -> int:
+    result = build_sd(DIST_SD, version=version, with_sound=with_sound)
     if with_sound and not device.exists(UH_SOUND_BACKUP):
         original = device.read(UH_SOUND)
         ours = (DIST_SD / UH_SOUND).read_bytes()
@@ -539,6 +539,7 @@ def main(argv: list[str] | None = None) -> int:
     p_install = device_sub.add_parser("install", help="envia overlay, ícones, definições e som")
     device_conn(p_install)
     p_install.add_argument("--no-sound", action="store_true", help="mantém o som de notificação do Ultrahand")
+    p_install.add_argument("--version", default="dev", help="versão gravada no SD (o app compara com a release)")
     p_restore = device_sub.add_parser("restore-sound", help="volta o som original do Ultrahand")
     device_conn(p_restore)
     p_notify = device_sub.add_parser("notify", help="envia um toast de teste ao Ultrahand")
@@ -555,6 +556,7 @@ def main(argv: list[str] | None = None) -> int:
 
     p_build = sub.add_parser("build", help="monta dist/sd/, o espelho do cartão SD")
     p_build.add_argument("--out", type=Path, default=DIST_SD)
+    p_build.add_argument("--version", default="dev", help="versão gravada no SD (o app compara com a release)")
     p_release = sub.add_parser("release", help="gera o zip do SD e o manifest.json da release do GitHub")
     p_release.add_argument("--version", required=True)
     p_release.add_argument("--notes", default="")
@@ -564,7 +566,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "device":
             return cmd_device(args)
         if args.command == "build":
-            return cmd_build(args.out)
+            return cmd_build(args.out, args.version)
         if args.command == "release":
             return cmd_release(args.version, args.notes)
         if args.command == "list":

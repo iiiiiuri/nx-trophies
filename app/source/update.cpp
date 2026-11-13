@@ -22,6 +22,7 @@ constexpr const char* kSysmoduleExefs = "atmosphere/contents/4200000000534143/ex
 constexpr const char* kAppNro = "switch/switch-achievements/switch-achievements.nro";
 constexpr const char* kUltrahandSound = "config/ultrahand/sounds/notification.wav";
 constexpr const char* kSoundBackup = "config/switch-achievements/backup/ultrahand-notification.wav";
+const std::string kCaBundle = kLayout.root() + "/cacert.pem";
 
 struct Transfer {
     std::vector<uint8_t>* out;
@@ -51,7 +52,7 @@ bool download(const std::string& url, std::vector<uint8_t>& out, std::atomic<flo
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_USERAGENT, "switch-achievements");
-    curl_easy_setopt(curl, CURLOPT_CAINFO, "romfs:/cacert.pem");
+    curl_easy_setopt(curl, CURLOPT_CAINFO, kCaBundle.c_str());
     curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 15L);
     curl_easy_setopt(curl, CURLOPT_LOW_SPEED_LIMIT, 64L);
     curl_easy_setopt(curl, CURLOPT_LOW_SPEED_TIME, 30L);
@@ -95,6 +96,13 @@ bool exists(const std::string& path) {
 }
 
 }  // namespace
+
+void prepareCertificates() {
+    std::string bundled, current;
+    if (!sa::readFile("romfs:/cacert.pem", bundled)) return;
+    if (sa::readFile(kCaBundle, current) && current == bundled) return;
+    sa::writeFileAtomic(kCaBundle, bundled);
+}
 
 std::string installedVersion() {
     sa::JsonDoc doc(sa::parseFile(kLayout.root() + "/version.json"));
@@ -227,35 +235,54 @@ bool Updater::doInstall(std::string& error) {
         }
         touchesSysmodule = touchesSysmodule || e.name == kSysmoduleExefs;
     }
+    const std::string sd = kLayout.sd + "/";
     const bool wasRunning = sysmoduleRunning();
+    if (touchesSysmodule) {
+        std::vector<uint8_t> exefs;
+        std::string current;
+        for (const auto& e : reader.entries()) {
+            if (e.name == kSysmoduleExefs && reader.extract(e, exefs, error) && sa::readFile(sd + e.name, current) &&
+                current.size() == exefs.size() && std::memcmp(current.data(), exefs.data(), exefs.size()) == 0) {
+                touchesSysmodule = false;
+            }
+        }
+    }
     if (touchesSysmodule && wasRunning && R_SUCCEEDED(pmshellInitialize())) {
         pmshellTerminateProgram(kSysmoduleId);
         pmshellExit();
     }
+    const auto finish = [&](bool ok) {
+        if (touchesSysmodule) restartSysmodule();
+        else sa::writeFileAtomic(kLayout.root() + "/reload", "1");
+        return ok;
+    };
 
-    const std::string sd = kLayout.sd + "/";
     if (!exists(sd + kSoundBackup) && exists(sd + kUltrahandSound)) {
         std::string original;
         if (sa::readFile(sd + kUltrahandSound, original)) sa::writeFileAtomic(sd + kSoundBackup, original);
     }
 
     std::vector<uint8_t> data;
+    std::string current;
     size_t done = 0;
     for (const auto& e : reader.entries()) {
         ++done;
+        m_progress = static_cast<float>(done) / static_cast<float>(reader.entries().size());
         if (e.name.back() == '/') continue;
-        if (!reader.extract(e, data, error)) return false;
+        if (!reader.extract(e, data, error)) return finish(false);
         const std::string target = sd + e.name;
+        if (sa::readFile(target, current) && current.size() == data.size() &&
+            std::memcmp(current.data(), data.data(), data.size()) == 0) {
+            continue;
+        }
         if (!sa::writeFileAtomic(target, std::string(data.begin(), data.end()))) {
             error = "não consegui gravar " + target;
-            return false;
+            return finish(false);
         }
         m_appRestart = m_appRestart.load() || e.name == kAppNro;
-        m_progress = static_cast<float>(done) / static_cast<float>(reader.entries().size());
     }
 
-    if (touchesSysmodule) restartSysmodule();
-    else sa::writeFileAtomic(kLayout.root() + "/reload", "1");
+    finish(true);
     setMessage("Versão " + m_version + " instalada." + std::string(m_appRestart ? " Feche e abra o app para usar a nova versão." : ""));
     m_phase = Phase::Done;
     return true;

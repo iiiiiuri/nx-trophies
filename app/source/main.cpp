@@ -412,7 +412,10 @@ private:
 }  // namespace
 
 int main(int argc, char* argv[]) {
-    romfsInit();
+    if (R_SUCCEEDED(romfsInit())) {
+        app::prepareCertificates();
+        romfsExit();
+    }
     socketInitializeDefault();
     curl_global_init(CURL_GLOBAL_DEFAULT);
     plInitialize(PlServiceType_User);
@@ -430,6 +433,5 @@ int main(int argc, char* argv[]) {
     plExit();
     curl_global_cleanup();
     socketExit();
-    romfsExit();
     return 0;
 }
