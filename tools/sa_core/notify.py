@@ -10,7 +10,7 @@ import json
 import time
 from pathlib import Path
 
-from .pack import Achievement
+from .definition import Achievement
 
 APP_ID = "SwitchAchievements"
 RARITY_LABEL = {

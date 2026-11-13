@@ -1,0 +1,145 @@
+{
+  "build_id": "909E904AF78AC1B8",
+  "regions": {
+    "main": {
+      "base": "0x8000000",
+      "size": "0x2000000"
+    },
+    "heap": {
+      "base": "0x40000000",
+      "size": "0x10000000"
+    }
+  },
+  "initial": [],
+  "ticks": [
+    {
+      "label": "início do arquivo",
+      "writes": []
+    },
+    {
+      "label": "Boneco do Yoshi no jogo de garra",
+      "writes": [
+        {
+          "addr": "main+0x1cc077a",
+          "type": "u8",
+          "value": 1
+        },
+        {
+          "addr": "main+0x1cc0760",
+          "type": "u16",
+          "value": 120
+        }
+      ]
+    },
+    {
+      "label": "CiaoCiao e Goomba",
+      "writes": [
+        {
+          "addr": "main+0x1cc07c8",
+          "type": "u16",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "label": "Laço",
+      "writes": [
+        {
+          "addr": "main+0x1cc077a",
+          "type": "u8",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "label": "Ração de Cachorro",
+      "writes": [
+        {
+          "addr": "main+0x1cc077a",
+          "type": "u8",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "label": "Caverna da Cauda: mapa, bússola, bico, chave",
+      "writes": [
+        {
+          "addr": "main+0x1cbb301",
+          "type": "u8",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "label": "Marin acompanha",
+      "writes": [
+        {
+          "addr": "main+0x1cc077d",
+          "type": "u8",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "label": "Marin volta para casa",
+      "writes": [
+        {
+          "addr": "main+0x1cc077d",
+          "type": "u8",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "label": "Bananas",
+      "writes": [
+        {
+          "addr": "main+0x1cc077a",
+          "type": "u8",
+          "value": 4
+        }
+      ]
+    },
+    {
+      "label": "3 folhas douradas",
+      "writes": [
+        {
+          "addr": "main+0x1cc07a2",
+          "type": "u8",
+          "value": 7
+        }
+      ]
+    },
+    {
+      "label": "mais figurinhas",
+      "writes": [
+        {
+          "addr": "main+0x1cc07c8",
+          "type": "u16",
+          "value": 527
+        }
+      ]
+    },
+    {
+      "label": "5 folhas douradas",
+      "writes": [
+        {
+          "addr": "main+0x1cc07a2",
+          "type": "u8",
+          "value": 31
+        }
+      ]
+    },
+    {
+      "label": "rúpias no máximo",
+      "writes": [
+        {
+          "addr": "main+0x1cc0760",
+          "type": "u16",
+          "value": 999
+        }
+      ]
+    }
+  ]
+}

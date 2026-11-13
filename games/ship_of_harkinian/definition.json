@@ -1,0 +1,238 @@
+{
+  "schema_version": 2,
+  "game": {
+    "id": "ship_of_harkinian",
+    "name": { "pt-BR": "Ship of Harkinian (Ocarina of Time)", "en": "Ship of Harkinian (Ocarina of Time)" },
+    "kind": "homebrew"
+  },
+
+  "content": {
+    "bosses": [
+      { "id": "gohma",         "name": { "pt-BR": "Rainha Gohma",  "en": "Queen Gohma" },   "timestamp_index": "0xA0", "bit": 18 },
+      { "id": "king_dodongo",  "name": { "pt-BR": "King Dodongo",  "en": "King Dodongo" },  "timestamp_index": "0xA1", "bit": 19 },
+      { "id": "barinade",      "name": { "pt-BR": "Barinade",      "en": "Barinade" },      "timestamp_index": "0xA2", "bit": 20 },
+      { "id": "phantom_ganon", "name": { "pt-BR": "Phantom Ganon", "en": "Phantom Ganon" }, "timestamp_index": "0xA3", "bit": 0 },
+      { "id": "volvagia",      "name": { "pt-BR": "Volvagia",      "en": "Volvagia" },      "timestamp_index": "0xA4", "bit": 1 },
+      { "id": "morpha",        "name": { "pt-BR": "Morpha",        "en": "Morpha" },        "timestamp_index": "0xA5", "bit": 2 },
+      { "id": "bongo_bongo",   "name": { "pt-BR": "Bongo Bongo",   "en": "Bongo Bongo" },   "timestamp_index": "0xA6", "bit": 4 },
+      { "id": "twinrova",      "name": { "pt-BR": "Twinrova",      "en": "Twinrova" },      "timestamp_index": "0xA7", "bit": 3 },
+      { "id": "ganon",         "name": { "pt-BR": "Ganon",         "en": "Ganon" },         "timestamp_index": "0xA9" }
+    ],
+    "medallions": [
+      { "id": "forest", "name": { "pt-BR": "Medalhão da Floresta", "en": "Forest Medallion" }, "bit": 0 },
+      { "id": "fire",   "name": { "pt-BR": "Medalhão do Fogo",     "en": "Fire Medallion" },   "bit": 1 },
+      { "id": "water",  "name": { "pt-BR": "Medalhão da Água",     "en": "Water Medallion" },  "bit": 2 },
+      { "id": "spirit", "name": { "pt-BR": "Medalhão do Espírito", "en": "Spirit Medallion" }, "bit": 3 },
+      { "id": "shadow", "name": { "pt-BR": "Medalhão das Sombras", "en": "Shadow Medallion" }, "bit": 4 },
+      { "id": "light",  "name": { "pt-BR": "Medalhão da Luz",      "en": "Light Medallion" },  "bit": 5 }
+    ],
+    "songs": [
+      { "id": "minuet",   "name": { "pt-BR": "Minueto da Floresta",  "en": "Minuet of Forest" },    "bit": 6 },
+      { "id": "bolero",   "name": { "pt-BR": "Bolero do Fogo",       "en": "Bolero of Fire" },      "bit": 7 },
+      { "id": "serenade", "name": { "pt-BR": "Serenata da Água",     "en": "Serenade of Water" },   "bit": 8 },
+      { "id": "requiem",  "name": { "pt-BR": "Réquiem do Espírito",  "en": "Requiem of Spirit" },   "bit": 9 },
+      { "id": "nocturne", "name": { "pt-BR": "Noturno das Sombras",  "en": "Nocturne of Shadow" },  "bit": 10 },
+      { "id": "prelude",  "name": { "pt-BR": "Prelúdio da Luz",      "en": "Prelude of Light" },    "bit": 11 },
+      { "id": "lullaby",  "name": { "pt-BR": "Canção de Ninar da Zelda", "en": "Zelda's Lullaby" }, "bit": 12 },
+      { "id": "epona",    "name": { "pt-BR": "Canção da Epona",      "en": "Epona's Song" },        "bit": 13 },
+      { "id": "saria",    "name": { "pt-BR": "Canção da Saria",      "en": "Saria's Song" },        "bit": 14 },
+      { "id": "sun",      "name": { "pt-BR": "Canção do Sol",        "en": "Sun's Song" },          "bit": 15 },
+      { "id": "time",     "name": { "pt-BR": "Canção do Tempo",      "en": "Song of Time" },        "bit": 16 },
+      { "id": "storms",   "name": { "pt-BR": "Canção das Tempestades", "en": "Song of Storms" },    "bit": 17 }
+    ],
+    "stones": [
+      { "id": "kokiri_emerald", "name": { "pt-BR": "Esmeralda Kokiri", "en": "Kokiri's Emerald" }, "bit": 18 },
+      { "id": "goron_ruby",     "name": { "pt-BR": "Rubi Goron",       "en": "Goron's Ruby" },     "bit": 19 },
+      { "id": "zora_sapphire",  "name": { "pt-BR": "Safira Zora",      "en": "Zora's Sapphire" },  "bit": 20 }
+    ],
+    "swords": [
+      { "id": "kokiri",   "name": { "pt-BR": "Espada Kokiri",      "en": "Kokiri Sword" },     "bit": 0 },
+      { "id": "master",   "name": { "pt-BR": "Espada Mestra",      "en": "Master Sword" },     "bit": 1 },
+      { "id": "biggoron", "name": { "pt-BR": "Espada de Biggoron", "en": "Biggoron's Sword" }, "bit": 2 }
+    ],
+    "stat_counters": [
+      { "id": "dark_link", "name": { "pt-BR": "Dark Link derrotado", "en": "Dark Link defeated" }, "index": 12 },
+      { "id": "rolls",     "name": { "pt-BR": "Rolamentos",          "en": "Rolls" },              "index": 96 },
+      { "id": "pots",      "name": { "pt-BR": "Potes quebrados",     "en": "Pots broken" },        "index": 100 }
+    ]
+  },
+
+  "variables": {
+    "quest_items":      { "type": "u32", "description": "Bitfield de medalhões, canções e pedras." },
+    "equipment":        { "type": "u16", "description": "Bitfield de espadas, escudos, túnicas e botas." },
+    "gs_tokens":        { "type": "u16", "description": "Gold Skulltula Tokens." },
+    "health_capacity":  { "type": "u16", "description": "Corações x 16." },
+    "deaths":           { "type": "u16", "description": "Mortes no arquivo." },
+    "game_complete":    { "type": "u8",  "description": "Jogo zerado." },
+    "play_timer":       { "type": "u32", "description": "Quadros de jogo (/2 = décimos de segundo)." },
+    "pause_timer":      { "type": "u32", "description": "Quadros de pausa (/3 = décimos de segundo)." },
+    "is_randomizer":    { "type": "u8" },
+    "is_master_quest":  { "type": "u8" },
+    "stat_table_size":  { "type": "u16", "description": "Tamanho da tabela de contadores (107 no SoH develop)." },
+    "boss.defeated_at": { "type": "u32", "indexed_by": "bosses", "description": "Tempo de jogo (décimos de s) da derrota; 0 = vivo." },
+    "stat.count":       { "type": "u32", "indexed_by": "stat_counters" }
+  },
+
+  "bindings": [
+    {
+      "id": "soh_save_json",
+      "label": "Save JSON do SoH (SaveManager, seções base v4 e sohStats v1)",
+      "source": "save_json",
+      "match": { "files": ["sdmc:/switch/soh/Save/file1.sav", "sdmc:/switch/soh/Save/file2.sav", "sdmc:/switch/soh/Save/file3.sav"] },
+      "aliases": { "base": "sections.base.data", "stats": "sections.sohStats.data" },
+      "instance_modes": {
+        "randomizer":   { "value": "is_randomizer",   "op": "==", "rhs": 1 },
+        "master_quest": { "value": "is_master_quest", "op": "==", "rhs": 1 }
+      },
+      "poll_ms": 2000,
+      "variables": {
+        "quest_items":     { "path": "base.inventory.questItems", "confidence": "community" },
+        "equipment":       { "path": "base.inventory.equipment",  "confidence": "community" },
+        "gs_tokens":       { "path": "base.inventory.gsTokens",   "confidence": "community" },
+        "health_capacity": { "path": "base.healthCapacity",       "confidence": "community" },
+        "deaths":          { "path": "base.deaths",               "confidence": "community" },
+        "game_complete":   { "path": "stats.gameComplete",        "confidence": "community" },
+        "play_timer":      { "path": "stats.playTimer",           "confidence": "community" },
+        "pause_timer":     { "path": "stats.pauseTimer",          "confidence": "community" },
+        "is_randomizer":   { "path": "base.n64ddFlag",            "confidence": "community" },
+        "is_master_quest": { "path": "base.isMasterQuest",        "confidence": "community" },
+        "stat_table_size": { "path": "stats.counts.length",       "confidence": "community" },
+        "boss.defeated_at": { "path": "stats.itemTimestamps[{item.key}]", "index_key": "timestamp_index", "confidence": "community" },
+        "stat.count":       { "path": "stats.counts[{item.key}]",         "index_key": "index",           "confidence": "community" }
+      }
+    }
+  ],
+
+  "achievements": [
+    {
+      "id": "boss",
+      "for_each": "bosses",
+      "where_has": "bit",
+      "name": { "pt-BR": "Derrote {item.name}", "en": "Defeat {item.name}" },
+      "description": { "pt-BR": "Derrote {item.name} e receba sua recompensa.", "en": "Defeat {item.name} and claim the reward." },
+      "rarity": "uncommon", "xp": 50,
+      "modes": ["default", "master_quest"],
+      "condition": { "any": [
+        { "value": "boss.defeated_at[{item.id}]", "op": ">", "rhs": 0 },
+        { "value": "quest_items", "op": "has_all", "rhs": "{item.mask}" }
+      ] }
+    },
+    {
+      "id": "hero_of_time",
+      "name": { "pt-BR": "Herói do Tempo", "en": "Hero of Time" },
+      "description": { "pt-BR": "Derrote Ganon e salve Hyrule.", "en": "Defeat Ganon and save Hyrule." },
+      "rarity": "epic", "xp": 250,
+      "condition": { "any": [
+        { "value": "boss.defeated_at[ganon]", "op": ">", "rhs": 0 },
+        { "value": "game_complete", "op": "==", "rhs": 1 }
+      ] }
+    },
+    {
+      "id": "song",
+      "for_each": "songs",
+      "name": { "pt-BR": "{item.name}", "en": "{item.name}" },
+      "description": { "pt-BR": "Aprenda {item.name}.", "en": "Learn the {item.name}." },
+      "rarity": "common", "xp": 10,
+      "condition": { "value": "quest_items", "op": "has_all", "rhs": "{item.mask}" }
+    },
+    {
+      "id": "all_songs",
+      "name": { "pt-BR": "Virtuose da Ocarina", "en": "Ocarina Virtuoso" },
+      "description": { "pt-BR": "Aprenda as 12 canções.", "en": "Learn all 12 songs." },
+      "rarity": "rare", "xp": 100,
+      "progress": { "value": { "popcount": { "value": "quest_items", "mask": { "content_mask": { "of": "songs" } } } }, "target": 12 },
+      "condition": { "value": "quest_items", "op": "has_all", "rhs": { "content_mask": { "of": "songs" } } }
+    },
+    {
+      "id": "spiritual_stones",
+      "name": { "pt-BR": "As Três Pedras", "en": "The Three Stones" },
+      "description": { "pt-BR": "Reúna as três Pedras Espirituais.", "en": "Collect all three Spiritual Stones." },
+      "rarity": "uncommon", "xp": 50,
+      "modes": ["default", "master_quest"],
+      "progress": { "value": { "popcount": { "value": "quest_items", "mask": { "content_mask": { "of": "stones" } } } }, "target": 3 },
+      "condition": { "value": "quest_items", "op": "has_all", "rhs": { "content_mask": { "of": "stones" } } }
+    },
+    {
+      "id": "six_medallions",
+      "name": { "pt-BR": "Os Seis Sábios", "en": "The Six Sages" },
+      "description": { "pt-BR": "Reúna os seis Medalhões.", "en": "Collect all six Medallions." },
+      "rarity": "epic", "xp": 150,
+      "modes": ["default", "master_quest"],
+      "progress": { "value": { "popcount": { "value": "quest_items", "mask": { "content_mask": { "of": "medallions" } } } }, "target": 6 },
+      "condition": { "value": "quest_items", "op": "has_all", "rhs": { "content_mask": { "of": "medallions" } } }
+    },
+    {
+      "id": "sword",
+      "for_each": "swords",
+      "name": { "pt-BR": "{item.name}", "en": "{item.name}" },
+      "description": { "pt-BR": "Obtenha a {item.name}.", "en": "Obtain the {item.name}." },
+      "rarity": "uncommon", "xp": 25,
+      "condition": { "value": "equipment", "op": "has_all", "rhs": "{item.mask}" }
+    },
+    {
+      "id": "skulltulas_100",
+      "name": { "pt-BR": "Maldição Quebrada", "en": "Curse Lifted" },
+      "description": { "pt-BR": "Colete os 100 Gold Skulltula Tokens.", "en": "Collect all 100 Gold Skulltula Tokens." },
+      "rarity": "legendary", "xp": 250,
+      "progress": { "value": "gs_tokens", "target": 100 },
+      "condition": { "value": "gs_tokens", "op": ">=", "rhs": 100 }
+    },
+    {
+      "id": "twenty_hearts",
+      "name": { "pt-BR": "Coração de Herói", "en": "Heart of a Hero" },
+      "description": { "pt-BR": "Alcance 20 corações.", "en": "Reach 20 hearts." },
+      "rarity": "rare", "xp": 100,
+      "progress": { "value": { "div": ["health_capacity", 16] }, "target": 20 },
+      "condition": { "value": "health_capacity", "op": ">=", "rhs": 320 }
+    },
+    {
+      "id": "speedy_gohma",
+      "name": { "pt-BR": "Ligeirinho de Kokiri", "en": "Kokiri Speedster" },
+      "description": { "pt-BR": "Derrote a Rainha Gohma com menos de 30 minutos de jogo.", "en": "Defeat Queen Gohma with under 30 minutes of playtime." },
+      "rarity": "epic", "xp": 100, "secret": true,
+      "modes": ["default", "master_quest"],
+      "condition": { "all": [
+        { "value": "boss.defeated_at[gohma]", "op": ">", "rhs": 0 },
+        { "value": "boss.defeated_at[gohma]", "op": "<=", "rhs": 18000 }
+      ] }
+    },
+    {
+      "id": "deathless",
+      "name": { "pt-BR": "Imortal", "en": "Immortal" },
+      "description": { "pt-BR": "Zere o jogo sem morrer nenhuma vez.", "en": "Beat the game without dying once." },
+      "rarity": "legendary", "xp": 500, "secret": true,
+      "condition": { "all": [
+        { "value": "deaths", "op": "==", "rhs": 0 },
+        { "value": "game_complete", "op": "==", "rhs": 1 }
+      ] }
+    },
+    {
+      "id": "ten_hours",
+      "name": { "pt-BR": "Dedicação Hyliana", "en": "Hylian Dedication" },
+      "description": { "pt-BR": "Acumule 10 horas de jogo em um arquivo.", "en": "Play a single file for 10 hours." },
+      "rarity": "uncommon", "xp": 50,
+      "condition": { "value": { "sum": [{ "div": ["play_timer", 2] }, { "div": ["pause_timer", 3] }] }, "op": ">=", "rhs": 360000 }
+    },
+    {
+      "id": "stat_rolls",
+      "name": { "pt-BR": "Cambalhota Profissional", "en": "Professional Roller" },
+      "description": { "pt-BR": "Role 1.000 vezes.", "en": "Roll 1,000 times." },
+      "rarity": "uncommon", "xp": 25,
+      "progress": { "value": "stat.count[rolls]", "target": 1000 },
+      "condition": { "all": [
+        { "value": "stat_table_size", "op": "==", "rhs": 107 },
+        { "value": "stat.count[rolls]", "op": ">=", "rhs": 1000 }
+      ] }
+    },
+    {
+      "id": "stat_dark_link",
+      "name": { "pt-BR": "Encare a Si Mesmo", "en": "Face Yourself" },
+      "description": { "pt-BR": "Derrote Dark Link.", "en": "Defeat Dark Link." },
+      "rarity": "rare", "xp": 75,
+      "condition": { "all": [
+        { "value": "stat_table_size", "op": "==", "rhs": 107 },
+        { "value": "stat.count[dark_link]", "op": ">=", "rhs": 1 }
+      ] }
+    }
+  ]
+}

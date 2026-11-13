@@ -1,0 +1,175 @@
+{
+  "schema_version": 2,
+  "game": {
+    "id": "zelda_links_awakening",
+    "name": { "pt-BR": "The Legend of Zelda: Link's Awakening", "en": "The Legend of Zelda: Link's Awakening" },
+    "kind": "retail",
+    "title_ids": ["01006BB00C6F0000"]
+  },
+
+  "content": {
+    "trade_items": [
+      { "id": "yoshi_doll",      "name": { "pt-BR": "Boneco do Yoshi",   "en": "Yoshi Doll" },       "value": 1,  "confidence": "assumed" },
+      { "id": "ribbon",          "name": { "pt-BR": "Laço",              "en": "Ribbon" },           "value": 2,  "confidence": "assumed" },
+      { "id": "dog_food",        "name": { "pt-BR": "Ração de Cachorro", "en": "Dog Food" },         "value": 3 },
+      { "id": "bananas",         "name": { "pt-BR": "Bananas",           "en": "Bananas" },          "value": 4 },
+      { "id": "stick",           "name": { "pt-BR": "Graveto",           "en": "Stick" },            "value": 5 },
+      { "id": "honeycomb",       "name": { "pt-BR": "Favo de Mel",       "en": "Honeycomb" },        "value": 6 },
+      { "id": "pineapple",       "name": { "pt-BR": "Abacaxi",           "en": "Pineapple" },        "value": 7,  "confidence": "assumed" },
+      { "id": "hibiscus",        "name": { "pt-BR": "Hibisco",           "en": "Hibiscus" },         "value": 8 },
+      { "id": "letter",          "name": { "pt-BR": "Carta da Cabra",    "en": "Goat's Letter" },    "value": 9 },
+      { "id": "broom",           "name": { "pt-BR": "Vassoura",          "en": "Broom" },            "value": 10 },
+      { "id": "fishing_hook",    "name": { "pt-BR": "Anzol",             "en": "Fishing Hook" },     "value": 11 },
+      { "id": "necklace",        "name": { "pt-BR": "Colar",             "en": "Necklace" },         "value": 12 },
+      { "id": "mermaid_scale",   "name": { "pt-BR": "Escama da Sereia",  "en": "Mermaid's Scale" },  "value": 13 },
+      { "id": "magnifying_lens", "name": { "pt-BR": "Lupa",              "en": "Magnifying Lens" },  "value": 14 }
+    ],
+    "figures": [
+      { "id": "ciaociao", "name": { "pt-BR": "CiaoCiao",    "en": "CiaoCiao" },    "mask": "0x0001" },
+      { "id": "goomba",               "name": { "pt-BR": "Goomba",      "en": "Goomba" },      "mask": "0x0002" },
+      { "id": "shy_guy",              "name": { "pt-BR": "Shy Guy",     "en": "Shy Guy" },     "mask": "0x0004" },
+      { "id": "boo",                  "name": { "pt-BR": "Boo",         "en": "Boo" },         "mask": "0x0008" },
+      { "id": "cheep_cheep",          "name": { "pt-BR": "Cheep Cheep", "en": "Cheep Cheep" }, "mask": "0x0010" },
+      { "id": "blooper",              "name": { "pt-BR": "Blooper",     "en": "Blooper" },     "mask": "0x0020" },
+      { "id": "bow_wow",              "name": { "pt-BR": "BowWow",      "en": "BowWow" },      "mask": "0x0200" }
+    ],
+    "dungeons": [
+      { "id": "tail_cave",     "name": { "pt-BR": "Caverna da Cauda",     "en": "Tail Cave" },      "slot": 0, "confidence": "assumed" },
+      { "id": "bottle_grotto", "name": { "pt-BR": "Gruta da Garrafa",     "en": "Bottle Grotto" },  "slot": 1, "confidence": "assumed" },
+      { "id": "key_cavern",    "name": { "pt-BR": "Caverna da Chave",     "en": "Key Cavern" },     "slot": 2, "confidence": "assumed" },
+      { "id": "angler_tunnel", "name": { "pt-BR": "Túnel do Pescador",    "en": "Angler's Tunnel" },"slot": 3, "confidence": "assumed" },
+      { "id": "catfish_maw",   "name": { "pt-BR": "Boca do Bagre",        "en": "Catfish's Maw" },  "slot": 4, "confidence": "assumed" },
+      { "id": "face_shrine",   "name": { "pt-BR": "Santuário da Face",    "en": "Face Shrine" },    "slot": 5, "confidence": "assumed" },
+      { "id": "eagle_tower",   "name": { "pt-BR": "Torre da Águia",       "en": "Eagle's Tower" },  "slot": 6, "confidence": "assumed" },
+      { "id": "turtle_rock",   "name": { "pt-BR": "Rocha da Tartaruga",   "en": "Turtle Rock" },    "slot": 7, "confidence": "assumed" },
+      { "id": "color_dungeon", "name": { "pt-BR": "Masmorra das Cores",   "en": "Color Dungeon" },  "slot": 8, "confidence": "assumed" }
+    ],
+    "instruments": [
+      { "id": "full_moon_cello",       "name": { "pt-BR": "Violoncelo da Lua Cheia", "en": "Full Moon Cello" },       "bit": 0, "confidence": "assumed" },
+      { "id": "conch_horn",            "name": { "pt-BR": "Trompa de Concha",        "en": "Conch Horn" },            "bit": 1, "confidence": "assumed" },
+      { "id": "sea_lily_bell",         "name": { "pt-BR": "Sino do Lírio do Mar",    "en": "Sea Lily's Bell" },       "bit": 2, "confidence": "assumed" },
+      { "id": "surf_harp",             "name": { "pt-BR": "Harpa das Ondas",         "en": "Surf Harp" },             "bit": 3, "confidence": "assumed" },
+      { "id": "wind_marimba",          "name": { "pt-BR": "Marimba do Vento",        "en": "Wind Marimba" },          "bit": 4, "confidence": "assumed" },
+      { "id": "coral_triangle",        "name": { "pt-BR": "Triângulo de Coral",      "en": "Coral Triangle" },        "bit": 5, "confidence": "assumed" },
+      { "id": "evening_calm_organ",    "name": { "pt-BR": "Órgão da Calmaria",       "en": "Organ of Evening Calm" }, "bit": 6, "confidence": "assumed" },
+      { "id": "thunder_drum",          "name": { "pt-BR": "Tambor do Trovão",        "en": "Thunder Drum" },          "bit": 7, "confidence": "assumed" }
+    ],
+    "followers": [
+      { "id": "marin", "name": { "pt-BR": "Marin", "en": "Marin" }, "value": 1 },
+      { "id": "ghost", "name": { "pt-BR": "Fantasma", "en": "Ghost" }, "value": 3 }
+    ]
+  },
+
+  "variables": {
+    "rupees":        { "type": "u16", "description": "Rúpias." },
+    "trade_item":    { "type": "u8",  "description": "Item atual da sequência de trocas (valores em content.trade_items)." },
+    "follower":      { "type": "u8",  "description": "Acompanhante atual (valores em content.followers)." },
+    "golden_leaves": { "type": "u8",  "description": "Bitfield das 5 Folhas Douradas." },
+    "figures":       { "type": "u16", "description": "Bitfield das figurinhas do jogo de garra (máscaras em content.figures)." },
+    "instruments":   { "type": "u8",  "description": "Bitfield dos Instrumentos das Sirenas." },
+    "dungeon.small_keys": { "type": "u8", "indexed_by": "dungeons", "description": "Chaves pequenas na masmorra." },
+    "dungeon.treasures":  { "type": "u8", "indexed_by": "dungeons", "description": "Bitfield: mapa, bússola, bico de pedra, chave do pesadelo." }
+  },
+
+  "bindings": [
+    {
+      "id": "v1_0_x",
+      "label": "Builds 909E904AF78AC1B8 e AE16F71E002AF8CB (mesmos endereços nos cheats publicados)",
+      "source": "memory",
+      "match": { "build_ids": ["909E904AF78AC1B8", "AE16F71E002AF8CB"] },
+      "poll_ms": 1000,
+      "variables": {
+        "rupees":        { "base": "main", "offset": "0x1CC0760", "confidence": "community", "note": "cheat '9999 Rupees' (u16)" },
+        "trade_item":    { "base": "main", "offset": "0x1CC077A", "confidence": "community", "note": "cheats de itens de troca (Bananas=4, Vassoura=0xA...)" },
+        "follower":      { "base": "main", "offset": "0x1CC077D", "confidence": "community", "note": "cheats 'Girl'=1, 'Ghost'=3" },
+        "golden_leaves": { "base": "main", "offset": "0x1CC07A2", "confidence": "community", "note": "cheat 'Have 5/5 Gold Leafs' escreve 0x1F" },
+        "figures":       { "base": "main", "offset": "0x1CC07C8", "confidence": "community", "note": "cheats de figurinhas (máscaras por personagem)" },
+        "instruments":   { "confidence": "to_discover", "note": "provavelmente no mesmo bloco de inventário perto de 0x1CC0788; buscar após pegar o 1º instrumento" },
+        "dungeon.small_keys": { "base": "main", "offset": "0x1CBB300", "stride": "0x10", "index_key": "slot", "confidence": "community", "note": "cheat 'Infinite Small Keys' escreve em 0x1CBB300 + 0x10*n" },
+        "dungeon.treasures":  { "base": "main", "offset": "0x1CBB301", "stride": "0x10", "index_key": "slot", "confidence": "community", "note": "cheat 'Map/Compass/Nightmare Key/Stone Beak' escreve 0x0F em 0x1CBB301 + 0x10*n" }
+      }
+    }
+  ],
+
+  "achievements": [
+    {
+      "id": "rupees_999",
+      "name": { "pt-BR": "Fortuna de Koholint", "en": "Koholint Fortune" },
+      "description": { "pt-BR": "Junte 999 rúpias.", "en": "Collect 999 rupees." },
+      "rarity": "uncommon", "xp": 25,
+      "progress": { "value": "rupees", "target": 999 },
+      "condition": { "value": "rupees", "op": ">=", "rhs": 999 }
+    },
+    {
+      "id": "trade",
+      "for_each": "trade_items",
+      "name": { "pt-BR": "Troca: {item.name}", "en": "Trade: {item.name}" },
+      "description": { "pt-BR": "Obtenha {item.name} na sequência de trocas.", "en": "Obtain the {item.name} in the trading sequence." },
+      "rarity": "common", "xp": 10,
+      "condition": { "value": "trade_item", "op": "==", "rhs": "{item.value}" }
+    },
+    {
+      "id": "trade_complete",
+      "name": { "pt-BR": "Mestre das Trocas", "en": "Master Trader" },
+      "description": { "pt-BR": "Complete a sequência de trocas até a Lupa.", "en": "Complete the trading sequence up to the Magnifying Lens." },
+      "rarity": "rare", "xp": 75,
+      "condition": { "value": "trade_item", "op": "==", "rhs": 14 }
+    },
+    {
+      "id": "figure",
+      "for_each": "figures",
+      "name": { "pt-BR": "Figurinha: {item.name}", "en": "Figure: {item.name}" },
+      "description": { "pt-BR": "Ganhe a figurinha de {item.name} no jogo de garra.", "en": "Win the {item.name} figure at the crane game." },
+      "rarity": "common", "xp": 10,
+      "condition": { "value": "figures", "op": "has_all", "rhs": "{item.mask}" }
+    },
+    {
+      "id": "figures_5",
+      "name": { "pt-BR": "Mão Boa na Garra", "en": "Crane Game Pro" },
+      "description": { "pt-BR": "Tenha 5 figurinhas conhecidas.", "en": "Own 5 known figures." },
+      "rarity": "uncommon", "xp": 25,
+      "progress": { "value": { "popcount": { "value": "figures", "mask": { "content_mask": { "of": "figures" } } } }, "target": 5 },
+      "condition": { "value": { "popcount": { "value": "figures", "mask": { "content_mask": { "of": "figures" } } } }, "op": ">=", "rhs": 5 }
+    },
+    {
+      "id": "golden_leaves",
+      "name": { "pt-BR": "Folhas de Ouro", "en": "Golden Leaves" },
+      "description": { "pt-BR": "Recupere as 5 Folhas Douradas.", "en": "Recover all 5 Golden Leaves." },
+      "rarity": "uncommon", "xp": 50,
+      "progress": { "value": { "popcount": { "value": "golden_leaves", "mask": "0x1F" } }, "target": 5 },
+      "condition": { "value": "golden_leaves", "op": "has_all", "rhs": "0x1F" }
+    },
+    {
+      "id": "dungeon_treasures",
+      "for_each": "dungeons",
+      "name": { "pt-BR": "Tesouros: {item.name}", "en": "Treasures: {item.name}" },
+      "description": { "pt-BR": "Tenha mapa, bússola, bico de pedra e chave do pesadelo de {item.name}.", "en": "Hold the map, compass, stone beak and nightmare key of {item.name}." },
+      "rarity": "uncommon", "xp": 25,
+      "condition": { "value": "dungeon.treasures[{item.id}]", "op": "has_all", "rhs": "0x0F" }
+    },
+    {
+      "id": "instrument",
+      "for_each": "instruments",
+      "name": { "pt-BR": "{item.name}", "en": "{item.name}" },
+      "description": { "pt-BR": "Obtenha o {item.name}.", "en": "Obtain the {item.name}." },
+      "rarity": "uncommon", "xp": 50,
+      "condition": { "value": "instruments", "op": "has_all", "rhs": "{item.mask}" }
+    },
+    {
+      "id": "all_instruments",
+      "name": { "pt-BR": "A Balada do Peixe do Vento", "en": "Ballad of the Wind Fish" },
+      "description": { "pt-BR": "Reúna os oito Instrumentos das Sirenas.", "en": "Collect all eight Instruments of the Sirens." },
+      "rarity": "epic", "xp": 250,
+      "progress": { "value": { "count_of": "instruments", "condition": { "value": "instruments", "op": "has_all", "rhs": "{each.mask}" } }, "target": 8 },
+      "condition": { "value": "instruments", "op": "has_all", "rhs": { "content_mask": { "of": "instruments" } } }
+    },
+    {
+      "id": "follower",
+      "for_each": "followers",
+      "name": { "pt-BR": "Companhia: {item.name}", "en": "Company: {item.name}" },
+      "description": { "pt-BR": "Seja acompanhado por {item.name}.", "en": "Be followed by {item.name}." },
+      "rarity": "common", "xp": 10, "secret": true,
+      "condition": { "value": "follower", "op": "==", "rhs": "{item.value}" }
+    }
+  ]
+}

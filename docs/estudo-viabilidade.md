@@ -1,6 +1,8 @@
 # Switch Achievements — Estudo de Viabilidade Técnica
 
 > Versão 0.1 · Novembro/2026 · Status: proposta, antes de qualquer implementação
+>
+> **Atualização:** os "packs" por título/build descritos aqui foram substituídos por uma definição única por jogo (`games/<jogo>/definition.json`), com bindings por build. Veja [modelo-de-definicao.md](modelo-de-definicao.md).
 
 Este documento avalia se é possível construir um sistema de conquistas universal para Nintendo Switch com CFW (Atmosphère), com notificações sobrepostas aos jogos, e define arquitetura, riscos e um MVP realista.
 

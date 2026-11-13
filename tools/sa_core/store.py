@@ -29,6 +29,7 @@ def xp_for_level(level: int) -> int:
 class UserState:
     unlocked: dict[str, dict[str, Any]] = field(default_factory=dict)
     history: list[dict[str, Any]] = field(default_factory=list)
+    counters: dict[str, dict[str, int]] = field(default_factory=dict)
 
     def is_unlocked(self, game_id: str, ach_id: str) -> bool:
         return f"{game_id}/{ach_id}" in self.unlocked
@@ -40,16 +41,19 @@ class UserState:
         self.history.append(record)
         return record
 
-    @property
-    def total_xp(self) -> int:
-        return sum(int(r["xp"]) for r in self.unlocked.values())
+    def counters_for(self, game_id: str) -> dict[str, int]:
+        return self.counters.setdefault(game_id, {})
+
+    def xp_for(self, game_id: str | None = None) -> int:
+        return sum(int(r["xp"]) for r in self.unlocked.values() if game_id is None or r["game"] == game_id)
 
     def to_json(self) -> dict[str, Any]:
-        return {"version": 1, "unlocked": self.unlocked, "history": self.history}
+        return {"version": 2, "unlocked": self.unlocked, "history": self.history, "counters": self.counters}
 
     @classmethod
     def from_json(cls, raw: dict[str, Any]) -> "UserState":
-        return cls(unlocked=dict(raw.get("unlocked", {})), history=list(raw.get("history", [])))
+        return cls(unlocked=dict(raw.get("unlocked", {})), history=list(raw.get("history", [])),
+                   counters={k: dict(v) for k, v in raw.get("counters", {}).items()})
 
 
 def load_state(path: Path) -> UserState:

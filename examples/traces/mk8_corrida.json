@@ -1,0 +1,170 @@
+{
+  "build_id": "FE941ED5BA14BE5D",
+  "regions": {
+    "main": {
+      "base": "0x8000000",
+      "size": "0x2000000"
+    },
+    "heap": {
+      "base": "0x40000000",
+      "size": "0x10000000"
+    }
+  },
+  "initial": [],
+  "ticks": [
+    {
+      "label": "menu: kart ainda não existe",
+      "writes": []
+    },
+    {
+      "label": "corrida começa",
+      "writes": [
+        {
+          "addr": "main+0x1354AF0",
+          "type": "u64",
+          "value": 1073745920
+        },
+        {
+          "addr": "0x400016e0",
+          "type": "u64",
+          "value": 1074790400
+        },
+        {
+          "addr": "0x401007a4",
+          "type": "u32",
+          "value": 8392704
+        }
+      ]
+    },
+    {
+      "label": "pegou Superestrela",
+      "writes": [
+        {
+          "addr": "0x401007bc",
+          "type": "u32",
+          "value": 447
+        }
+      ]
+    },
+    {
+      "label": "estrela ainda ativa",
+      "writes": [
+        {
+          "addr": "0x401007bc",
+          "type": "u32",
+          "value": 256
+        }
+      ]
+    },
+    {
+      "label": "estrela acabou",
+      "writes": [
+        {
+          "addr": "0x401007bc",
+          "type": "u32",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "label": "atingido por Raio",
+      "writes": [
+        {
+          "addr": "0x401007fc",
+          "type": "u32",
+          "value": 373
+        }
+      ]
+    },
+    {
+      "label": "choque acabou",
+      "writes": [
+        {
+          "addr": "0x401007fc",
+          "type": "u32",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "label": "caiu da pista, Lakitu",
+      "writes": [
+        {
+          "addr": "0x40100830",
+          "type": "u32",
+          "value": 447
+        }
+      ]
+    },
+    {
+      "label": "de volta à pista",
+      "writes": [
+        {
+          "addr": "0x40100830",
+          "type": "u32",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "label": "virou Bullet Bill",
+      "writes": [
+        {
+          "addr": "0x401007a4",
+          "type": "u32",
+          "value": 10489856
+        }
+      ]
+    },
+    {
+      "label": "Bullet Bill acabou",
+      "writes": [
+        {
+          "addr": "0x401007a4",
+          "type": "u32",
+          "value": 8392704
+        }
+      ]
+    },
+    {
+      "label": "segunda Superestrela",
+      "writes": [
+        {
+          "addr": "0x401007bc",
+          "type": "u32",
+          "value": 447
+        }
+      ]
+    },
+    {
+      "label": "estrela acabou",
+      "writes": [
+        {
+          "addr": "0x401007bc",
+          "type": "u32",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "label": "fim da corrida: volta ao menu",
+      "writes": [
+        {
+          "addr": "0x400016e0",
+          "type": "u64",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "label": "menu (lixo onde era o kart não conta)",
+      "writes": [
+        {
+          "addr": "0x401007bc",
+          "type": "u32",
+          "value": 447
+        }
+      ]
+    }
+  ]
+}

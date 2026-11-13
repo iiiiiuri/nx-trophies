@@ -1,0 +1,187 @@
+{
+  "schema_version": 2,
+  "game": {
+    "id": "mario_kart_8_deluxe",
+    "name": { "pt-BR": "Mario Kart 8 Deluxe", "en": "Mario Kart 8 Deluxe" },
+    "kind": "retail",
+    "title_ids": ["0100152000022000"]
+  },
+
+  "content": {
+    "cups": [
+      { "id": "mushroom",    "name": { "pt-BR": "Copa Cogumelo",   "en": "Mushroom Cup" },   "menu_order": 0 },
+      { "id": "flower",      "name": { "pt-BR": "Copa Flor",       "en": "Flower Cup" },     "menu_order": 1 },
+      { "id": "star",        "name": { "pt-BR": "Copa Estrela",    "en": "Star Cup" },       "menu_order": 2 },
+      { "id": "special",     "name": { "pt-BR": "Copa Especial",   "en": "Special Cup" },    "menu_order": 3 },
+      { "id": "egg",         "name": { "pt-BR": "Copa Ovo",        "en": "Egg Cup" },        "menu_order": 4 },
+      { "id": "crossing",    "name": { "pt-BR": "Copa Cruzamento", "en": "Crossing Cup" },   "menu_order": 5 },
+      { "id": "shell",       "name": { "pt-BR": "Copa Casco",      "en": "Shell Cup" },      "menu_order": 6 },
+      { "id": "banana",      "name": { "pt-BR": "Copa Banana",     "en": "Banana Cup" },     "menu_order": 7 },
+      { "id": "leaf",        "name": { "pt-BR": "Copa Folha",      "en": "Leaf Cup" },       "menu_order": 8 },
+      { "id": "lightning",   "name": { "pt-BR": "Copa Relâmpago",  "en": "Lightning Cup" },  "menu_order": 9 },
+      { "id": "triforce",    "name": { "pt-BR": "Copa Triforce",   "en": "Triforce Cup" },   "menu_order": 10 },
+      { "id": "bell",        "name": { "pt-BR": "Copa Sino",       "en": "Bell Cup" },       "menu_order": 11 },
+      { "id": "golden_dash", "name": { "pt-BR": "Copa Arrancada Dourada", "en": "Golden Dash Cup" }, "menu_order": 12, "dlc": true },
+      { "id": "lucky_cat",   "name": { "pt-BR": "Copa Gato da Sorte",     "en": "Lucky Cat Cup" },   "menu_order": 13, "dlc": true },
+      { "id": "turnip",      "name": { "pt-BR": "Copa Nabo",       "en": "Turnip Cup" },     "menu_order": 14, "dlc": true },
+      { "id": "propeller",   "name": { "pt-BR": "Copa Hélice",     "en": "Propeller Cup" },  "menu_order": 15, "dlc": true },
+      { "id": "rock",        "name": { "pt-BR": "Copa Pedra",      "en": "Rock Cup" },       "menu_order": 16, "dlc": true },
+      { "id": "moon",        "name": { "pt-BR": "Copa Lua",        "en": "Moon Cup" },       "menu_order": 17, "dlc": true },
+      { "id": "fruit",       "name": { "pt-BR": "Copa Fruta",      "en": "Fruit Cup" },      "menu_order": 18, "dlc": true },
+      { "id": "boomerang",   "name": { "pt-BR": "Copa Bumerangue", "en": "Boomerang Cup" },  "menu_order": 19, "dlc": true },
+      { "id": "feather",     "name": { "pt-BR": "Copa Pena",       "en": "Feather Cup" },    "menu_order": 20, "dlc": true },
+      { "id": "cherry",      "name": { "pt-BR": "Copa Cereja",     "en": "Cherry Cup" },     "menu_order": 21, "dlc": true },
+      { "id": "acorn",       "name": { "pt-BR": "Copa Bolota",     "en": "Acorn Cup" },      "menu_order": 22, "dlc": true },
+      { "id": "spiny",       "name": { "pt-BR": "Copa Espinhoso",  "en": "Spiny Cup" },      "menu_order": 23, "dlc": true }
+    ]
+  },
+
+  "variables": {
+    "p1.star_timer":   { "type": "u32", "description": "Temporizador da Superestrela do jogador 1 (> 0 enquanto ativa)." },
+    "p1.ghost_timer":  { "type": "u32", "description": "Temporizador de invisibilidade (Boo) do jogador 1." },
+    "p1.squish_timer": { "type": "u32", "description": "Temporizador de 'achatado' do jogador 1." },
+    "p1.shock_timer":  { "type": "u32", "description": "Temporizador de choque (Raio) do jogador 1." },
+    "p1.lakitu_timer": { "type": "u32", "description": "Temporizador do resgate do Lakitu do jogador 1." },
+    "p1.status":       { "type": "u32", "description": "Flags de estado do kart do jogador 1." },
+    "p1.coins":        { "type": "u8",  "description": "Moedas do jogador 1 na corrida atual." },
+    "race.finished":   { "type": "u8",  "description": "1 quando o jogador 1 cruza a linha de chegada da última volta." },
+    "race.final_rank": { "type": "u8",  "description": "Colocação final do jogador 1 (1 = primeiro)." },
+    "cup.best_trophy_150cc": {
+      "type": "u8",
+      "indexed_by": "cups",
+      "description": "Melhor troféu na copa em 150cc, no save carregado em memória. Codificação presumida: 0 nenhum, 1 bronze, 2 prata, 3 ouro."
+    }
+  },
+
+  "bindings": [
+    {
+      "id": "build_FE941ED5BA14BE5D",
+      "label": "Build FE941ED5BA14BE5D (versão 3.0.x; confirmar no console)",
+      "source": "memory",
+      "match": { "build_ids": ["FE941ED5BA14BE5D"] },
+      "pointers": {
+        "p1_kart": { "base": "main", "chain": ["0x1354AF0", "0x6E0"] }
+      },
+      "active_when": { "exists": "p1.star_timer" },
+      "poll_ms": 250,
+      "variables": {
+        "p1.star_timer":   { "from": "p1_kart", "offset": "0x7BC", "confidence": "community", "note": "cheat 'Press D-UP P1 Star Power' (Arch9SK7/MyNXCheats) escreve 0x1BF aqui" },
+        "p1.ghost_timer":  { "from": "p1_kart", "offset": "0x7C4", "confidence": "community", "note": "cheat 'Ghost Mode'" },
+        "p1.squish_timer": { "from": "p1_kart", "offset": "0x7F4", "confidence": "community", "note": "cheat 'Squished'" },
+        "p1.shock_timer":  { "from": "p1_kart", "offset": "0x7FC", "confidence": "community", "note": "cheat 'Shocked'" },
+        "p1.lakitu_timer": { "from": "p1_kart", "offset": "0x830", "confidence": "community", "note": "cheat 'Lakitu Pickup'" },
+        "p1.status":       { "from": "p1_kart", "offset": "0x7A4", "confidence": "assumed", "note": "cheats escrevem 0x00801000 (normal) e 0x00A01000 (Bullet Bill); o bit 0x00200000 é inferido" },
+        "p1.coins":        { "confidence": "to_discover", "note": "Breeze: busca u8 exata 0, pegar moedas, refinar por valor; depois achar a cadeia a partir de main" },
+        "race.finished":   { "confidence": "to_discover", "note": "flag que muda na chegada; provavelmente na mesma estrutura de p1_kart" },
+        "race.final_rank": { "confidence": "to_discover", "note": "busca u8 pela posição exibida durante a corrida (1..12)" },
+        "cup.best_trophy_150cc": { "confidence": "to_discover", "index_key": "trophy_index", "note": "tabela do save em memória; descobrir offset base, stride e trophy_index de cada copa" }
+      }
+    }
+  ],
+
+  "events": [
+    { "id": "star_used",     "when": { "value": "p1.star_timer",   "op": ">", "rhs": 0 } },
+    { "id": "ghost_used",    "when": { "value": "p1.ghost_timer",  "op": ">", "rhs": 0 } },
+    { "id": "squished",      "when": { "value": "p1.squish_timer", "op": ">", "rhs": 0 } },
+    { "id": "shocked",       "when": { "value": "p1.shock_timer",  "op": ">", "rhs": 0 } },
+    { "id": "lakitu_rescue", "when": { "value": "p1.lakitu_timer", "op": ">", "rhs": 0 } },
+    { "id": "bullet_bill",   "when": { "value": "p1.status", "op": "has_any", "rhs": "0x00200000" } },
+    { "id": "race_won",      "when": { "all": [
+        { "value": "race.finished",   "op": "==", "rhs": 1 },
+        { "value": "race.final_rank", "op": "==", "rhs": 1 }
+    ] } }
+  ],
+
+  "achievements": [
+    {
+      "id": "star_first",
+      "name": { "pt-BR": "Brilho de Estrela", "en": "Star Power" },
+      "description": { "pt-BR": "Use uma Superestrela.", "en": "Use a Super Star." },
+      "rarity": "common", "xp": 10,
+      "condition": { "value": { "count": "star_used" }, "op": ">=", "rhs": 1 }
+    },
+    {
+      "id": "star_50",
+      "name": { "pt-BR": "Constelação", "en": "Constellation" },
+      "description": { "pt-BR": "Use 50 Superestrelas.", "en": "Use 50 Super Stars." },
+      "rarity": "rare", "xp": 75,
+      "progress": { "value": { "count": "star_used" }, "target": 50 },
+      "condition": { "value": { "count": "star_used" }, "op": ">=", "rhs": 50 }
+    },
+    {
+      "id": "ghost_first",
+      "name": { "pt-BR": "Assombração", "en": "Spooked" },
+      "description": { "pt-BR": "Fique invisível com um Boo.", "en": "Turn invisible with a Boo." },
+      "rarity": "common", "xp": 10,
+      "condition": { "value": { "count": "ghost_used" }, "op": ">=", "rhs": 1 }
+    },
+    {
+      "id": "shocked_10",
+      "name": { "pt-BR": "Alta Voltagem", "en": "High Voltage" },
+      "description": { "pt-BR": "Seja atingido por 10 Raios.", "en": "Get hit by 10 Lightning bolts." },
+      "rarity": "uncommon", "xp": 25,
+      "progress": { "value": { "count": "shocked" }, "target": 10 },
+      "condition": { "value": { "count": "shocked" }, "op": ">=", "rhs": 10 }
+    },
+    {
+      "id": "squished_first",
+      "name": { "pt-BR": "Panqueca", "en": "Pancake" },
+      "description": { "pt-BR": "Seja achatado.", "en": "Get squished." },
+      "rarity": "common", "xp": 10, "secret": true,
+      "condition": { "value": { "count": "squished" }, "op": ">=", "rhs": 1 }
+    },
+    {
+      "id": "lakitu_25",
+      "name": { "pt-BR": "Freguês do Lakitu", "en": "Lakitu's Regular" },
+      "description": { "pt-BR": "Seja resgatado pelo Lakitu 25 vezes.", "en": "Get rescued by Lakitu 25 times." },
+      "rarity": "uncommon", "xp": 25, "secret": true,
+      "progress": { "value": { "count": "lakitu_rescue" }, "target": 25 },
+      "condition": { "value": { "count": "lakitu_rescue" }, "op": ">=", "rhs": 25 }
+    },
+    {
+      "id": "bullet_bill_first",
+      "name": { "pt-BR": "Bala Humana", "en": "Human Cannonball" },
+      "description": { "pt-BR": "Vire um Bullet Bill.", "en": "Become a Bullet Bill." },
+      "rarity": "common", "xp": 10,
+      "condition": { "value": { "count": "bullet_bill" }, "op": ">=", "rhs": 1 }
+    },
+    {
+      "id": "ten_coins",
+      "name": { "pt-BR": "Cofre Cheio", "en": "Full Wallet" },
+      "description": { "pt-BR": "Tenha 10 moedas em uma corrida.", "en": "Hold 10 coins in a race." },
+      "rarity": "common", "xp": 10, "confirm_ticks": 2,
+      "condition": { "value": "p1.coins", "op": ">=", "rhs": 10 }
+    },
+    {
+      "id": "race_won_first",
+      "name": { "pt-BR": "Primeiro Lugar", "en": "First Place" },
+      "description": { "pt-BR": "Vença uma corrida.", "en": "Win a race." },
+      "rarity": "common", "xp": 25,
+      "condition": { "value": { "count": "race_won" }, "op": ">=", "rhs": 1 }
+    },
+    {
+      "id": "race_won_100",
+      "name": { "pt-BR": "Lenda das Pistas", "en": "Track Legend" },
+      "description": { "pt-BR": "Vença 100 corridas.", "en": "Win 100 races." },
+      "rarity": "epic", "xp": 150,
+      "progress": { "value": { "count": "race_won" }, "target": 100 },
+      "condition": { "value": { "count": "race_won" }, "op": ">=", "rhs": 100 }
+    },
+    {
+      "id": "gold_150",
+      "for_each": "cups",
+      "name": { "pt-BR": "Ouro na {item.name} (150cc)", "en": "{item.name} Gold (150cc)" },
+      "description": { "pt-BR": "Conquiste o troféu de ouro na {item.name} em 150cc.", "en": "Win the gold trophy in the {item.name} at 150cc." },
+      "rarity": "uncommon", "xp": 25,
+      "condition": { "value": "cup.best_trophy_150cc[{item.id}]", "op": ">=", "rhs": 3 }
+    },
+    {
+      "id": "all_gold_150",
+      "name": { "pt-BR": "Colecionador de Ouro", "en": "Gold Collector" },
+      "description": { "pt-BR": "Conquiste ouro em todas as copas em 150cc.", "en": "Win gold in every cup at 150cc." },
+      "rarity": "legendary", "xp": 250,
+      "progress": { "value": { "count_of": "cups", "condition": { "value": "cup.best_trophy_150cc[{each.id}]", "op": ">=", "rhs": 3 } }, "target": 24 },
+      "condition": { "for_all": "cups", "condition": { "value": "cup.best_trophy_150cc[{each.id}]", "op": ">=", "rhs": 3 } }
+    }
+  ]
+}

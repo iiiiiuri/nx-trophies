@@ -1,6 +1,6 @@
 # Ship of Harkinian (Ocarina of Time): modelo de conquistas
 
-> Primeiro jogo-piloto do projeto. Pack: [`packs/ship_of_harkinian/pack.json`](../../packs/ship_of_harkinian/pack.json)
+> Um dos três jogos da v1, ao lado de Mario Kart 8 Deluxe e Link's Awakening. Definição: [`games/ship_of_harkinian/definition.json`](../../games/ship_of_harkinian/definition.json). O formato é o mesmo dos jogos retail ([modelo de definição](../modelo-de-definicao.md)); só muda o **binding**, que aqui lê o save em vez da memória.
 
 ## 1. Por que o SoH é um bom piloto
 
@@ -12,7 +12,7 @@ O Ship of Harkinian (SoH) é um port nativo de Ocarina of Time, com **código ab
 | **Arquivo de save (JSON)** | **Forte. É a rota escolhida.** O SoH grava `Save/fileN.sav` como JSON legível, com o estado do jogo **e** uma seção de estatísticas (`sohStats`): timestamps de chefes derrotados, contadores de inimigos, rolamentos, potes, tempo de jogo etc. Não exige engenharia reversa: os campos vêm do código-fonte. |
 | Integração nativa (fork do SoH) | **Futuro.** O SoH tem um barramento de eventos (`GameInteractor`, com hooks como `OnLoadGame` e `OnGameFrameUpdate`) e um sistema de toasts próprio (`Notification::Emit`). Um fork poderia emitir eventos em tempo real. Exige compilar e manter um build do SoH para Switch. |
 
-Essa decisão gerou um novo tipo de fonte no formato de packs, o `save_json`. Ele serve para **qualquer port/homebrew que grave saves legíveis** (a família HarbourMasters, como 2 Ship 2 Harkinian, segue o mesmo `SaveManager`).
+Por isso o binding do SoH usa a fonte `save_json` em vez de `memory`. Conteúdo, variáveis, eventos e conquistas são declarados igual aos jogos retail. Ele serve para **qualquer port/homebrew que grave saves legíveis** (a família HarbourMasters, como 2 Ship 2 Harkinian, segue o mesmo `SaveManager`).
 
 ## 2. Estrutura do save (verificada no código)
 
@@ -28,7 +28,7 @@ Envelope gravado por `SaveManager::SaveFileThreaded` ([SaveManager.cpp](https://
 }
 ```
 
-No pack, os apelidos `base` e `stats` apontam para `sections.base.data` e `sections.sohStats.data`.
+No binding, os apelidos `base` e `stats` apontam para `sections.base.data` e `sections.sohStats.data`.
 
 | Campo | Significado | Fonte no código |
 |---|---|---|
@@ -43,20 +43,22 @@ No pack, os apelidos `base` e `stats` apontam para `sections.base.data` e `secti
 | `stats.playTimer` / `pauseTimer` | Tempo: `playTimer/2 + pauseTimer/3` = décimos de segundo | macro `GAMEPLAYSTAT_TOTAL_TIME` |
 | `stats.gameComplete` | Jogo zerado | `SaveStats` |
 
-## 3. Conquistas modeladas (27)
+## 3. Conquistas modeladas (34)
+
+O bloco `content` cataloga chefes (com o índice do timestamp e o bit de quest), medalhões, canções, pedras, espadas e contadores de estatística. As conquistas por item são **templates** (`for_each`), não listas escritas à mão.
 
 | Categoria | Conquistas |
 |---|---|
-| História (chefes) | Gohma, King Dodongo, Barinade, Phantom Ganon, Volvagia, Morpha, Bongo Bongo, Twinrova, Ganon (Herói do Tempo) |
-| Coleção | 3 Pedras, 6 Medalhões, 12 canções, Espada Kokiri, Espada Mestra, Espada de Biggoron, 50 e 100 Skulltulas, 20 corações, Ocarina das Fadas |
-| Estatísticas | 10 horas de jogo, 500 inimigos, 1.000 rolamentos, 300 potes, Dark Link |
-| Secretas | Primeira morte, Gohma em menos de 30 min, Zerar sem morrer |
+| História | template `boss` (8 chefes com bit de quest) e Herói do Tempo (Ganon) |
+| Coleção | template `song` (12) e Virtuose da Ocarina, As Três Pedras, Os Seis Sábios, template `sword` (3), 100 Skulltulas, 20 corações |
+| Estatísticas | 10 horas de jogo, 1.000 rolamentos, Dark Link |
+| Desafios | Gohma em menos de 30 min, zerar sem morrer |
 
 Decisões de robustez:
 
-- **Dupla verificação nos chefes:** o timestamp do chefe **ou** o item de quest correspondente. Assim a conquista funciona mesmo em saves antigos, anteriores às estatísticas.
-- **`guard` nos contadores:** os índices de `counts` dependem da ordem do enum. Se o save não tiver exatamente 107 contadores (outra versão do SoH), essas conquistas ficam como **"não suportadas"**, em vez de desbloquear errado.
-- **`modes`:** as conquistas de história são ignoradas em saves de **Randomizer**, onde itens e recompensas estão embaralhados.
+- **Dupla verificação nos chefes:** o timestamp do chefe (`stats.itemTimestamps[{item.timestamp_index}]`) **ou** o bit de quest. Assim a conquista funciona mesmo em saves antigos, anteriores às estatísticas.
+- **Guarda nos contadores:** os índices de `counts` dependem da ordem do enum. As conquistas de estatística exigem `stat_table_size == 107`; em outra versão do SoH elas simplesmente não disparam, em vez de desbloquear errado.
+- **`modes`:** o binding classifica cada slot como `default`, `randomizer` ou `master_quest` (`instance_modes`). As conquistas de história ignoram saves de Randomizer, onde itens e recompensas estão embaralhados.
 - **Slots combinados:** a conquista desbloqueia se *qualquer* dos três arquivos satisfizer a condição; o progresso mostra o maior valor.
 - **Somente leitura:** o save do SoH nunca é modificado.
 
@@ -74,10 +76,10 @@ Decisões de robustez:
 2. Rode:
 
    ```bash
-   python3 tools/sa_eval.py packs/ship_of_harkinian/pack.json --save-dir /caminho/para/Save --state estado.json --notify-dir notificacoes/
+   python3 tools/sa.py save games/ship_of_harkinian/definition.json --save-dir /caminho/para/Save --state estado.json --notify-dir notificacoes/
    ```
 
-   A saída mostra a versão do SoH detectada, mortes, Skulltulas, tempo de jogo, cada conquista (`[X]`, `[ ]` ou `[?]`), o progresso, o XP e o nível. Use `--verbose` para ver campos ausentes no seu save e `--reveal-secrets` para mostrar as secretas.
+   A saída mostra o modo de cada slot, cada conquista (`[X]` ou `[ ]`), o progresso, o XP e o nível. Use `--reveal-secrets` para mostrar as secretas.
 3. Rodar de novo com o mesmo `--state` mostra só os desbloqueios **novos**: é o comportamento do motor. `--watch` reavalia sempre que um save muda.
 
 ### Testar a notificação no Switch (requer Ultrahand ≥ 2.3)
@@ -86,7 +88,7 @@ Copie [`examples/ultrahand/SwitchAchievements-teste.notify`](../../examples/ultr
 
 ## 6. Próximos passos para este jogo
 
-1. Validar o pack contra o save real do usuário (confirmar versão, `counts.length` e campos presentes).
-2. Sysmodule mínimo: a cada 2 s, faz `stat()` em `sdmc:/switch/soh/Save/*.sav`. Quando o mtime muda, lê o arquivo (com nova tentativa se o JSON estiver incompleto), avalia em C++ com a mesma semântica de `tools/sa_core/expr.py` e grava o `.notify`.
+1. Validar a definição contra o save real do usuário (confirmar versão, `counts.length` e campos presentes).
+2. Sysmodule mínimo: a cada 2 s, faz `stat()` em `sdmc:/switch/soh/Save/*.sav`. Quando o mtime muda, lê o arquivo (com nova tentativa se o JSON estiver incompleto), avalia em C++ com a mesma semântica de `tools/sa_core/` e grava o `.notify`.
 3. Ícones 50×50 RGBA por conquista.
 4. Avaliar a integração nativa via fork do SoH, para ter eventos em tempo real.
